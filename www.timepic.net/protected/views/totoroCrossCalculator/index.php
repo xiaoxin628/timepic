@@ -174,7 +174,22 @@ $this->breadcrumbs=array(
 <div class="row-fluid download" style="padding:30px;">
 	<?php $this->widget('application.components.widgets.TpAppdownloadWidget');?>
 </div>
-
+<!--comment-->
+<div class="row-fluid well show_nave">
+    <script type="text/javascript">
+        (function(){
+            var url = "http://widget.weibo.com/distribution/comments.php?width=0&url=auto&color=cccccc,ffffff,4c4c4c,5093d5,cccccc,f0f0f0&colordiy=1&ralateuid=2734978073&appkey=3706708774&dpc=1";
+            url = url.replace("url=auto", "url=" + document.URL); 
+            document.write('<iframe id="WBCommentFrame" src="' + url + '" scrolling="no" frameborder="0" style="width:100%"></iframe>');
+        })();
+    </script>
+    <script src="http://tjs.sjs.sinajs.cn/open/widget/js/widget/comment.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        window.WBComment.init({
+            "id": "WBCommentFrame"
+        });
+    </script>
+</div>
 
 
     <script language="javascript">
