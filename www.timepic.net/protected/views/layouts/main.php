@@ -35,22 +35,14 @@
 		}
 		small_clouds.css("background-position",small_current+"px 0");
 	}
-//	init = setInterval("scrollBg()", small_scrollSpeed);
+	init = setInterval("scrollBg()", small_scrollSpeed);
 	//var init_big = setInterval("scrollBg('big')", big_scrollSpeed);
 </script>
 <?php
 
 //memberinfo
 $memberInfo = array();
-if (Yii::app()->user->isGuest) {
-        $sinaLoginUrl = CommonHelper::getOpenIdUrl(1);
-//        $memberInfo = array('label' => Yii::t('Base', 'Login'), 'url' => $sinaLoginUrl);
-        $memberInfo = '<ul class="nav pull-right"><li><a href="'.$sinaLoginUrl.'"><img src="'.Yii::app()->request->baseUrl.'/images/static/common/sina_16.png"/>  '.Yii::t('Base', 'Login').'</a></li></ul>';
-} else {
-//        $memberInfo = array('label' =>  Yii::app()->user->username, 'url' => '#', 'items' => array(
-//                array('label' => Yii::t('Base', 'Logout'), 'url' => '/TPuser/logout'),
-//            ),
-//        );
+if (!Yii::app()->user->isGuest) {
         $adminLogin = isset (Yii::app()->user->adminid) ? '<li><a href="/admin/member/login">'."登陆后台".'</a></li>': '';
         $memberInfo = '<ul class="nav pull-right">
                          <li class="dropdown">
@@ -66,6 +58,9 @@ if (Yii::app()->user->isGuest) {
                          </li>
                          
                        </ul>';
+} else {
+        $sinaLoginUrl = CommonHelper::getOpenIdUrl(1);
+        $memberInfo = '<ul class="nav pull-right"><li><a href="'.$sinaLoginUrl.'"><img src="'.Yii::app()->request->baseUrl.'/images/static/common/sina_16.png"/>  '.Yii::t('Base', 'Login').'</a></li></ul>';
 }
 
 $this->widget('bootstrap.widgets.TbNavbar', array(
