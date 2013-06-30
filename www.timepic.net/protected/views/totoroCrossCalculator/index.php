@@ -18,7 +18,7 @@ $this->breadcrumbs=array(
 			<?php foreach($kits as $kide):?>
 				<li class="span2" style="margin-left: 10px;">
                                     <a class="thumbnail" href="#" rel="Popover" rel="tooltip" data-content="<?php echo $kide['color'];?>"  data-title="<?php echo $kide['probalility'];?>" data-placement="right" data-trigger="hover" >
-                                        <img style="height:81px;" class="img-circle" src="<?php echo Yii::app()->request->baseUrl."images/static/totorocross/".$kide['imageid'].".jpg";?>" />
+                                        <img style="height:81px;" class="img-circle" src="<?php echo Yii::app()->request->getBaseUrl(true)."/images/static/totorocross/".$kide['imageid'].".jpg";?>" />
 					<div style="height:50px;"><?php echo $kide['color'];?> </div>
 					<div><?php echo $kide['probalility'];?></div>
                                     </a>
@@ -40,7 +40,7 @@ $this->breadcrumbs=array(
 	<div class="span6 well pull-left">		
 		<fieldset>
 			<Legend><?php echo Yii::t('Base','Dam');?><br />
-				<img id="DamImage" class="img-circle" src="<?php echo Yii::app()->request->baseUrl; ?>images/static/totorocross/600000.jpg" alt="Chinchilla Dam Phenotype" />
+				<img id="DamImage" class="img-circle" src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/images/static/totorocross/600000.jpg" alt="Chinchilla Dam Phenotype" />
 			</Legend>
 			<div class="control-group ">
 				<label class="totorolabel span2" for="DamGene_id1"><?php echo Yii::t('Base','Beige');?> : </label>
@@ -102,7 +102,7 @@ $this->breadcrumbs=array(
 	<div class="span6 pull-right well">
 		<fieldset>
 			<Legend><?php echo Yii::t('Base','Sire');?><br />
-				<img id="SireImage" class="img-circle"  src="<?php echo Yii::app()->request->baseUrl; ?>images/static/totorocross/600000.jpg" alt="Chinchilla Sire Phenotype" />
+				<img id="SireImage" class="img-circle"  src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/images/static/totorocross/600000.jpg" alt="Chinchilla Sire Phenotype" />
 			</Legend>
 			<div class="control-group ">
 				<label class="totorolabel span2" for="SireGene_id1"><?php echo Yii::t('Base','Beige');?> : </label>
@@ -151,7 +151,7 @@ $this->breadcrumbs=array(
 				<label class="totorolabel span2" for="SireGene_id5"><?php echo Yii::t('Base','Vio/Sap');?> : </label>
 				<div class="controls">
 					<select name="SireGene_id5" id="SireGene_id5" onchange="UpdateParentImage('Sire');">
-						<option <?php echo $formselect['SireGene_id5']['6'];?>  value="6"><?php echo Yii::t('Base', 'No Recessive'); ?></option>
+						<option <?php echo $formselect['SireGene_id5']['6'];?> value="6"><?php echo Yii::t('Base', 'No Recessive'); ?></option>
 						<option <?php echo $formselect['SireGene_id5']['3'];?> value="3"><?php echo Yii::t('Base', 'Violet'); ?></option>
 						<option <?php echo $formselect['SireGene_id5']['1'];?> value="1"><?php echo Yii::t('Base', 'Sapphire'); ?></option>
 						<option <?php echo $formselect['SireGene_id5']['5'];?> value="5"><?php echo Yii::t('Base', 'Violet-Carrier'); ?></option>
@@ -197,7 +197,7 @@ $this->breadcrumbs=array(
 			var GenotypeValueCode;
 			GenotypeValueCode = CompileGenotypeValueCode(Parent);
 			var Imgid = "#"+Parent+"Image";
-			var src = $(Imgid).src = "<?php echo Yii::app()->request->baseUrl; ?>images/static/totorocross/" + GenotypeValueCode + ".jpg";
+			var src = $(Imgid).src = "<?php echo Yii::app()->request->getBaseUrl(true); ?>/images/static/totorocross/" + GenotypeValueCode + ".jpg";
 			$(Imgid).attr('src', src);
 		}
 	

@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="language" content="zh-CN" />
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/style.css"/>
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->getBaseUrl(true); ?>/css/style.css"/>
 
 	<?php Yii::app()->bootstrap->register(); ?>
 </head>
@@ -35,14 +35,14 @@
 		}
 		small_clouds.css("background-position",small_current+"px 0");
 	}
-	init = setInterval("scrollBg()", small_scrollSpeed);
+	// init = setInterval("scrollBg()", small_scrollSpeed);
 	//var init_big = setInterval("scrollBg('big')", big_scrollSpeed);
 </script>
 <?php
 
 //memberinfo
 $memberInfo = array();
-if (!Yii::app()->user->isGuest) {
+if (!Yii::app()->user->isGuest && Yii::app()->user->username) {
         $adminLogin = isset (Yii::app()->user->adminid) ? '<li><a href="/admin/member/login">'."登陆后台".'</a></li>': '';
         $memberInfo = '<ul class="nav pull-right">
                          <li class="dropdown">
@@ -60,7 +60,7 @@ if (!Yii::app()->user->isGuest) {
                        </ul>';
 } else {
         $sinaLoginUrl = CommonHelper::getOpenIdUrl(1);
-        $memberInfo = '<ul class="nav pull-right"><li><a href="'.$sinaLoginUrl.'"><img src="'.Yii::app()->request->baseUrl.'/images/static/common/sina_16.png"/>  '.Yii::t('Base', 'Login').'</a></li></ul>';
+        $memberInfo = '<ul class="nav pull-right"><li><a href="'.$sinaLoginUrl.'"><img src="'.Yii::app()->request->getBaseUrl(true).'/images/static/common/sina_16.png"/>  '.Yii::t('Base', 'Login').'</a></li></ul>';
 }
 
 $this->widget('bootstrap.widgets.TbNavbar', array(
@@ -98,7 +98,7 @@ $this->widget('bootstrap.widgets.TbNavbar', array(
 
 <footer id="footer" class="footer">
     <div class="container">
-        <p>Copyright &copy; <?php echo date('Y'); ?> TimePic. All Rights Reserved.</p>
+        <!-- <p>Copyright &copy; <?php echo date('Y'); ?> TimePic. All Rights Reserved.</p> -->
         <address>
             <strong><?php echo Yii::t('Base','Contact Us');?> </strong><br>
             <a href="mailto:#">timepic.net@gmail.com</a>

@@ -5,7 +5,7 @@ $this->breadcrumbs=array(
 <div class="row-fluid">
 	<div class="lside span6">
 		<div id="totorologo">
-			<img src="<?php echo Yii::app()->request->baseUrl; ?>/images/static/totorotalk/logo.png"/>
+			<img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/images/static/totorotalk/logo.png"/>
 		</div>
 		<div id="totorointro">
 			<div class="caption">
@@ -14,7 +14,7 @@ $this->breadcrumbs=array(
 		</div>
 	</div>
 	<div class="span6">
-		<div id="totoroscreen"><img src="<?php echo Yii::app()->request->baseUrl; ?>/images/static/totorotalk/iphonescreen.png"/></div>
+		<div id="totoroscreen"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/images/static/totorotalk/iphonescreen.png"/></div>
 	</div>
 	<div class="row-fluid download">
 		<?php $this->widget('application.components.widgets.TpAppdownloadWidget');?>
