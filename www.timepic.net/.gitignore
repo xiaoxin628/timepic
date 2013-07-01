@@ -2,3 +2,5 @@ assets/
 protected/runtime/
 images/upload/
 nbproject/
+protected/config/main.php
+protected/config/params.php
