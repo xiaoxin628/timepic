@@ -16,17 +16,12 @@ $this->breadcrumbs=array(
 			
 		</div>
 	  <?php endforeach;?>
+	  <div class="pagination">
 	  <?php $this->widget('bootstrap.widgets.TbPager', 
 			  array('pages'=>$pages,
-				  'htmlOptions'=>array('class'=>'pagination'),
-//				  'header'=>'',
-//				  'firstPageLabel'=>'首页',
-//				  'lastPageLabel'=>'末页',
-//				  'prevPageLabel'=>'<<',
-//				  'nextPageLabel'=>'>>',
-				  
 				)
 		);?>
+	  </div>
 	  
 
 	<div class="row">
