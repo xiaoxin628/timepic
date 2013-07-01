@@ -165,8 +165,8 @@ $this->breadcrumbs=array(
 <div class="row-fluid totorosubmit">
 	<input type="hidden" value="GDVs" name="SubmissionMode" />
 
-	<input type="hidden" value="600000" name="SireGVC" />
-	<input type="hidden" value="600000" name="DamGVC" />
+	<input type="hidden" value="600000" name="SireGVC" id="SireGVC"/>
+	<input type="hidden" value="600000" name="DamGVC" id="DamGVC"/>
 	<input onclick="CalcGenotype();" type="button" value="提交" class="btn btn-primary"/>
 	<button onclick="window.location.href='/totoroCrossCalculator'" type="button" value="重置" class="btn"/>重置</button>
 </div>
@@ -215,8 +215,8 @@ $this->breadcrumbs=array(
 		}
 		
 		function CalcGenotype() {
-			$("#SireGVC").value = CompileGenotypeValueCode("Sire");
-			$("#DamGVC").value = CompileGenotypeValueCode("Dam");
+			$("#SireGVC").val(CompileGenotypeValueCode("Sire"));
+			$("#DamGVC").val(CompileGenotypeValueCode("Dam"));
 			$("#ChinCalc").submit();
 		}
 		
