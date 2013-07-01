@@ -13,6 +13,7 @@ return array(
 	'language'=>'zh_cn',
 	'homeUrl' => 'http://test.timepic.net',
 	'theme' => 'classic',
+    'timeZone'=> 'Asia/Chongqing',
 	// preloading 'log' component
 	'preload'=>array('log'),
 
@@ -23,30 +24,31 @@ return array(
 		'application.extensions.*',
 		'application.helpers.*'
 	),
-
 	'aliases' => array(
 		//assuming you extracted the files to the extensions folder
 		'xupload' => 'ext.xupload',
-		'bootstrap' => 'ext.bootstrap',
 	),
+
 
 	'modules'=>array(
 		// uncomment the following to enable the Gii tool
+	/*	
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
-			'password'=>'lishuzu511',
+			'password'=>'xxxx',
 		 	// If removed, Gii defaults to localhost only. Edit carefully to taste.
 			'ipFilters'=>array('127.0.0.1','::1'),
 			'generatorPaths'=>array(
-				'bootstrap.gii',
+				'bootstrap.gii', // since 0.9.1
 			),
 		),
+	*/
 		//admin管理模板
 		'admin' => array(
 			'adminLayout'=> 'application.modules.admin.views.layouts.column2',	
 		),
 		'totorotalk',
-		'api',
+        'chinchilla',
 	),
 
 	// application components
@@ -72,7 +74,6 @@ return array(
 			'urlFormat'=>'path',
 			'showScriptName' => false,
 			'urlSuffix' => '.html',
-			//'matchValue'=>false,
 			'rules'=>array(
 				'<controller:\w+>/<action:\w+>/page/<page:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
@@ -89,8 +90,8 @@ return array(
 			'class'=>'CDbConnection',
 			'connectionString' => 'mysql:host=localhost;dbname=timepic',
 			'emulatePrepare' => true,
-			'username' => 'root',
-			'password' => 'lishuzu511',
+			'username' => 'xxxxx',
+			'password' => 'xxxxxx',
 			'charset' => 'utf8',
 			'tablePrefix' => 'tp_',
 			//'enableProfiling'=>true
@@ -100,29 +101,28 @@ return array(
 			// use 'site/error' action to display errors
             'errorAction'=>'site/error',
         ),
-                'log' => array(
-                    'class' => 'CLogRouter',
-                    'routes' => array(
-                        array(
-                            'class' => 'CFileLogRoute',
-                            'levels' => 'error, warning',
-                            'categories' => 'system.*',
-                        ),
-                        array(
-                                'class'=>'CFileLogRoute',
-                                'levels'=>'trace, info',
-                                'categories'=>'timepic.*',
-                                //'filter'=>'CLogFilter',
-                                'logFile'=>'timepic.log',
-                        ),
-                    // uncomment the following to show log messages on web pages
-                    /*
-                      array(
-                      'class'=>'CWebLogRoute',
-                      ),
-                     */
-                    ),
-                ),
+		'log'=>array(
+			'class'=>'CLogRouter',
+			'routes'=>array(
+				array(
+					'class'=>'CFileLogRoute',
+					'levels'=>'error, warning',
+				),
+				array(
+					'class'=>'CFileLogRoute',
+					'levels'=>'trace, info',
+					'categories'=>'timepic.*',
+					//'filter'=>'CLogFilter',
+					'logFile'=>'timepic.log',
+				),
+				// uncomment the following to show log messages on web pages
+				/*
+				array(
+					'class'=>'CWebLogRoute',
+				),
+				*/
+			),
+		),
 		'image'=>array(
 				  'class'=>'application.extensions.image.CImageComponent',
 					// GD or ImageMagick
@@ -140,5 +140,5 @@ return array(
 
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
-	'params'=>  require_once(dirname(__FILE__).'/params.php')
+	'params'=>  require_once(dirname(__FILE__).'/params.php'),
 );
