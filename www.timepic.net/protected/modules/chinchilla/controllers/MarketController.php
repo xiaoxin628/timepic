@@ -1,55 +1,17 @@
 <?php
 
-class MarketController extends Controller
+class MarketController extends TPController
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
-	public $translate = array(
-			
-			"Beige (Hetero)" => "米色",
-			"Beige (Homo)" => "金色",
-			"(Hetero Beige)" => "(米色)",
-			"(Hetero  Beige)" => "(米色)",
-			"(Homo Beige)" => "(金色)",
-			"(Homo  Beige)" => "(金色)",
-			"Mosaic" => "纯白",
-			"Silver" => "银白",
-			"Sapphire" => "蓝灰",
-			"Violet" => "紫灰",
-			"Carrier" => "基因",
-			"Black" => "黑色",
-			"Brown" => "咖啡",
-			"Velvet" => "丝绒",
-			"Vio-Sap" => "紫蓝灰",
-			"Chocolate" => "深褐色",
-			"Ebony" => "黑色",
-			"White" => "白色",
-			"Tan" => "咖啡",
-			"TOV" => "丝绒",
-			"Sap" => "蓝灰",
-			"Homo Beige" => "金色",
-			"Lethal" => "致命的",
-			"Light" => "浅",
-			"Medium" => "中",
-			"MediTOV" => "中",
-			"Extra" => "纯",
-			"Dark" => "深",
-			"Pink" => "粉",
-			"Standard" => "标准",
-			"Carr." => "基因",
-			"Carr" => "基因",
-			"Gray" => "灰",
-			"Beige" => "米色",
-			"Homo" => "类似",
-			"Hetero" => "不同",
-			"and" => "并且",
-			"or" => "或",
+	public $translate = array();
 
-		);
-
+	public function init(){
+		//get chinchilla color translate data from the config/param
+		 $this->translate = Yii::app()->getParams('chinchilla')->chinchilla['colorTranslate'];
+	}
 	/**
 	 * @return array action filters
 	 */
@@ -78,7 +40,7 @@ class MarketController extends Controller
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+				'users'=>array('@'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -87,6 +49,7 @@ class MarketController extends Controller
 	}
 	// show chinchilla color by the imageid
 	public function actionGetChinchillaColor($imageid){
+
 		if (isset($imageid)) {
 			$row = Yii::app()->db->createCommand()->select('*')->from('{{totoro_color}}')->where('imageid=:imageid', array(':imageid' => $imageid))->query()->read();
 			//只有语言选择中文才开始翻译。
@@ -190,10 +153,36 @@ class MarketController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('ChinchillaMarketTrade');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+
+		$model=new ChinchillaMarketTrade;
+		
+		$sql = "SELECT tradeid, uid, title, price, dateline, pic  FROM {{chinchilla_market_trade}} ORDER BY dateline DESC";
+		$criteria = new CDbCriteria();
+		$result = Yii::app()->db->createCommand($sql)->query();
+		$pages=new CPagination($result->rowCount);
+		$pages->pageSize = 2;
+		$pages->applyLimit($criteria);
+		$result=Yii::app()->db->createCommand($sql." LIMIT :offset,:limit");
+		$result->bindValue(':offset', $pages->currentPage*$pages->pageSize);
+		$result->bindValue(':limit', $pages->pageSize);
+		$query = $result->query();
+		while($row = $query->read()){
+			if ($row['uid']) {
+				$row['memberInfo'] = member::model()->getMemberInfo($row['uid']); 
+			}
+			$data[] = $row;
+		}
+		$this->render('index',
+				array('model'=>$model,
+						'data'=>$data,
+						'pages'=>$pages,
+					)
+				);
+
+		// $dataProvider=new CActiveDataProvider('ChinchillaMarketTrade');
+		// $this->render('index',array(
+		// 	'dataProvider'=>$dataProvider,
+		// ));
 	}
 
 	/**

@@ -117,4 +117,10 @@ class Member extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+	public function getMemberInfo($uid){
+		$memberInfo = $this->findByPk($uid);
+		return $memberInfo->attributes;
+
+	}
 }

@@ -11,6 +11,7 @@
  * @property integer $birthday
  * @property integer $weight
  * @property string $ip
+ * @property string $title
  * @property string $description
  * @property integer $price
  * @property string $pic
@@ -46,19 +47,20 @@ class ChinchillaMarketTrade extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('uid, breed, gender, birthday, weight, description, price, expiredDate', 'required'),
+			array('uid, breed, gender, birthday, weight, title, description, price, expiredDate', 'required'),
 			array('uid, breed, gender, weight, price, dateline, displayorder', 'numerical', 'integerOnly'=>true),
 			array('gender', 'in', 'range'=>array(0, 1)),
 			array('birthday', 'date','format'=>'yyyy-mm-dd'),
 			array('expiredDate', 'date','format'=>'yyyy-mm-dd'),
 			array('weight', 'numerical', 'min'=>10, 'max'=>2000),
 			array('ip', 'length', 'max'=>15),
-			array('description', 'length', 'min'=>4, 'max'=>2000, 'message'=>'{attribute}'),
+			array('description', 'length', 'min'=>4, 'max'=>60),
+			array('description', 'length', 'min'=>4, 'max'=>2000),
 			array('price', 'numerical', 'min'=>1, 'max'=>1000000),
 			array('pic', 'default'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('tradeId, uid, breed, gender, birthday, weight, ip, description, price, pic, expiredDate, dateline, displayorder', 'safe', 'on'=>'search'),
+			array('tradeId, uid, breed, gender, birthday, weight, ip, title, description, price, pic, expiredDate, dateline, displayorder', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -86,6 +88,7 @@ class ChinchillaMarketTrade extends CActiveRecord
 			'birthday' => '生日',
 			'weight' => '体重',
 			'ip' => 'Ip',
+			'title' => '标题',
 			'description' => '描述',
 			'price' => '价格',
 			'pic' => '封面',
@@ -113,6 +116,7 @@ class ChinchillaMarketTrade extends CActiveRecord
 		$criteria->compare('birthday',$this->birthday);
 		$criteria->compare('weight',$this->weight);
 		$criteria->compare('ip',$this->ip,true);
+		$criteria->compare('title',$this->title,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('price',$this->price);
 		$criteria->compare('pic',$this->pic,true);

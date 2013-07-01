@@ -21,7 +21,7 @@
 				<?php echo CHtml::link('高级模式', '#', array('class'=>'btn btn-primary offset1 span1', 'onclick'=>"ChangeMenu('advanced');")) ?>
 			</div>
 			<div class="control-group">
-				<?php echo CHtml::label('颜色', 'ChinchillaMarketTrade_Gene_classic',array('class'=>'control-label')) ?>
+				<?php echo CHtml::label('颜色<span class="required">*</span>', 'ChinchillaMarketTrade_Gene_classic',array('class'=>'control-label')) ?>
 				<div class="controls">
 					<?php echo CHtml::dropDownList('ChinchillaMarketTrade[classic]', '600000', array(600000=>'标灰',
 																			 600100=>'纯白或银白',
@@ -103,7 +103,7 @@
 		<div class="span2">
 			<Legend>
 				
-				<div class="fluid">
+				<div class="row-fluid">
 					<div class="icon-home"> </div>
 					<img id="ChinchillaImage" class="img-circle"  src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/images/static/totorocross/600000.jpg" alt="Chinchilla Sire Phenotype" />
 				</div>
@@ -171,12 +171,21 @@
 		</div>
 	</div>
 
+	<div class="control-group">
+		<?php echo $form->labelEx($model,'title', array('class'=>'control-label')); ?>
+		<div class="controls">
+			<?php echo $form->textField($model,'title',array('class'=>'span5','maxlength'=>60)); ?>
+			<div class="row-fluid">
+				<?php echo $form->error($model,'title', array('class'=>'help-inline error')); ?>
+			</div>
+		</div>
+	</div>
 
 	<div class="control-group">
 		<?php echo $form->labelEx($model,'description', array('class'=>'control-label')); ?>
 		<div class="controls">
 			<?php echo $form->textArea($model,'description',array('rows'=>6, 'cols'=>50, 'class'=>'span5')); ?>
-			<div class="fluid">
+			<div class="row-fluid">
 				<?php echo $form->error($model,'description', array('class'=>'help-inline error')); ?>
 			</div>
 		</div>
