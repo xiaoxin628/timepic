@@ -80,38 +80,39 @@ class CommonHelper {
                 return $strcut . $dot;
         }
 
-        //获取龙猫图片路径
-        public static function get_totorophoto($path, $size = 'normal', $type = 'path', $watermark='0') {
+        //获取图片路径
+        public static function getImageByType($path, $type, $size = 'big', $formate = 'path', $watermark='0') {
                 $size = in_array($size, array('thumb', 'normal', 'big', 'origin')) ? $size : 'big';
-                $type = in_array($type, array('path', 'url')) ? $type : 'path';
+                $type = in_array($type, array('totorotalk', 'coffee', 'chinchillaMarket'))? $type : '';
+                $formate = in_array($formate, array('path', 'url')) ? $formate : 'path';
+                if (empty($type)) {
+                    return false;
+                }
+                
                 $siteurl = Yii::app()->params['attachurl'] ? Yii::app()->params['attachurl'] : Yii::app()->params['site'];
 
-                $baseurl = $siteurl . "/images/upload/totorotalk/";
-                $dir = Yii::getPathOfAlias('webroot') . '/images/upload/totorotalk/';
-                $watermarkKey = 'timepic719';
+                $baseUrl = $siteurl . "/images/upload/".$type;
+                $basePath = Yii::getPathOfAlias('webroot') . '/images/upload/'.$type;
+                $watermarkKey = Yii::app()->params['watermarkKey'];
                 if ($path) {
                         $fileinfo = pathinfo($path);
-                        if ($type == 'path') {
+                        if ($formate == 'path') {
                                 if ($size == 'origin') {
-                                        $filename = $dir . $path;
+                                        $filename = $basePath . '/' . $path;
                                 } else {
-                                        $filename = $dir . $fileinfo['dirname'] . '/' . $size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'];
+                                        $filename = $basePath . '/' . $fileinfo['dirname'] . '/' . $size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'];
                                 }
-                        }
-                        $sizefile = $dir . $fileinfo['dirname'] . '/' . $size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'];
-                        if (!file_exists($sizefile)) {
-                                TotorotalkPhoto::resize($dir . $path);
                         }
 
-                        if ($type == 'url') {
+                        if ($formate == 'url') {
                                 if ($size == "origin") {
-                                        $filename = $baseurl . $path;
+                                        $filename = $baseUrl . '/' . $path;
                                 } else {
-                                        $filename = $baseurl . $fileinfo['dirname'] . '/' . $size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'];
+                                        $filename = $baseUrl . '/' . $fileinfo['dirname'] . '/' . $size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'];
                                 }
                                 if ($watermark) {
-                                        $filename = $baseurl . $fileinfo['dirname'] . '/mark/' . md5($size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'] . $watermarkKey) . '.' . $fileinfo['extension'];
-                                        $filepath = $dir . $fileinfo['dirname'] . '/mark/' . md5($size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'] . $watermarkKey) . '.' . $fileinfo['extension'];
+                                        $filename = $baseUrl . '/' . $fileinfo['dirname'] . '/mark/' . md5($size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'] . $watermarkKey) . '.' . $fileinfo['extension'];
+                                        $filepath = $basePath . '/' . $fileinfo['dirname'] . '/mark/' . md5($size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'] . $watermarkKey) . '.' . $fileinfo['extension'];
                                         //缩略图 不打水印
                                         if (!file_exists($filepath)) {
                                                 $addwater = $size == 'thumb' ? FALSE : TRUE;
@@ -119,8 +120,8 @@ class CommonHelper {
                                                 if ($size == 'big') {
                                                         $watermarkfile = Yii::getPathOfAlias('webroot') . '/images/static/common/watermark/960.png';
                                                 }
-                                                $photoPath = $dir . $fileinfo['dirname'] . '/' . $size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'];
-                                                TotorotalkPhoto::waterMark($photoPath, $watermarkfile, $addwater);
+                                                $photoPath = $basePath .'/'. $fileinfo['dirname'] . '/' . $size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'];
+                                                UploadHelper::waterMark($photoPath, $watermarkfile);
                                         }
                                 }
                         }

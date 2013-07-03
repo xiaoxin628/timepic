@@ -65,14 +65,14 @@ class PhotoController extends Controller
 			while($row = $query->read()) {
 				$row['dateline'] = date("Y-m-d H:i:s", $row['dateline']);
 				if($row['filepath']){
-					if (!file_exists(CommonHelper::get_totorophoto($row['filepath'], 'normal'))) {
-						$row['image'] = CommonHelper::get_totorophoto($row['filepath'], "origin", 'url');			
+					if (!file_exists(CommonHelper::getImageByType($row['filepath'], "totorotalk", 'normal'))) {
+						$row['image'] = CommonHelper::getImageByType($row['filepath'], "totorotalk", "origin", 'url');			
 					}else{
-						$row['image'] = CommonHelper::get_totorophoto($row['filepath'], "normal", 'url');			
+						$row['image'] = CommonHelper::getImageByType($row['filepath'], "totorotalk", "normal", 'url');			
 					}
 
 					if ($row['thumb']) {
-						$row['thumb'] = CommonHelper::get_totorophoto($row['filepath'], "thumb", 'url');
+						$row['thumb'] = CommonHelper::getImageByType($row['filepath'], "totorotalk", "thumb", 'url');
 					}else{
 						$row['thumb'] = $row['image'];					
 					}

@@ -1,6 +1,6 @@
 <li class="span2" style="margin-left: 5px;">
         <a href="<?php echo Yii::app()->createUrl('totoroPic/view/'.$data['pid'])?>" class="thumbnail lightbox">
-            <img class="img-rounded" src="<?php echo CommonHelper::get_totorophoto($data['filepath'], "thumb", 'url', 1);?>" alt="totoropic">
+            <img class="img-rounded" src="<?php echo CommonHelper::getImageByType($data['filepath'], "totorotalk", "thumb", 'url', 1);?>" alt="totoropic">
         </a>
         <p>            
             <?php $this->widget('bootstrap.widgets.TbButton', array(
@@ -49,7 +49,7 @@
                         jiathis_config.url = "<?php echo Yii::app()->createAbsoluteUrl('/totoroPic/view/'.$data['pid'])?>";
                         jiathis_config.title = "#<?php echo Yii::t('Base','ShareTotorotalk');?>#";
                         jiathis_config.summary = "<?php echo Yii::t('Base','TotoroTalk_App_caption');?>";
-                        jiathis_config.pic = "<?php echo CommonHelper::get_totorophoto($data['filepath'], "normal", 'url', 1);?>";
+                        jiathis_config.pic = "<?php echo CommonHelper::getImageByType($data['filepath'], "totorotalk", "normal", 'url', 1);?>";
                     });
                     </script>
                 </p>

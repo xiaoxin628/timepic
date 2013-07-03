@@ -47,7 +47,7 @@ $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
 <?php endif; ?>
     </div>
     <div class="span8">
-        <img class="img-rounded" src="<?php echo CommonHelper::get_totorophoto($currentPic['filepath'], "big", 'url', 1); ?>" alt="totoropic" />
+        <img class="img-rounded" src="<?php echo CommonHelper::getImageByType($currentPic['filepath'], "totorotalk", "big", 'url', 1); ?>" alt="totoropic" />
     </div>
     <div class="span2">
 <?php if ($nextid): ?>
@@ -86,7 +86,7 @@ $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
             <?php foreach ($relatePic as $photo): ?>
                 <li class="span2">
                     <a href="<?php echo Yii::app()->createUrl('totoroPic/view/' . $photo['pid']) ?>" class="thumbnail noborder">
-                        <img class="img-polaroid" src="<?php echo CommonHelper::get_totorophoto($photo['filepath'], "thumb", 'url', 1); ?>" alt="">
+                        <img class="img-polaroid" src="<?php echo CommonHelper::getImageByType($photo['filepath'], "totorotalk", "thumb", 'url', 1); ?>" alt="">
                     </a>
                 </li>	
     <?php endforeach; ?>
@@ -120,7 +120,7 @@ $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
         url:location.href,
         summary:"<?php echo Yii::t('Base', 'TotoroTalk_App_caption'); ?>",
         title:"#<?php echo Yii::t('Base', 'ShareTotorotalk'); ?>#",
-        pic:"<?php echo CommonHelper::get_totorophoto($currentPic['filepath'], "big", 'url', 1); ?>",
+        pic:"<?php echo CommonHelper::getImageByType($currentPic['filepath'], "big", 'url', 1); ?>",
         ralateuid:{
             "tsina":"2734978073"
         },

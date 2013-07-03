@@ -93,10 +93,10 @@ class TotorotalkPhotoController extends adminController {
     public function actionDelete($id) {
         if (Yii::app()->request->isPostRequest) {
             $model = $this->loadModel($id);
-            $image_origin = CommonHelper::get_totorophoto($model->filepath, "origin");
-            $image_thumb = CommonHelper::get_totorophoto($model->filepath, "thumb");
-            $image_big = CommonHelper::get_totorophoto($model->filepath, "big");
-            $image_normal = CommonHelper::get_totorophoto($model->filepath, "normal");
+            $image_origin = CommonHelper::getImageByType($model->filepath,'totorotalk' , "origin");
+            $image_thumb = CommonHelper::getImageByType($model->filepath,'totorotalk', "thumb");
+            $image_big = CommonHelper::getImageByType($model->filepath,'totorotalk', "big");
+            $image_normal = CommonHelper::getImageByType($model->filepath,'totorotalk', "normal");
             if (file_exists($image_origin) && file_exists($image_thumb)) {
                 @unlink($image_origin);
                 @unlink($image_thumb);
@@ -144,7 +144,7 @@ class TotorotalkPhotoController extends adminController {
 		$model = $this->loadModel(1271);
 //		$model = $this->loadModel(1274);
 //		$model = $this->loadModel(1106);
-		$file = CommonHelper::get_totorophoto($model->filepath, "normal", 'path');
+		$file = CommonHelper::getImageByType($model->filepath,'totorotalk', "normal", 'path');
 		
 		$layer = new ImageWorkshop(array(
 					"imageFromPath" => $file,

@@ -60,7 +60,7 @@ Yii::app()->clientScript->registerScript('admin_lightbox',"$('a.lightbox').light
 		'imgtype',
 		'size',
 		'thumb',
-		array('name'=>'filepath','type'=>'html', 'value'=>'CHtml::link(CHtml::image(CommonHelper::get_totorophoto($data->filepath, "thumb", "url"), $data->filename), CommonHelper::get_totorophoto($data->filepath, "origin", "url"), array("class"=>"lightbox"))'),
+		array('name'=>'filepath','type'=>'html', 'value'=>'CHtml::link(CHtml::image(CommonHelper::getImageByType($data->filepath, "totorotalk", "thumb", "url"), $data->filename), CommonHelper::getImageByType($data->filepath, "totorotalk", "origin", "url"), array("class"=>"lightbox"))'),
 //		'filepath',
 		'filename',
 		array('name'=> 'dateline', 'value' => 'date("Y-m-d H:i:s", $data->dateline)'),
