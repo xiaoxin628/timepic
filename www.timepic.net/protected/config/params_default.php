@@ -6,6 +6,8 @@ return array(
     'site' => 'http://test.timepic.net',
     //附件url 可以换到cdn显示
     'attachurl' => 'http://test.timepic.net',
+    'tmpPath' => '/images/upload/tmp',
+    'watermarkKey' => 'timepic719',
     'coffee_category' => array(
         '1' => array(
             'catid' => '1',
