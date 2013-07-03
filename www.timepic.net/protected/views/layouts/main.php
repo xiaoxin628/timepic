@@ -42,7 +42,7 @@
 
 //memberinfo
 $memberInfo = array();
-if (!Yii::app()->user->isGuest && Yii::app()->user->username) {
+if (!Yii::app()->user->isGuest && isset(Yii::app()->user->username)) {
         $adminLogin = isset (Yii::app()->user->adminid) ? '<li><a href="/admin/member/login">'."登陆后台".'</a></li>': '';
         $memberInfo = '<ul class="nav pull-right">
                          <li class="dropdown">

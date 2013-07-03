@@ -28,10 +28,12 @@
       <?php  foreach ($data as $item):?>
         <div class="row-fluid well well-large trade">
             <div class="span2">
-                <img class="tradeImage" src="http://test.timepic.net/images/upload/totorotalk/201302/mark/61b3f342ec1eb95a0101407cf9d87d26.jpg">
+                <a href="<?php echo $this->createUrl('view', array('id'=>$item['tradeId']))?>" target="_blank">
+                    <img class="tradeImage" src="<?php echo CommonHelper::getImageByType($item['pic'], 'chinchillaMarket', 'thumb', 'url');?>">
+                </a>
             </div>
             <div class="offset2 row-fluid detail">
-                <p class=""><strong><?php echo CHtml::encode($item['title']);?></strong></p>
+                <p class=""><a href="<?php echo $this->createUrl('view', array('id'=>$item['tradeId']))?>" target="_blank"><strong><?php echo CHtml::encode($item['title']);?></strong></a></p>
                 <p class="label label-info price">￥<?php echo CHtml::encode($item['price']);?></p>
                 <p class="muted"><?php echo CHtml::encode($item['memberInfo']['username']); ?> - <?php echo CHtml::encode(date("Y-m-d H:i:s", $item['dateline'])); ?></p>
             </div>

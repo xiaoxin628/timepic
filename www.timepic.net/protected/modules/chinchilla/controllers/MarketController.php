@@ -69,8 +69,11 @@ class MarketController extends TPController
 	 */
 	public function actionView($id)
 	{
+        $model = ChinchillaMarketTrade::model()->with('author')->findByPk($id);
+        $tradeImages = ChinchillaMarketTradePic::model()->findAll('uid=:uid and tradeId=:tradeId', array(':uid'=>Yii::app()->user->uid, ':tradeId'=>$model->tradeId));
 		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+			'model'=> $model,
+            'tradeImages'=>$tradeImages,
 		));
 	}
 
@@ -208,16 +211,16 @@ class MarketController extends TPController
 	 */
 	public function actionDelete($id)
 	{
-		if(Yii::app()->request->isPostRequest)
-		{
-			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
-
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-		}
-		else
+//		if(Yii::app()->request->isPostRequest)
+//		{
+//			// we only allow deletion via POST request
+//			$this->loadModel($id)->delete();
+//
+//			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+//			if(!isset($_GET['ajax']))
+//				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+//		}
+//		else
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
 	}
 
@@ -229,7 +232,7 @@ class MarketController extends TPController
 
 		$model=new ChinchillaMarketTrade;
 		
-		$sql = "SELECT tradeid, uid, title, price, dateline, pic  FROM {{chinchilla_market_trade}} ORDER BY dateline DESC";
+		$sql = "SELECT tradeId, uid, title, price, dateline, pic  FROM {{chinchilla_market_trade}} ORDER BY dateline DESC";
 		$criteria = new CDbCriteria();
 		$result = Yii::app()->db->createCommand($sql)->query();
 		$pages=new CPagination($result->rowCount);

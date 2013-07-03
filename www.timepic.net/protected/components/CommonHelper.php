@@ -243,6 +243,7 @@ class CommonHelper {
                 }
                 return false;
         }
+        
 
         public static function TimePicMenu($uri, $right=FALSE) {
                 $TimePic_menu = array(

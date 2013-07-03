@@ -79,6 +79,7 @@ class ChinchillaMarketTrade extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+            'author'=>array(self::BELONGS_TO, 'Member', 'uid'),
 		);
 	}
 
@@ -155,6 +156,21 @@ class ChinchillaMarketTrade extends CActiveRecord
 		$this->expiredDate = strtotime($this->expiredDate);
 		return true;
 	}
+    
+    public function getChinchillaColor($colorCode){
+        if ($colorCode) {
+            $translate = Yii::app()->getParams('chinchilla')->chinchilla['colorTranslate'];
+			$row = Yii::app()->db->createCommand()->select('*')->from('{{totoro_color}}')->where('imageid=:imageid', array(':imageid' => $colorCode))->query()->read();
+			//只有语言选择中文才开始翻译。
+			if (Yii::app()->language == 'zh_cn') {
+				$row['color'] = str_replace(array_keys($translate), $translate, $row['color']);	
+			}
+			if (isset($row['color'])) {
+				return $row['color'];
+			}
+        }
+        return FALSE;
+    }
     /**
      *  white        白色 0无 1有
      *  black        黑色 0无 1浅 2中 3深 4纯
