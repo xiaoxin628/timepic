@@ -86,10 +86,7 @@ $this->widget('bootstrap.widgets.TbNavbar', array(
 ?>
 
 <div id="container" class="container">
-	
-	<header >
-		
-	</header>
+	<header></header>
 	
 	<?php echo $content; ?>
 	<div class="clear"></div>

@@ -23,19 +23,22 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Chinchilla Market Trades</h1>
-
-<p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>
-
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button btn')); ?>
-<div class="search-form" style="display:none">
-<?php $this->renderPartial('_search',array(
-	'model'=>$model,
+<div class="row-fluid">
+<?php $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
+    'links'=>array('龙猫市场'=>array('index'), '我的龙猫交易'),
 )); ?>
-</div><!-- search-form -->
+</div>
+<div class="row-fluid">
+    <?php $this->widget('bootstrap.widgets.TbMenu', array(
+    'type'=>'pills', // '', 'tabs', 'pills' (or 'list')
+    'stacked'=>false, // whether this is a stacked menu
+    'items'=>array(
+        array('label'=>'龙猫市场', 'url'=>array('index')),
+        array('label'=>'创建龙猫交易', 'url'=>array('create')),
+        array('label'=>'我的龙猫交易', 'url'=>array('admin'), 'active'=>true),
+    ),
+    'htmlOptions'=>array('class'=> 'pull-right'),
+)); ?>
 
 <?php $this->widget('bootstrap.widgets.TbGridView',array(
 	'id'=>'chinchilla-market-trade-grid',

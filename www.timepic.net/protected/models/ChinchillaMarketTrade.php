@@ -10,12 +10,19 @@
  * @property integer $gender
  * @property integer $birthday
  * @property integer $weight
+ * @property integer $white
+ * @property integer $black
+ * @property integer $beige
+ * @property integer $velvet
+ * @property integer $violet
+ * @property integer $sapphire
  * @property string $ip
  * @property string $title
  * @property string $description
  * @property integer $price
  * @property string $pic
  * @property integer $expiredDate
+ * @property integer $mode
  * @property integer $dateline
  * @property integer $displayorder
  */
@@ -48,19 +55,19 @@ class ChinchillaMarketTrade extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('uid, breed, gender, birthday, weight, title, description, price, expiredDate', 'required'),
-			array('uid, breed, gender, weight, price, dateline, displayorder', 'numerical', 'integerOnly'=>true),
+			array('uid, breed, gender, weight, white, black, beige, velvet, violet, sapphire, price, mode, dateline, displayorder', 'numerical', 'integerOnly'=>true),
 			array('gender', 'in', 'range'=>array(0, 1)),
 			array('birthday', 'date','format'=>'yyyy-mm-dd'),
 			array('expiredDate', 'date','format'=>'yyyy-mm-dd'),
 			array('weight', 'numerical', 'min'=>10, 'max'=>2000),
 			array('ip', 'length', 'max'=>15),
-			array('description', 'length', 'min'=>4, 'max'=>60),
+			array('title', 'length', 'min'=>4, 'max'=>60),
 			array('description', 'length', 'min'=>4, 'max'=>2000),
 			array('price', 'numerical', 'min'=>1, 'max'=>1000000),
-			array('pic', 'default'),
+			array('pic', 'length', 'max'=>150),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('tradeId, uid, breed, gender, birthday, weight, ip, title, description, price, pic, expiredDate, dateline, displayorder', 'safe', 'on'=>'search'),
+			array('tradeId, uid, breed, gender, birthday, weight, white, black, beige, velvet, violet, sapphire, ip, title, description, price, pic, expiredDate, dateline, displayorder', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -87,12 +94,19 @@ class ChinchillaMarketTrade extends CActiveRecord
 			'gender' => '性别',
 			'birthday' => '生日',
 			'weight' => '体重',
+			'white' => '白色', 
+			'black' => '黑色',
+			'beige' => '米色',
+			'velvet' => '丝绒', 
+			'violet' => '紫色', 
+			'sapphire' => '蓝色', 
 			'ip' => 'Ip',
 			'title' => '标题',
 			'description' => '描述',
 			'price' => '价格',
 			'pic' => '封面',
 			'expiredDate' => '过期时间',
+            'mode' => '选择模式', //0经典模式 1高级模式
 			'dateline' => '发表日期',
 			'displayorder' => 'Displayorder',
 		);
@@ -115,12 +129,19 @@ class ChinchillaMarketTrade extends CActiveRecord
 		$criteria->compare('gender',$this->gender);
 		$criteria->compare('birthday',$this->birthday);
 		$criteria->compare('weight',$this->weight);
+        $criteria->compare('white',$this->white);
+		$criteria->compare('black',$this->black);
+		$criteria->compare('beige',$this->beige);
+		$criteria->compare('velvet',$this->velvet);
+		$criteria->compare('violet',$this->violet);
+		$criteria->compare('sapphire',$this->sapphire);
 		$criteria->compare('ip',$this->ip,true);
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('price',$this->price);
 		$criteria->compare('pic',$this->pic,true);
 		$criteria->compare('expiredDate',$this->expiredDate);
+		$criteria->compare('mode',$this->mode);
 		$criteria->compare('dateline',$this->dateline);
 		$criteria->compare('displayorder',$this->displayorder);
 
@@ -134,4 +155,51 @@ class ChinchillaMarketTrade extends CActiveRecord
 		$this->expiredDate = strtotime($this->expiredDate);
 		return true;
 	}
+    /**
+     *  white        白色 0无 1有
+     *  black        黑色 0无 1浅 2中 3深 4纯
+     *  beige        0无 1 米色 2金色
+     *  velvet       丝绒 0 无 1有
+     *  violet       紫色 0 无 3紫灰 5带紫灰基因
+     *  sapphire     蓝色 0 无 1蓝灰 4带蓝灰基因
+     * @param type $color 600000 六位数字
+     */
+    public function checkColor($color){
+        $colors = array();
+        if ($color) {
+            for($i=0;$i<6;$i++){
+                switch ($i) {
+                    case 0:
+                        if ($color[$i] == 6) {
+                            $colors['sapphire'] = $colors['violet'] = '0';
+                        }elseif($color[$i] == 3 || $color[$i] == 5){
+                            $colors['violet'] = $color[$i];
+                            $colors['sapphire'] = '0';
+                        }elseif($color[$i] == 1 || $color[$i] == 4){
+                            $colors['sapphire'] = $color[$i];
+                            $colors['violet'] = '0';   
+                        }
+                        break;
+                    case 1:
+                        $colors['black'] = $color[$i];
+                        break;
+                    case 2:
+                        $colors['velvet'] = $color[$i];
+                        break;
+                    case 3:
+                        $colors['white'] = $color[$i];
+                        break;
+                    case 4:
+                        $colors['beige'] = $color[$i];
+                        break;
+                    case 6:
+                        break;
+                    default:
+                        break;
+                }
+            }  
+            return $colors;
+        }
+        return false;
+    }
 }

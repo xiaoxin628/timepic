@@ -115,13 +115,16 @@ class CommonHelper {
                                         $filepath = $basePath . '/' . $fileinfo['dirname'] . '/mark/' . md5($size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'] . $watermarkKey) . '.' . $fileinfo['extension'];
                                         //缩略图 不打水印
                                         if (!file_exists($filepath)) {
-                                                $addwater = $size == 'thumb' ? FALSE : TRUE;
-                                                $watermarkfile = Yii::getPathOfAlias('webroot') . '/images/static/common/watermark/480.png';
-                                                if ($size == 'big') {
-                                                        $watermarkfile = Yii::getPathOfAlias('webroot') . '/images/static/common/watermark/960.png';
+                                                $addwater = ($size == 'thumb') ? FALSE : TRUE;
+                                                if ($addwater) {
+                                                    $watermarkfile = Yii::getPathOfAlias('webroot') . '/images/static/common/watermark/480.png';
+                                                    if ($size == 'big') {
+                                                            $watermarkfile = Yii::getPathOfAlias('webroot') . '/images/static/common/watermark/960.png';
+                                                    }
+                                                    $photoPath = $basePath .'/'. $fileinfo['dirname'] . '/' . $size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'];
+                                                    UploadHelper::waterMark($photoPath, $watermarkfile);
                                                 }
-                                                $photoPath = $basePath .'/'. $fileinfo['dirname'] . '/' . $size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'];
-                                                UploadHelper::waterMark($photoPath, $watermarkfile);
+
                                         }
                                 }
                         }

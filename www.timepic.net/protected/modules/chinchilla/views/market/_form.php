@@ -1,3 +1,56 @@
+<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl."/js/SWFUpload/swfupload.js"); ?>
+<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl."/js/SWFUpload/application_handlers.js"); ?>
+<?php Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl."/css/SWFUpload.css"); ?>
+<script type="text/javascript">
+var TPSWFUPLOADIMAGEPATH = '<?php echo Yii::app()->request->getBaseUrl(true).'/images/static/common/SWFUpload/'?>';
+var TPTHUMBNAILURL = '<?php echo Yii::app()->request->getBaseUrl(true).$this->createUrl('showTmpThumbnail')?>';
+		var swfu;
+		window.onload = function () {
+			swfu = new SWFUpload({
+				// Backend Settings
+				upload_url: "<?php echo $this->createUrl('uploadTradePic')?>",
+                post_params: {"PHPSESSID": "<?php echo Yii::app()->session->sessionID; ?>", 'tradeId':'<?php echo isset($model->tradeId) ? $model->tradeId: 0;?>'},
+
+				// File Upload Settings
+				file_size_limit : "2 MB",	// 2MB
+				file_types : "*.jpg",
+				file_types_description : "JPG Images",
+				file_upload_limit : "4",
+
+				// Event Handler Settings - these functions as defined in Handlers.js
+				//  The handlers are not part of SWFUpload but are part of my website and control how
+				//  my website reacts to the SWFUpload events.
+				file_queue_error_handler : fileQueueError,
+				file_dialog_complete_handler : fileDialogComplete,
+				upload_progress_handler : uploadProgress,
+				upload_error_handler : uploadError,
+				upload_success_handler : uploadSuccess,
+				upload_complete_handler : uploadComplete,
+
+				// Button Settings
+				button_image_url : "",
+				button_placeholder_id : "SWFUploadButtonPlaceholder",
+				button_width: 180,
+				button_height: 20,
+				button_text : '<span class="button">选择图片 (2 MB)</span>',
+				button_text_style : '.button { font-family: Helvetica, Arial, sans-serif; font-size: 14px; color:#ffffff;}',
+				button_text_top_padding: 3,
+				button_text_left_padding: 12,
+				button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+				button_cursor: SWFUpload.CURSOR.HAND,
+				
+				// Flash Settings
+				flash_url : "<?php echo Yii::app()->request->getBaseUrl(true);?>/js/SWFUpload/swfupload.swf",
+
+				custom_settings : {
+					upload_target : "SWFUploadFileProgressContainer"
+				},
+				
+				// Debug Settings
+				debug: false
+			});
+		};
+	</script>
 <?php $form=$this->beginWidget('CActiveForm',array(
 	'id'=>'chinchilla-market-trade-form',
 	'enableAjaxValidation'=>false,
@@ -23,9 +76,23 @@
 			<div class="control-group">
 				<?php echo CHtml::label('颜色<span class="required">*</span>', 'ChinchillaMarketTrade_Gene_classic',array('class'=>'control-label')) ?>
 				<div class="controls">
-					<?php echo CHtml::dropDownList('ChinchillaMarketTrade[classic]', '600000', array(600000=>'标灰',
+                    <?php 
+                          //classic mode default value check
+                          $classicModeDefaultValue = '600000';
+                          if(isset($model->tradeId)){
+                              if (!$model->mode) {
+                                 $classicModeDefaultValue = $model->breed; 
+                              }
+                          }
+                    ?>
+					<?php echo CHtml::dropDownList('ChinchillaMarketTrade[classic]', $classicModeDefaultValue, array(
+                                                                             600000=>'标灰',
 																			 600100=>'纯白或银白',
-																			 630000=>'深黑'
+                                                                             600110=>'粉白红眼',
+																			 640000=>'纯黑',
+                                                                             600010=>'米色',
+                                                                             300000=>'紫灰',
+                                                                             100000=>'蓝灰',
 																			),
 																		array('class'=>'input-small','onchange'=>"UpdateChinchillaImage('Chinchilla');")
 																			); ?>
@@ -36,11 +103,30 @@
 			<div class="control-group">
 				<?php echo CHtml::link('经典模式', '#', array('class'=>'btn btn-primary offset1 span1', 'onclick'=>"ChangeMenu('classic');")) ?>
 			</div>
-
+            <?php
+            //advanced mode default value check
+              $Gene_id1_checked = $Gene_id2_checked = $Gene_id3_checked = $Gene_id4_checked = 0;
+            $Gene_id5_checked = 6;
+            if (isset($model->tradeId)) {
+                if ($model->mode) {
+                    $Gene_id1_checked = $model->beige;
+                    $Gene_id2_checked = $model->white;
+                    $Gene_id3_checked = $model->velvet;
+                    $Gene_id4_checked = $model->black;
+                    if ($model->violet) {
+                        $Gene_id5_checked = $model->black;
+                    } elseif ($model->sapphire) {
+                        $Gene_id5_checked = $model->sapphire;
+                    } else {
+                        $Gene_id5_checked = 6;
+                    }
+                }
+            }
+            ?>
 			<div class="control-group">
 				<?php echo CHtml::label(Yii::t('Base','Beige'), 'ChinchillaMarketTrade_Gene_id1',array('class'=>'control-label')) ?>
 				<div class="controls">
-					<?php echo CHtml::dropDownList('ChinchillaMarketTrade[Gene_id1]', '0', array(0=>Yii::t('Base', 'No Beige'),
+					<?php echo CHtml::dropDownList('ChinchillaMarketTrade[Gene_id1]', $Gene_id1_checked, array(0=>Yii::t('Base', 'No Beige'),
 																			 1=>Yii::t('Base', 'Hetero-Beige'),
 																			 2=>Yii::t('Base', 'Homo-Beige')
 																			),
@@ -51,7 +137,7 @@
 			<div class="control-group">
 				<?php echo CHtml::label(Yii::t('Base','White'), 'ChinchillaMarketTrade_Gene_id2',array('class'=>'control-label')) ?>
 				<div class="controls">
-					<?php echo CHtml::dropDownList('ChinchillaMarketTrade[Gene_id2]', '0', array(0=>Yii::t('Base', 'No White'),
+					<?php echo CHtml::dropDownList('ChinchillaMarketTrade[Gene_id2]', $Gene_id2_checked, array(0=>Yii::t('Base', 'No White'),
 																								 1=>Yii::t('Base', 'White')
 																								),
 																							array('class'=>'input-small','onchange'=>"UpdateParentImage('Chinchilla');")
@@ -62,7 +148,7 @@
 
 				<?php echo CHtml::label(Yii::t('Base','Velvet'), 'ChinchillaMarketTrade_Gene_id3',array('class'=>'control-label')) ?>
 				<div class="controls">
-					<?php echo CHtml::dropDownList('ChinchillaMarketTrade[Gene_id3]', '0', array(0=>Yii::t('Base', 'No Velvet or TOV'),
+					<?php echo CHtml::dropDownList('ChinchillaMarketTrade[Gene_id3]', $Gene_id3_checked, array(0=>Yii::t('Base', 'No Velvet or TOV'),
 																								 1=>Yii::t('Base', 'Velvet or TOV')
 																								),
 																							array('class'=>'input-small','onchange'=>"UpdateParentImage('Chinchilla');")
@@ -72,7 +158,7 @@
 			<div class="control-group">
 				<?php echo CHtml::label(Yii::t('Base','Ebony'), 'ChinchillaMarketTrade_Gene_id4',array('class'=>'control-label')) ?>
 				<div class="controls">
-					<?php echo CHtml::dropDownList('ChinchillaMarketTrade[Gene_id4]', '0', array(0=>Yii::t('Base', 'No Ebony'),
+					<?php echo CHtml::dropDownList('ChinchillaMarketTrade[Gene_id4]', $Gene_id4_checked, array(0=>Yii::t('Base', 'No Ebony'),
 																								 1=>Yii::t('Base', 'Light Ebony (or Carrier)'),
 																								 2=>Yii::t('Base', 'Medium Ebony'),
 																								 3=>Yii::t('Base', 'Dark Ebony'), 
@@ -85,7 +171,7 @@
 			<div class="control-group">
 				<?php echo CHtml::label(Yii::t('Base','Vio/Sap'), 'ChinchillaMarketTrade_Gene_id5',array('class'=>'control-label')) ?>
 				<div class="controls">
-					<?php echo CHtml::dropDownList('ChinchillaMarketTrade[Gene_id5]', '6', array(6=>Yii::t('Base', 'No Recessive'),
+					<?php echo CHtml::dropDownList('ChinchillaMarketTrade[Gene_id5]', $Gene_id5_checked, array(6=>Yii::t('Base', 'No Recessive'),
 																								 3=>Yii::t('Base', 'Violet'),
 																								 1=>Yii::t('Base', 'Sapphire'),
 																								 5=>Yii::t('Base', 'Violet-Carrier'),
@@ -162,12 +248,50 @@
 		</div>
 	</div>
 
-
+    <!--SFWupload-->
+    <?php if($model->tradeId):?>
+ 
+        <div class="control-group">
+            <?php echo CHtml::label('相关图片', '', array('class'=>'control-label'));?>
+            <div class="controls">
+                <ul class="thumbnails">
+                    <?php if(isset($tradeImages)):?>
+                    <?php foreach($tradeImages as $key => $image):?>
+                        <li class="span2">
+                            <div class="thumbnail text-center">
+                                <img src="<?php echo CommonHelper::getImageByType($image->filepath, "chinchillaMarket", "thumb", 'url');?>" />
+                            </div>
+                            <div class="text-center">
+                                封面
+                                <?php
+                                     if ($model->pic == $image->filepath) {
+                                         $isChecked = true;
+                                     }elseif($key != 0){
+                                         $isChecked = false;
+                                     }
+                                     
+                                    echo CHtml::radioButton('ChinchillaMarketTrade[cover]', $isChecked, array('onclick'=>'$("#coverPic").val("'.$image->filepath.'");'));
+                                ?>
+                            </div>
+                        </li>
+                    <?php endforeach;?>
+                    <?php endif;?>
+                </ul>
+            </div>
+            <?php echo $form->HiddenField($model,'pic', array('id'=>'coverPic')); ?>
+            <?php echo $form->error($model,'pic', array('class'=>'help-inline error')); ?>
+        </div>
+    
+    <?php endif;?>
+ 
 	<div class="control-group">
-		<?php echo $form->labelEx($model,'pic', array('class'=>'control-label')); ?>
+		<?php echo CHtml::label('上传图片', '', array('class'=>'control-label'));?>
 		<div class="controls">
-			<?php echo $form->textField($model,'pic',array('class'=>'input-small','maxlength'=>150)); ?>
-			<?php echo $form->error($model,'pic', array('class'=>'help-inline error')); ?>
+			<div class="btn btn-primary">
+				<span id="SWFUploadButtonPlaceholder"></span>
+			</div>
+			<div id="SWFUploadFileProgressContainer" style="height: 75px;"></div>
+			<div id="SWFUploadthumbnails"></div>
 		</div>
 	</div>
 
@@ -190,6 +314,7 @@
 			</div>
 		</div>
 	</div>
+    <?php echo $form->HiddenField($model,'mode', array('id'=>'picMode')); ?>
 	<input type="hidden" value="0" id="ChinchillaGVC" name="ChinchillaGVC" />
 
 
@@ -210,6 +335,7 @@
 		};	
 		return true;
 	}
+    
 	function ChangeMenu(menu){
 		advancedMenu = $('#advancedColorChoosing');
 		classicMenu = $('#classicColorChoosing');
@@ -217,10 +343,12 @@
 			advancedMenu.hide('normal');
 			classicMenu.show('normal');
 			UpdateChinchillaImage('Chinchilla');
+            $('#picMode').val(0);
 		}else{
 			classicMenu.hide('normal');
 			advancedMenu.show('normal');
 			UpdateParentImage("Chinchilla");
+            $('#picMode').val(1);
 		};
 		
 	}
@@ -267,4 +395,9 @@
 	}
 	//Update the images using a script, so that browsers which don't support script, show the unknown image. UpdateParentImage("Sire");
 	UpdateChinchillaImage('Chinchilla');
+    <?php if(isset($model->mode)):?>
+        <?php if($model->mode):?>
+            ChangeMenu('advanced');
+        <?php endif;?>
+    <?php endif;?>
 	</script>

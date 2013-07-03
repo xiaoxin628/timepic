@@ -18,7 +18,7 @@ class MarketController extends TPController
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
+			'accessControl -uploadTradePic', // perform access control for CRUD operations
 		);
 	}
 
@@ -31,11 +31,11 @@ class MarketController extends TPController
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'getChinchillaColor'),
+				'actions'=>array('index','view', 'uploadTradePic'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'getChinchillaColor', 'showTmpThumbnail'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -84,21 +84,57 @@ class MarketController extends TPController
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-
+        //distroy the images uploaded before in this action to keep upload images being available.
+        
+        
 		if(isset($_POST['ChinchillaMarketTrade']))
 		{
+            $uploadList = isset(Yii::app()->user->uploadList) ? Yii::app()->user->uploadList : array();
 			$model->attributes=$_POST['ChinchillaMarketTrade'];
 			$model->uid = Yii::app()->user->uid;
 			$model->breed = Yii::app()->request->getParam('ChinchillaGVC');
 			$model->dateline = time();
 			$model->ip = Yii::app()->request->getUserHostAddress();
 			$model->displayorder = 0;
-			if($model->save())
+            //check breed color
+            $colors = $model->checkColor($model->breed);
+            $model->attributes = $colors;
+            if($model->save()){
+                if ($uploadList) {
+                    Yii::import('application.components.UploadHelper');
+                    $setCover = true;
+                    foreach ($uploadList as $attachment){
+                        $upload = new UploadHelper();
+                        $upload->init($attachment, 'chinchillaMarket');
+                        $upload->save();
+                        $picmodel = new ChinchillaMarketTradePic();
+                        $picmodel->uid = Yii::app()->user->uid;
+                        $picmodel->tradeId = $model->tradeId;
+                        $picmodel->ip = Yii::app()->request->getUserHostAddress();
+                        $picmodel->filename = $upload->attach['name'];
+                        $picmodel->type = $upload->attach['extension'];
+                        $picmodel->size = $upload->attach['size'];
+                        $picmodel->filepath = $upload->attach['attachment'];
+                        $picmodel->thumb = 1;
+                        $picmodel->status = 0;
+                        $picmodel->dateline = time();
+                        $picmodel->save();
+                        //the cover will be the first element in the uploadList;
+                        if ($setCover) {
+                            $model->updateByPk($model->tradeId, array('pic'=>$picmodel->filepath));
+                            $setCover = false;
+                        }
+                        unset($upload);
+                        unset($picmodel);
+                    }
+                }
+                //reset the attachment list
+                unset(Yii::app()->user->uploadList);
 				$this->redirect(array('view','id'=>$model->tradeId));
-			var_dump($model->validate());
-			exit;
+            }
 		}
-
+        //reset the attachment list
+        unset(Yii::app()->user->uploadList);
 		$this->render('create',array(
 			'model'=>$model,
 		));
@@ -119,12 +155,49 @@ class MarketController extends TPController
 		if(isset($_POST['ChinchillaMarketTrade']))
 		{
 			$model->attributes=$_POST['ChinchillaMarketTrade'];
-			if($model->save())
+			$model->uid = Yii::app()->user->uid;
+			$model->breed = Yii::app()->request->getParam('ChinchillaGVC');
+            //check breed color
+            $colors = $model->checkColor($model->breed);
+            $model->attributes = $colors;
+            if($model->save()){
+                $uploadList = isset(Yii::app()->user->uploadList) ? Yii::app()->user->uploadList : array();
+                if ($uploadList) {
+                    Yii::import('application.components.UploadHelper');
+                    foreach ($uploadList as $attachment){
+                        $upload = new UploadHelper();
+                        $upload->init($attachment, 'chinchillaMarket');
+                        $upload->save();
+                        $picmodel = new ChinchillaMarketTradePic();
+                        $picmodel->uid = Yii::app()->user->uid;
+                        $picmodel->tradeId = $model->tradeId;
+                        $picmodel->ip = Yii::app()->request->getUserHostAddress();
+                        $picmodel->filename = $upload->attach['name'];
+                        $picmodel->type = $upload->attach['extension'];
+                        $picmodel->size = $upload->attach['size'];
+                        $picmodel->filepath = $upload->attach['attachment'];
+                        $picmodel->thumb = 1;
+                        $picmodel->status = 0;
+                        $picmodel->dateline = time();
+                        $picmodel->save();
+                        unset($upload);
+                        unset($picmodel);
+                    }
+                }
+                //reset the attachment list
+                unset(Yii::app()->user->uploadList);
 				$this->redirect(array('view','id'=>$model->tradeId));
+            }
 		}
-
-		$this->render('update',array(
+        //reset the attachment list
+        unset(Yii::app()->user->uploadList);
+        //formate the time
+        $model->birthday = date('Y-m-d', $model->birthday);
+        $model->expiredDate = date('Y-m-d', $model->expiredDate);
+        $tradeImages = ChinchillaMarketTradePic::model()->findAll('uid=:uid and tradeId=:tradeId', array(':uid'=>Yii::app()->user->uid, ':tradeId'=>$model->tradeId));
+        $this->render('update',array(
 			'model'=>$model,
+            'tradeImages'=>$tradeImages,
 		));
 	}
 
@@ -225,4 +298,73 @@ class MarketController extends TPController
 			Yii::app()->end();
 		}
 	}
+
+    /** 
+     * multiupload images
+     */
+	public function actionUploadTradePic(){
+		//this action should be access by anyone due the SWFUpload bug
+		//you should modify the filters
+		//		'accessControl -uploadTradePic',
+  
+        $uploadlist = array();
+        $sessionCount = $dbCount = 0;
+		if (Yii::app()->request->getParam('PHPSESSID')) {
+			$res = Yii::app()->session->setSessionID(Yii::app()->request->getParam('PHPSESSID'));
+		}
+		// Check the upload
+		if (!isset($_FILES["Filedata"]) || !is_uploaded_file($_FILES["Filedata"]["tmp_name"]) || $_FILES["Filedata"]["error"] != 0) {
+			echo "ERROR:invalid upload";
+			Yii::app()->end();
+		}
+        if (isset(Yii::app()->user->uploadList)) {
+            $uploadList = Yii::app()->user->uploadList; 
+            $sessionCount = count($uploadList);
+        }
+        
+        $tradeId = Yii::app()->request->getParam('tradeId');
+        
+        if ($tradeId) {
+            $dbCount = ChinchillaMarketTradePic::model()->count('uid=:uid and tradeId=:tradeId', array(':uid'=>Yii::app()->user->uid, ':tradeId'=>$tradeId));
+        }
+        
+        if (($sessionCount+$dbCount)>=4) {
+			echo "ERROR: 图片最多上传4张";
+			Yii::app()->end();
+        }
+        
+        Yii::import('application.components.UploadHelper');
+        $attach = $_FILES['Filedata'];
+        $upload = new UploadHelper();
+		$upload->init($attach);
+        $upload->saveToTmp();
+
+
+        $uploadList[$upload->attach['attachName']] = $upload->attach;
+        Yii::app()->user->setState('uploadList', $uploadList);
+        echo 'FILEID:'.$upload->attach['attachName'];
+        Yii::app()->end();
+	}
+    
+    /**
+     * 
+     * show Thumbnail in market create
+     */
+    public function actionShowTmpThumbnail(){
+        $id = Yii::app()->request->getParam('id');
+        if (empty($id)) {
+            throw new CHttpException(500, 'No ID');
+        }
+        $uploadList = Yii::app()->user->uploadList;
+        if (empty($uploadList) || empty($uploadList[$id]['copyTmp'])) {
+            throw new CHttpException(404, 'No File');
+        }
+        $pathInfo = pathinfo(Yii::getPathOfAlias('webroot').$uploadList[$id]['copyTmp']);
+        $thumbImage = $pathInfo['dirname'].'/'.'thumb'.'_'.$pathInfo['basename'];
+        $image = file_get_contents($thumbImage);
+        header("Content-type: image/jpeg");
+        header("Content-Length: " . strlen($image));
+        echo $image;
+        Yii::app()->end();
+    }
 }
