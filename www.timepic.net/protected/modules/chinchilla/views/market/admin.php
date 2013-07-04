@@ -40,6 +40,12 @@ $('.search-form form').submit(function(){
     'htmlOptions'=>array('class'=> 'pull-right'),
 )); ?>
 
+<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button btn')); ?>
+<div class="search-form" style="display:none">
+<?php $this->renderPartial('_search',array(
+	'model'=>$model,
+)); ?>
+</div><!-- search-form -->
 <?php $this->widget('bootstrap.widgets.TbGridView',array(
 	'id'=>'chinchilla-market-trade-grid',
 	'dataProvider'=>$model->search(),

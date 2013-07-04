@@ -225,23 +225,133 @@ class MarketController extends TPController
 	}
 
 	/**
-	 * Lists all models.
+     * Lists all models.
+     * @property integer $white
+     * @property integer $black
+     * @property integer $beige
+     * @property integer $velvet
+     * @property integer $violet
+     * @property integer $sapphire
 	 */
-	public function actionIndex()
+	public function actionIndex($color='-', $velvet='-', $gene='-', $gender='-', $weight='-', $price='-')
 	{
+        $whereStr = '';
+        $whereParams = $linkParams = array();
+        $linkParams = $_GET;
+        //颜色
+        if ($color != '-') {
+            if ($color=='gray') {
+                $whereParams['breed=:breed'][':breed'] = 600000;
+            }elseif ($color=='white') {
+                $whereParams['white>:white'][':white'] = 0;
+            }elseif ($color=='black') {
+                $whereParams['black>:black'][':black'] = 0;
+            }elseif ($color=='beige') {
+                $whereParams['beige>:beige'][':beige'] = 0;
+            }
+        }
+        //丝绒
+        if ($velvet != '-') {
+            if (in_array($velvet, array(0,1))) {
+                $whereParams['velvet=:velvet'][':velvet'] = $velvet;
+            }
+        }
+        //隐性颜色
+        if ($gene != '-') {
+            if ($gene == 'sapphire') {
+                $whereParams['sapphire>:sapphire'][':sapphire'] = 0;
+            }elseif ($gene == 'violet') {
+                $whereParams['violet>:violet'][':violet'] = 0;
+            }elseif ($gene === 0) {
+                $whereParams['sapphire=:sapphire'][':sapphire'] = 0;
+                $whereParams['violet=:violet'][':violet'] = 0;
+            }
+        }
+        //gender
+        if ($gender != '-') {
+            if (in_array($gender, array(0,1))) {
+                $whereParams['gender=:gender'][':gender'] = $gender;
+            }
+        }
+        //weight
+        $weightList = array(
+            1=>array('min'=>1, 'max'=>100),
+            2=>array('min'=>200, 'max'=>300),
+            3=>array('min'=>300, 'max'=>400),
+            4=>array('min'=>500, 'max'=>600),
+            5=>array('min'=>600, 'max'=>''),
+            );
+
+        if ($weight != '-') {
+            if (in_array($weight, array(1,2,3,4,5,6))) {
+                if ($weightList[$weight]['min']) {
+                    $whereParams['weight>:weight'][':weight'] = $weightList[$weight]['min'];
+                }
+                if ($weightList[$weight]['max']) {
+                    $whereParams['weight<=:weight'][':weight'] = $weightList[$weight]['max'];
+                }
+            }
+        }
+        //price
+        $priceList = array(
+            1=>array('min'=>1, 'max'=>400),
+            2=>array('min'=>400, 'max'=>1000),
+            3=>array('min'=>1000, 'max'=>2000),
+            4=>array('min'=>2000, 'max'=>3000),
+            4=>array('min'=>3000, 'max'=>4000),
+            4=>array('min'=>5000, 'max'=>6000),
+            5=>array('min'=>6000, 'max'=>''),
+            );
+
+        if ($price != '-') {
+            if (in_array($price, array(1,2,3,4,5,6))) {
+                if ($priceList[$price]['min']) {
+                    $whereParams['price>:price'][':price'] = $priceList[$price]['min'];
+                }
+                if ($priceList[$price]['max']) {
+                    $whereParams['price<=:price'][':price'] = $priceList[$price]['max'];
+                }
+            }
+        }
+        // if ($black!='-') {
+        //     $whereStr .= 'black>:black';
+        //     $whereParams[':black'] = 0;
+        // }
+        // if ($black!='-') {
+        //     $whereStr .= 'black>:black';
+        //     $whereParams[':black'] = 0;
+        // }
+        // var_dump($whereParams);
+        // exit;
 
 		$model=new ChinchillaMarketTrade;
-		
-		$sql = "SELECT tradeId, uid, title, price, dateline, pic  FROM {{chinchilla_market_trade}} ORDER BY dateline DESC";
-		$criteria = new CDbCriteria();
-		$result = Yii::app()->db->createCommand($sql)->query();
-		$pages=new CPagination($result->rowCount);
-		$pages->pageSize = 2;
+        $command = Yii::app()->db->createCommand();
+        $command->select('count(tradeId)');
+        $command->from('{{chinchilla_market_trade}}');
+
+        if (!empty($whereParams)) {
+            foreach ($whereParams as $whereStr => $whereParam) {
+                $command->andWhere($whereStr, $whereParam);
+            }
+        }
+
+        $criteria = new CDbCriteria();
+		$pages=new CPagination($command->queryScalar());
+		$pages->pageSize = 20;
 		$pages->applyLimit($criteria);
-		$result=Yii::app()->db->createCommand($sql." LIMIT :offset,:limit");
-		$result->bindValue(':offset', $pages->currentPage*$pages->pageSize);
-		$result->bindValue(':limit', $pages->pageSize);
-		$query = $result->query();
+
+        $command = Yii::app()->db->createCommand();
+        $command->select('tradeId, uid, title, price, dateline, pic');
+        $command->from('{{chinchilla_market_trade}}');
+        if (!empty($whereParams)) {
+            foreach ($whereParams as $whereStr => $whereParam) {
+                $command->andWhere($whereStr, $whereParam);
+            }
+        }
+        $command->order('dateline DESC');
+        $command->limit($pages->pageSize, $pages->currentPage*$pages->pageSize);
+
+		$query = $command->query();
 		while($row = $query->read()){
 			if ($row['uid']) {
 				$row['memberInfo'] = member::model()->getMemberInfo($row['uid']); 
@@ -250,11 +360,11 @@ class MarketController extends TPController
 		}
 		$this->render('index',
 				array('model'=>$model,
-						'data'=>$data,
-						'pages'=>$pages,
+                    'data'=>$data,
+                    'pages'=>$pages,
+                    'linkParams'=>$linkParams,
 					)
 				);
-
 		// $dataProvider=new CActiveDataProvider('ChinchillaMarketTrade');
 		// $this->render('index',array(
 		// 	'dataProvider'=>$dataProvider,
