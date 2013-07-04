@@ -35,7 +35,7 @@ class MarketController extends TPController
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'getChinchillaColor', 'showTmpThumbnail'),
+				'actions'=>array('create','update', 'getChinchillaColor', 'showTmpThumbnail', 'tradeSwitch'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -223,6 +223,33 @@ class MarketController extends TPController
 //		else
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
 	}
+    /**
+     * turn on or off the trade. 
+     * if turning on,then the displayorder value  is 0
+     * or turn off the trad which makes the dispalyorder value is equal to -2
+     */
+    public function actionTradeSwitch($id, $status){
+        
+        if (in_array($status, array('on', 'off'))) {
+                $model = $this->loadModel($id);
+                if ($status == 'on') {
+                    $displayorder = '0';
+                    $model->updateByPk($id, array('expiredDate'=>new CDbExpression('expiredDate+604800')),'uid=:uid', array(':uid'=>Yii::app()->user->uid));
+                }else{
+                    $displayorder = '-1';
+                }
+
+                $model->updateByPk($id, array('displayorder'=>$displayorder),'uid=:uid', array(':uid'=>Yii::app()->user->uid));
+                if(!isset($_GET['ajax']))
+                    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin')); 
+//			// we only allow deletion via POST request
+//			$this->loadModel($id)->delete();
+//
+//			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+
+        }
+        throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+    }
 
 	/**
      * Lists all models.
@@ -376,13 +403,51 @@ class MarketController extends TPController
 	 */
 	public function actionAdmin()
 	{
-		$model=new ChinchillaMarketTrade('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['ChinchillaMarketTrade']))
-			$model->attributes=$_GET['ChinchillaMarketTrade'];
-
+//        $model = ChinchillaMarketTrade::model()->findAll('uid=:uid', array(':uid'=>Yii::app()->user->uid));
+        $dataprovider = new CActiveDataProvider('ChinchillaMarketTrade', array(
+                    'criteria' => array(
+                        'condition' => 'uid='.Yii::app()->user->uid,
+//                        'order' => 'dateline DESC',
+                    ),
+                    'pagination' => array(
+                        'pageSize' => 10,
+                    ),
+                    'sort' => array(
+                        'defaultOrder' => array('dateline'=>'CSort::SORT_DESC'),
+                        'attributes' =>array(
+                            'tradeId' => array(
+                                'asc' => 'tradeId',
+                                'desc' => 'tradeId DESC',
+                                'label' => 'Id',
+                            ),
+                            'breed',
+                            'gender' => array(
+                                'asc' => 'gender',
+                                'desc' => 'gender DESC',
+                            ),
+                            'weight' => array(
+                                'asc' => 'weight',
+                                'desc' => 'gender DESC',
+                                'label'=>'体重(g)'
+                            ),
+                            'price' => array(
+                                'asc' => 'price',
+                                'desc' => 'price DESC',
+                                'label'=>'价格(元)'
+                            ),
+                            'dateline',
+                            'displayorder' => array(
+                                'asc' => 'displayorder',
+                                'desc' => 'displayorder DESC',
+                                'label'=>'状态'
+                            ),
+                        ),
+                    )
+                )
+        );
+        
 		$this->render('admin',array(
-			'model'=>$model,
+            'dataprovider'=>$dataprovider,
 		));
 	}
 

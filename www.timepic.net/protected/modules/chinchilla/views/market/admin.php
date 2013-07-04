@@ -40,33 +40,40 @@ $('.search-form form').submit(function(){
     'htmlOptions'=>array('class'=> 'pull-right'),
 )); ?>
 
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button btn')); ?>
-<div class="search-form" style="display:none">
-<?php $this->renderPartial('_search',array(
-	'model'=>$model,
-)); ?>
-</div><!-- search-form -->
 <?php $this->widget('bootstrap.widgets.TbGridView',array(
 	'id'=>'chinchilla-market-trade-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
+	'dataProvider'=>$dataprovider,
 	'columns'=>array(
 		'tradeId',
-		'uid',
-		'breed',
-		'gender',
-		'birthday',
-		'weight',
-		/*
-		'ip',
-		'description',
+		array('name'=>'pic', 'type'=>'image', 'value'=>'CommonHelper::getImageByType($data->pic, "chinchillaMarket", "thumb", "url")'),
+		array('name'=>'title', 'value'=>'CommonHelper::cutstr($data->title, 20)'),
+        array('name'=>'breed', 'value'=>'ChinchillaMarketTrade::getChinchillaColor($data->breed)'),
+		array('name'=>'gender', 'value'=>'$data->gender? MM : DD'),
+		array('name'=>'weight', 'value'=>'$data->weight'),
 		'price',
-		'pic',
-		'dateline',
-		'displayorder',
-		*/
+        array('name'=>'displayorder', 'value'=>'$data->weight >= 0 ?开启:关闭'),
+		array('name' => 'dateline', 'value' => 'date("Y-m-d H:i:s", $data->dateline)'),
 		array(
+            'header'=>'操作',
+            'headerHtmlOptions'=>array('width'=>'10%'),
 			'class'=>'bootstrap.widgets.TbButtonColumn',
+            'template'=>'{view}{update}{tradeOff}{tradeOn}',
+            'buttons'=>array(
+                'tradeOff' => array(
+                    'label'=>'<i class="icon-arrow-down"></i>',
+                    'options'=>array('title'=>'关闭交易'),
+                    'url' => 'Yii::app()->createUrl("chinchilla/market/tradeSwitch",array("id"=>$data->tradeId, "status"=>"off"))',
+                    'visble'=>'intval($data->displayorder) >= 0',
+                    'click' => 'function(){return confirm("将关闭此交易，您的交易中的联系方式将被隐藏，确认关闭？");}',
+                ),
+                'tradeOn' => array(
+                    'label'=>'<i class="icon-arrow-up"></i>',
+                    'options'=>array('title'=>'开启交易'),
+                    'url' => 'Yii::app()->createUrl("chinchilla/market/tradeSwitch",array("id"=>$data->tradeId, "status"=>"on"))',
+                    'visble'=>'0',
+                    'click' => 'function(){return confirm("开启交易，过期时间将自动延期7天，也可以通过修改该交易过期时间延期。确认开启？");}',
+                ),
+            ),
 		),
 	),
 )); ?>

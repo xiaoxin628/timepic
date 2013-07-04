@@ -1,4 +1,9 @@
-
+<?php
+//该交易已经过期
+if ($model->expiredDate < time()) {
+    $model->updateByPk($model->tradeId, array('displayorder'=>'-2'));
+}
+?>
 <div class="row-fluid">
 <?php $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
     'links'=>array('龙猫市场'=>array('index'), CommonHelper::cutstr($model->title, 30)),
@@ -41,7 +46,7 @@
                     <dt><span class="label label-success">出生日期</span></dt>
                     <dd><span class="badge badge-info"><?php echo CHtml::encode(date("Y-m-d", $model->birthday)); ?></span></dd>
                     <dt><span class="label label-important">交易过期时间</span></dt>
-                    <dd><span class="badge badge-info"><?php echo CHtml::encode(date("Y-m-d", $model->expiredDate)); ?></span></dd>
+                    <dd><span class="badge <?php echo $model->displayorder >=0 ? 'badge-info' : 'badge-important';?>"><?php echo $model->displayorder >=0 ? '' : '(已结束)';?><?php echo CHtml::encode(date("Y-m-d", $model->expiredDate)); ?></span></dd>
                 </dl>
             </div>
             <div class="span2 pull-right">

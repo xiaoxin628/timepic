@@ -58,7 +58,7 @@ var TPTHUMBNAILURL = '<?php echo Yii::app()->request->getBaseUrl(true).$this->cr
 	'focus'=>array($model,'breed'),
 	'htmlOptions'=>array('class'=>'form-horizontal'),
 	'clientOptions'=>array('validateOnSubmit'=>true,
-							'afterValidate' => 'js:checkChinchillaGVC',
+							'afterValidate' => 'js:checkChinchillaForm',
 		)
 
 )); ?>
@@ -328,16 +328,22 @@ var TPTHUMBNAILURL = '<?php echo Yii::app()->request->getBaseUrl(true).$this->cr
 
 <?php $this->endWidget(); ?>
 <script language="javascript">
-	function checkChinchillaGVC(){
+	function checkChinchillaForm(){
 		if ($("#ChinchillaGVC").val() == 0) {
 			alert('颜色选择异常，建议保存数据，重新刷新该页面！');
 			return false;
-		};	
+		};
+        
+		if ($("#SWFUploadthumbnails > img").length == 0) {
+			alert('至少上传一张图片。');
+			return false;
+		};
+
 		return true;
 	}
     
 	function ChangeMenu(menu){
-		advancedMenu = $('#advancedColorChoosing');
+        advancedMenu = $('#advancedColorChoosing');
 		classicMenu = $('#classicColorChoosing');
 		if (menu == 'classic') {
 			advancedMenu.hide('normal');
