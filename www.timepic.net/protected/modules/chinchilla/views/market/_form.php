@@ -4,6 +4,7 @@
 <script type="text/javascript">
 var TPSWFUPLOADIMAGEPATH = '<?php echo Yii::app()->request->getBaseUrl(true).'/images/static/common/SWFUpload/'?>';
 var TPTHUMBNAILURL = '<?php echo Yii::app()->request->getBaseUrl(true).$this->createUrl('showTmpThumbnail')?>';
+var TPPHPSESSID = '<?php echo Yii::app()->session->sessionID; ?>';
 		var swfu;
 		window.onload = function () {
 			swfu = new SWFUpload({
@@ -51,7 +52,7 @@ var TPTHUMBNAILURL = '<?php echo Yii::app()->request->getBaseUrl(true).$this->cr
 			});
 		};
 	</script>
-<?php $form=$this->beginWidget('CActiveForm',array(
+<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'chinchilla-market-trade-form',
 	'enableAjaxValidation'=>false,
 	'enableClientValidation'=>true,
@@ -206,12 +207,22 @@ var TPTHUMBNAILURL = '<?php echo Yii::app()->request->getBaseUrl(true).$this->cr
 		</div>
 
 	</div>
-
-    
 	<div class="control-group">
 		<?php echo $form->labelEx($model,'birthday', array('class'=>'control-label')); ?>
 		<div class="controls">
-			<?php echo $form->dateField($model,'birthday',array('class'=>'input-medium')); ?>
+            <?php
+            $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                'attribute' => 'birthday',
+                'model' => $model,
+                'options' => array(
+                    'mode' => 'focus',
+                    'dateFormat' => 'yy/mm/dd',
+                    'showAnim' => 'slideDown',
+                ),
+                'htmlOptions' => array('class' => 'input-medium', 'value' => isset($model->tradeId) ? $model->birthday : date('Y/m/d',time())),
+                    )
+            );
+            ?>
 			<?php echo $form->error($model,'birthday', array('class'=>'help-inline error')); ?>
 		</div>
 	</div>
@@ -219,7 +230,20 @@ var TPTHUMBNAILURL = '<?php echo Yii::app()->request->getBaseUrl(true).$this->cr
 	<div class="control-group">
 		<?php echo $form->labelEx($model,'expiredDate', array('class'=>'control-label')); ?>
 		<div class="controls">
-			<?php echo $form->dateField($model,'expiredDate',array('class'=>'input-medium')); ?>
+            <?php
+            $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                'attribute' => 'expiredDate',
+                'model' => $model,
+                'options' => array(
+                    'dateonly'=>true,
+                    'mode' => 'focus',
+                    'dateFormat' => 'yy/mm/dd',
+                    'showAnim' => 'slideDown',
+                ),
+                'htmlOptions' => array('class' => 'input-medium', 'value' => isset($model->tradeId) ? $model->expiredDate : date('Y/m/d',time()+2592000)),
+                    )
+            );
+            ?>
 			<?php echo $form->error($model,'expiredDate', array('class'=>'help-inline error')); ?>
 		</div>
 	</div>
@@ -285,7 +309,7 @@ var TPTHUMBNAILURL = '<?php echo Yii::app()->request->getBaseUrl(true).$this->cr
     <?php endif;?>
  
 	<div class="control-group">
-		<?php echo CHtml::label('上传图片', '', array('class'=>'control-label'));?>
+		<?php echo CHtml::label('上传图片(4张)', '', array('class'=>'control-label'));?>
 		<div class="controls">
 			<div class="btn btn-primary">
 				<span id="SWFUploadButtonPlaceholder"></span>
@@ -333,11 +357,13 @@ var TPTHUMBNAILURL = '<?php echo Yii::app()->request->getBaseUrl(true).$this->cr
 			alert('颜色选择异常，建议保存数据，重新刷新该页面！');
 			return false;
 		};
-        
-		if ($("#SWFUploadthumbnails > img").length == 0) {
-			alert('至少上传一张图片。');
-			return false;
-		};
+        <?php if(!isset($model->tradeId)):?>
+            if ($("#SWFUploadthumbnails > img").length == 0) {
+                alert('至少上传一张图片。');
+                return false;
+            };
+        <?php endif;?>
+
 
 		return true;
 	}

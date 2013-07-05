@@ -18,7 +18,8 @@ class MarketController extends TPController
 	public function filters()
 	{
 		return array(
-			'accessControl -uploadTradePic', // perform access control for CRUD operations
+			'accessControl -uploadTradePic',
+            'accessControl -showTmpThumbnail',// perform access control for CRUD operations
 		);
 	}
 
@@ -199,8 +200,8 @@ class MarketController extends TPController
         //reset the attachment list
         unset(Yii::app()->user->uploadList);
         //formate the time
-        $model->birthday = date('Y-m-d', $model->birthday);
-        $model->expiredDate = date('Y-m-d', $model->expiredDate);
+        $model->birthday = date('Y/m/d', $model->birthday);
+        $model->expiredDate = date('Y/m/d', $model->expiredDate);
         $tradeImages = ChinchillaMarketTradePic::model()->findAll('uid=:uid and tradeId=:tradeId', array(':uid'=>Yii::app()->user->uid, ':tradeId'=>$model->tradeId));
         $this->render('update',array(
 			'model'=>$model,
@@ -492,7 +493,9 @@ class MarketController extends TPController
         $uploadlist = array();
         $sessionCount = $dbCount = 0;
 		if (Yii::app()->request->getParam('PHPSESSID')) {
+            Yii::app()->session->close();
 			$res = Yii::app()->session->setSessionID(Yii::app()->request->getParam('PHPSESSID'));
+            Yii::app()->session->open();
 		}
 		// Check the upload
 		if (!isset($_FILES["Filedata"]) || !is_uploaded_file($_FILES["Filedata"]["tmp_name"]) || $_FILES["Filedata"]["error"] != 0) {
@@ -537,10 +540,18 @@ class MarketController extends TPController
         if (empty($id)) {
             throw new CHttpException(500, 'No ID');
         }
-        $uploadList = Yii::app()->user->uploadList;
-        if (empty($uploadList) || empty($uploadList[$id]['copyTmp'])) {
+        //resolve SWFUpload session problem
+		if (Yii::app()->request->getParam('PHPSESSID')) {
+            Yii::app()->session->close();
+			$res = Yii::app()->session->setSessionID(Yii::app()->request->getParam('PHPSESSID'));
+            Yii::app()->session->open();
+		}
+
+        
+        if (!isset(Yii::app()->user->uploadList) || empty(Yii::app()->user->uploadList[$id]['copyTmp'])) {
             throw new CHttpException(404, 'No File');
         }
+        $uploadList = Yii::app()->user->uploadList;
         $pathInfo = pathinfo(Yii::getPathOfAlias('webroot').$uploadList[$id]['copyTmp']);
         $thumbImage = $pathInfo['dirname'].'/'.'thumb'.'_'.$pathInfo['basename'];
         $image = file_get_contents($thumbImage);

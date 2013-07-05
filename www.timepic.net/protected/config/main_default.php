@@ -94,7 +94,7 @@ return array(
 			'password' => 'xxxxxx',
 			'charset' => 'utf8',
 			'tablePrefix' => 'tp_',
-			//'enableProfiling'=>true
+//			'enableProfiling'=>true
 		),
 		
 		'errorHandler'=>array(
@@ -115,6 +115,13 @@ return array(
 					//'filter'=>'CLogFilter',
 					'logFile'=>'timepic.log',
 				),
+                array(
+                    'class'=>'CProfileLogRoute',
+                    'report'=>'summary',
+                    // lists execution time of every marked code block
+                    // report can also be set to callstack
+                ),
+
 				// uncomment the following to show log messages on web pages
 				/*
 				array(
@@ -136,6 +143,20 @@ return array(
 		'cache'=>array(
 			'class'=>'system.caching.CApcCache',
 		),
+        'widgetFactory' => array(
+            'widgets' => array(
+                'CJuiDialog' => array(
+                    'themeUrl' => '/css/jquery/JUI/themes',
+                    'theme' => 'redmond',
+                    'language'=>'cn',
+                ),
+                'CJuiDatePicker' => array(
+                    'themeUrl' => '/css/jquery/JUI/themes',
+                    'theme' => 'redmond',
+                    'language'=>'cn',
+                ),
+            ),
+        ),
 	),
 
 	// application-level parameters that can be accessed

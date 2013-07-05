@@ -78,7 +78,7 @@ function uploadSuccess(file, serverData) {
 		var progress = new FileProgress(file,  this.customSettings.upload_target);
 
 		if (serverData.substring(0, 7) === "FILEID:") {
-			addImage(TPTHUMBNAILURL + "?id=" + serverData.substring(7));
+			addImage(TPTHUMBNAILURL + "?id=" + serverData.substring(7)+"&PHPSESSID="+TPPHPSESSID);
 			progress.setStatus("Thumbnail Created.");
 			progress.toggleCancel(false);
 		} else {
