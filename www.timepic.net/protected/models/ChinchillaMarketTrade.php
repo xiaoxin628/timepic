@@ -17,6 +17,7 @@
  * @property integer $violet
  * @property integer $sapphire
  * @property string $ip
+ * @property string $contact
  * @property string $title
  * @property string $description
  * @property integer $price
@@ -62,6 +63,7 @@ class ChinchillaMarketTrade extends CActiveRecord
 			array('weight', 'numerical', 'min'=>10, 'max'=>2000),
 			array('ip', 'length', 'max'=>15),
 			array('title', 'length', 'min'=>4, 'max'=>60),
+            array('contact', 'length', 'min'=>0, 'max'=>60),
 			array('description', 'length', 'min'=>4, 'max'=>2000),
 			array('price', 'numerical', 'min'=>1, 'max'=>1000000),
 			array('pic', 'length', 'max'=>150),
@@ -102,6 +104,7 @@ class ChinchillaMarketTrade extends CActiveRecord
 			'violet' => '紫色', 
 			'sapphire' => '蓝色', 
 			'ip' => 'Ip',
+            'contact' => '联系方式',
 			'title' => '标题',
 			'description' => '描述',
 			'price' => '价格',
@@ -130,13 +133,14 @@ class ChinchillaMarketTrade extends CActiveRecord
 		$criteria->compare('gender',$this->gender);
 		$criteria->compare('birthday',$this->birthday);
 		$criteria->compare('weight',$this->weight);
-        $criteria->compare('white',$this->white);
+		$criteria->compare('white',$this->white);
 		$criteria->compare('black',$this->black);
 		$criteria->compare('beige',$this->beige);
 		$criteria->compare('velvet',$this->velvet);
 		$criteria->compare('violet',$this->violet);
 		$criteria->compare('sapphire',$this->sapphire);
 		$criteria->compare('ip',$this->ip,true);
+		$criteria->compare('contact',$this->contact,true);
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('price',$this->price);

@@ -48,6 +48,28 @@
                     <dd><span class="badge badge-info"><?php echo CHtml::encode(date("Y-m-d", $model->birthday)); ?></span></dd>
                     <dt><span class="label label-important">交易过期时间</span></dt>
                     <dd><span class="badge <?php echo $model->displayorder >=0 ? 'badge-info' : 'badge-important';?>"><?php echo $model->displayorder >=0 ? CHtml::encode(date("Y-m-d", $model->expiredDate)) : '已结束';?></span></dd>
+                    <?php if($model->displayorder>=0):?>
+                    <dt><span class="label label-success">联系方式</span></dt>
+                    <dd>
+                        <span class="badge badge-info">
+                        <?php 
+                            if ($model->contact) {
+                              $contacts = explode(',', $model->contact);
+                              if (count($contacts)>1) {
+                                  foreach ($contacts as $contact){
+                                      echo CHtml::encode($contact)."<br />";
+                                  }
+                              }else{
+                                  echo CHtml::encode($model->contact);
+                              }
+                            }else{
+                                echo '无';
+                            }
+                            
+                        ?>    
+                        </span>
+                    </dd>
+                    <?php endif;?>
                 </dl>
             </div>
             <div class="span2 pull-right">

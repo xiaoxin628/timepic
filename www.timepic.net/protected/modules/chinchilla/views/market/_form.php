@@ -52,7 +52,7 @@ var TPPHPSESSID = '<?php echo Yii::app()->session->sessionID; ?>';
 			});
 		};
 	</script>
-<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
+<?php $form=$this->beginWidget('CActiveForm',array(
 	'id'=>'chinchilla-market-trade-form',
 	'enableAjaxValidation'=>false,
 	'enableClientValidation'=>true,
@@ -310,6 +310,7 @@ var TPPHPSESSID = '<?php echo Yii::app()->session->sessionID; ?>';
  
 	<div class="control-group">
 		<?php echo CHtml::label('上传图片(4张)', '', array('class'=>'control-label'));?>
+        <span class="required">*</span>
 		<div class="controls">
 			<div class="btn btn-primary">
 				<span id="SWFUploadButtonPlaceholder"></span>
@@ -318,7 +319,17 @@ var TPPHPSESSID = '<?php echo Yii::app()->session->sessionID; ?>';
 			<div id="SWFUploadthumbnails"></div>
 		</div>
 	</div>
-
+	<div class="control-group">
+		<?php echo $form->labelEx($model,'contact', array('class'=>'control-label')); ?>
+		<div class="controls">
+			<?php echo $form->textField($model,'contact',array('class'=>'span5','maxlength'=>60)); ?>
+			<div class="row-fluid">
+                <p class="text-warning">不同联系方式请以,分割。为了保护隐私，交易结束后，联系方式将会隐藏。</p>
+				<?php echo $form->error($model,'contact', array('class'=>'help-inline error')); ?>
+			</div>
+		</div>
+	</div>
+    
 	<div class="control-group">
 		<?php echo $form->labelEx($model,'title', array('class'=>'control-label')); ?>
 		<div class="controls">
@@ -332,7 +343,7 @@ var TPPHPSESSID = '<?php echo Yii::app()->session->sessionID; ?>';
 	<div class="control-group">
 		<?php echo $form->labelEx($model,'description', array('class'=>'control-label')); ?>
 		<div class="controls">
-			<?php echo $form->textArea($model,'description',array('rows'=>6, 'cols'=>50, 'class'=>'span5')); ?>
+			<?php echo $form->textArea($model,'description',array('rows'=>12, 'cols'=>50, 'class'=>'span5')); ?>
 			<div class="row-fluid">
 				<?php echo $form->error($model,'description', array('class'=>'help-inline error')); ?>
 			</div>

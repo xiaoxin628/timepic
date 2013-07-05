@@ -104,6 +104,7 @@ class MarketController extends TPController
 			$model->dateline = time();
 			$model->ip = Yii::app()->request->getUserHostAddress();
 			$model->displayorder = 0;
+            $model->contact = str_replace(array('，', ','), ',', $model->contact);
             //check breed color
             $colors = $model->checkColor($model->breed);
             $model->attributes = $colors;
@@ -165,6 +166,7 @@ class MarketController extends TPController
 			$model->attributes=$_POST['ChinchillaMarketTrade'];
 			$model->uid = Yii::app()->user->uid;
 			$model->breed = Yii::app()->request->getParam('ChinchillaGVC');
+            $model->contact = str_replace(array('，', ','), ',', $model->contact);
             //check breed color
             $colors = $model->checkColor($model->breed);
             $model->attributes = $colors;
