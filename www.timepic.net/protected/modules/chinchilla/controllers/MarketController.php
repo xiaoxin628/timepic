@@ -322,10 +322,10 @@ class MarketController extends TPController
         if ($weight != '-') {
             if (in_array($weight, array(1,2,3,4,5,6))) {
                 if ($weightList[$weight]['min']) {
-                    $whereParams['weight>:weight'][':weight'] = $weightList[$weight]['min'];
+                    $whereParams['weight>:weightMin'][':weightMin'] = $weightList[$weight]['min'];
                 }
                 if ($weightList[$weight]['max']) {
-                    $whereParams['weight<=:weight'][':weight'] = $weightList[$weight]['max'];
+                    $whereParams['weight<=:weightMax'][':weightMax'] = $weightList[$weight]['max'];
                 }
             }
         }
@@ -343,10 +343,10 @@ class MarketController extends TPController
         if ($price != '-') {
             if (in_array($price, array(1,2,3,4,5,6))) {
                 if ($priceList[$price]['min']) {
-                    $whereParams['price>:price'][':price'] = $priceList[$price]['min'];
+                    $whereParams['price>:priceMin'][':priceMin'] = $priceList[$price]['min'];
                 }
                 if ($priceList[$price]['max']) {
-                    $whereParams['price<=:price'][':price'] = $priceList[$price]['max'];
+                    $whereParams['price<=:priceMax'][':priceMax'] = $priceList[$price]['max'];
                 }
             }
         }
