@@ -232,3 +232,4 @@ CREATE TABLE IF NOT EXISTS `tp_totoro_color` (
   `color` char(100) NOT NULL COMMENT '颜色'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ALTER TABLE  `tp_chinchilla_market_trade` ADD  `views` INT( 10 ) NOT NULL COMMENT  '浏览数' AFTER  `dateline`

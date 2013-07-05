@@ -79,6 +79,9 @@ class MarketController extends TPController
         if ($model->expiredDate < time() && $model->displayorder >= 0) {
             $model->updateByPk($model->tradeId, array('displayorder'=>'-2'));
         }
+        //更新浏览数
+        $model->updateByPk($id, array('views'=>new CDbExpression('views+1')));
+        
 		$this->render('view',array(
 			'model'=> $model,
             'tradeImages'=>$tradeImages,
@@ -313,8 +316,8 @@ class MarketController extends TPController
         //weight
         $weightList = array(
             1=>array('min'=>1, 'max'=>100),
-            2=>array('min'=>200, 'max'=>300),
-            3=>array('min'=>300, 'max'=>400),
+            2=>array('min'=>100, 'max'=>300),
+            3=>array('min'=>300, 'max'=>500),
             4=>array('min'=>500, 'max'=>600),
             5=>array('min'=>600, 'max'=>''),
             );
@@ -335,13 +338,13 @@ class MarketController extends TPController
             2=>array('min'=>400, 'max'=>1000),
             3=>array('min'=>1000, 'max'=>2000),
             4=>array('min'=>2000, 'max'=>3000),
-            4=>array('min'=>3000, 'max'=>4000),
-            4=>array('min'=>5000, 'max'=>6000),
-            5=>array('min'=>6000, 'max'=>''),
+            5=>array('min'=>3000, 'max'=>4000),
+            6=>array('min'=>5000, 'max'=>6000),
+            7=>array('min'=>6000, 'max'=>''),
             );
 
         if ($price != '-') {
-            if (in_array($price, array(1,2,3,4,5,6))) {
+            if (in_array($price, array(1,2,3,4,5,6,7))) {
                 if ($priceList[$price]['min']) {
                     $whereParams['price>:priceMin'][':priceMin'] = $priceList[$price]['min'];
                 }
@@ -368,7 +371,7 @@ class MarketController extends TPController
 		$pages->applyLimit($criteria);
 
         $command = Yii::app()->db->createCommand();
-        $command->select('tradeId, uid, gender, title, price, dateline, pic');
+        $command->select('tradeId, uid, gender, title, price, dateline, pic, views');
         $command->from('{{chinchilla_market_trade}}');
         if (!empty($whereParams)) {
             foreach ($whereParams as $whereStr => $whereParam) {

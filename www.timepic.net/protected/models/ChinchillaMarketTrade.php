@@ -25,6 +25,7 @@
  * @property integer $expiredDate
  * @property integer $mode
  * @property integer $dateline
+ * @property integer $views
  * @property integer $displayorder
  */
 class ChinchillaMarketTrade extends CActiveRecord
@@ -112,6 +113,7 @@ class ChinchillaMarketTrade extends CActiveRecord
 			'expiredDate' => '过期时间',
             'mode' => '选择模式', //0经典模式 1高级模式
 			'dateline' => '发表日期',
+			'views' => '浏览次数',
 			'displayorder' => 'Displayorder',
 		);
 	}
@@ -148,6 +150,7 @@ class ChinchillaMarketTrade extends CActiveRecord
 		$criteria->compare('expiredDate',$this->expiredDate);
 		$criteria->compare('mode',$this->mode);
 		$criteria->compare('dateline',$this->dateline);
+		$criteria->compare('views',$this->views);
 		$criteria->compare('displayorder',$this->displayorder);
 
 		return new CActiveDataProvider($this, array(

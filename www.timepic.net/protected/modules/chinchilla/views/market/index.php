@@ -74,8 +74,8 @@ $this->pageTitle .= "-首页";
             <li><a href="#" class="label label-inverse">体重:</a></li>
             <li><a <?php echo $_GET['weight']=='-' || $_GET['weight']==''? 'class="label label-info"': ''; ?> href="<?php $weightParams['weight']='-';  echo $this->createUrl('index',$weightParams); ?>">不限</a></li>
             <li><a <?php echo $_GET['weight']=='1' ? 'class="label label-info"': ''; ?> href="<?php $weightParams['weight']='1';  echo $this->createUrl('index',$weightParams); ?>">1-100g</a></li>
-            <li><a <?php echo $_GET['weight']=='2' ? 'class="label label-info"': ''; ?> href="<?php $weightParams['weight']='2';  echo $this->createUrl('index',$weightParams); ?>">200-300g</a></li>
-            <li><a <?php echo $_GET['weight']=='3' ? 'class="label label-info"': ''; ?> href="<?php $weightParams['weight']='3';  echo $this->createUrl('index',$weightParams); ?>">400-500g</a></li>
+            <li><a <?php echo $_GET['weight']=='2' ? 'class="label label-info"': ''; ?> href="<?php $weightParams['weight']='2';  echo $this->createUrl('index',$weightParams); ?>">100-300g</a></li>
+            <li><a <?php echo $_GET['weight']=='3' ? 'class="label label-info"': ''; ?> href="<?php $weightParams['weight']='3';  echo $this->createUrl('index',$weightParams); ?>">300-500g</a></li>
             <li><a <?php echo $_GET['weight']=='4' ? 'class="label label-info"': ''; ?> href="<?php $weightParams['weight']='4';  echo $this->createUrl('index',$weightParams); ?>">500-600g</a></li>
             <li><a <?php echo $_GET['weight']=='5' ? 'class="label label-info"': ''; ?> href="<?php $weightParams['weight']='5';  echo $this->createUrl('index',$weightParams); ?>">600g以上</a></li>
             <?php unset($weightParams); ?>
@@ -110,7 +110,7 @@ $this->pageTitle .= "-首页";
                 <div class="offset2 row-fluid detail">
                     <p class=""><a href="<?php echo $this->createUrl('view', array('id'=>$item['tradeId']))?>" target="_blank"><strong>[<?php echo $item['gender'] ? 'MM' :'DD';?>] <?php echo CHtml::encode($item['title']);?></strong></a></p>
                     <p class="label label-info price">￥<?php echo CHtml::encode($item['price']);?></p>
-                    <p class="muted"><?php echo CHtml::encode($item['memberInfo']['username']); ?> - <?php echo CHtml::encode(date("Y-m-d H:i:s", $item['dateline'])); ?></p>
+                    <p class="muted"><?php echo CHtml::encode($item['memberInfo']['username']); ?> - <?php echo CHtml::encode(date("Y-m-d H:i:s", $item['dateline'])); ?> - <?php echo CHtml::encode(intval($item['views']));?>人浏览</p>
                 </div>
             </div>
           <?php endforeach;?>

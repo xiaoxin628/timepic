@@ -32,7 +32,7 @@ $this->pageTitle .= "-".$model->title;
     <p><strong class='text-info'><?php echo $model->author->username;?></strong></p>
     <p><a target='_blank' href='<?php echo Member::getMemberHomeUrl($model->author->openID, $model->author->openIDType);?>'>>去他的微博</a></p>
 </div>
-<p class='text-left muted'>    发表于：<?php echo CHtml::encode(date("Y-m-d H:i:s", $model->dateline)); ?></p>
+<p class='text-left muted'><?php echo CHtml::encode(intval($model->views));?>人浏览>发表于：<?php echo CHtml::encode(date("Y-m-d H:i:s", $model->dateline)); ?></p>
 <div class="row-fluid">
     <div class="row-fluid span7">
         <h3><?php echo CHtml::encode($model->title);?></h3>
