@@ -6,16 +6,24 @@ $this->pageTitle .= "-".$model->title;
 ?>
 </div>
 <div class="row-fluid">
-    <?php $this->widget('bootstrap.widgets.TbMenu', array(
+    <?php 
+    if (Yii::app()->user->isGuest) {
+        $tbMenu = array(
+            array('label'=>'龙猫市场', 'url'=>array('index'),'active'=>true),
+        );
+    }else{
+        $tbMenu = array(
+            array('label'=>'龙猫市场', 'url'=>array('index'),'active'=>true),
+            array('label'=>'创建龙猫交易', 'url'=>array('create')),
+            array('label'=>'我的龙猫交易', 'url'=>array('admin')),
+        );
+    }
+    $this->widget('bootstrap.widgets.TbMenu', array(
     'type'=>'pills', // '', 'tabs', 'pills' (or 'list')
     'stacked'=>false, // whether this is a stacked menu
-    'items'=>array(
-        array('label'=>'龙猫市场', 'url'=>array('index'),'active'=>true),
-        array('label'=>'创建龙猫交易', 'url'=>array('create')),
-        array('label'=>'我的龙猫交易', 'url'=>array('admin')),
-    ),
+    'items'=>$tbMenu,
     'htmlOptions'=>array('class'=> 'pull-right'),
-)); ?>
+    )); ?>
 </div>
 <div class="row-fluid">
     <a target='_blank' href='<?php echo Member::getMemberHomeUrl($model->author->openID, $model->author->openIDType);?>'>
@@ -119,7 +127,8 @@ $this->pageTitle .= "-".$model->title;
     <div class="row-fluid span4 pull-right well">
         <div class='alert alert-block'>
             <h4>提示：</h4>
-            直接评论并勾选同步到微博，将在weibo@发布者。他会收到通知并回复您。
+            直接评论并勾选同步到微博，将在weibo@发布者。他会收到通知并回复您。<br/><br/>
+            点击右上角<strong class="text-success">微博登陆</strong>即可发布龙猫信息。
         </div>
     </div>
 </div>

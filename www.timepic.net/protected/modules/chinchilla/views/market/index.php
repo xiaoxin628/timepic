@@ -5,16 +5,24 @@ $this->pageTitle .= "-首页";
 ?>
 </div>
 <div class="row-fluid">
-    <?php $this->widget('bootstrap.widgets.TbMenu', array(
+    <?php 
+    if (Yii::app()->user->isGuest) {
+        $tbMenu = array(
+            array('label'=>'龙猫市场', 'url'=>array('index'),'active'=>true),
+        );
+    }else{
+        $tbMenu = array(
+            array('label'=>'龙猫市场', 'url'=>array('index'),'active'=>true),
+            array('label'=>'创建龙猫交易', 'url'=>array('create')),
+            array('label'=>'我的龙猫交易', 'url'=>array('admin')),
+        );
+    }
+    $this->widget('bootstrap.widgets.TbMenu', array(
     'type'=>'pills', // '', 'tabs', 'pills' (or 'list')
     'stacked'=>false, // whether this is a stacked menu
-    'items'=>array(
-        array('label'=>'龙猫市场', 'url'=>array('index'), 'active'=>true),
-        array('label'=>'创建龙猫交易', 'url'=>array('create')),
-        array('label'=>'我的龙猫市场', 'url'=>array('admin')),
-    ),
+    'items'=>$tbMenu,
     'htmlOptions'=>array('class'=> 'pull-right'),
-)); ?>
+    )); ?>
 </div>
 <div class="row-fluid">
     <div class="row-fluid">

@@ -158,3 +158,68 @@ CREATE TABLE IF NOT EXISTS `tp_member` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- when user cancel the authorisation, we can get a flag.
 ALTER TABLE  `tp_member` ADD  `isAuth` TINYINT( 1 ) NOT NULL COMMENT  '0未授权 1授权' AFTER  `dateline`
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tp_chinchilla_market_trade`
+--
+
+CREATE TABLE IF NOT EXISTS `tp_chinchilla_market_trade` (
+  `tradeId` mediumint(8) NOT NULL AUTO_INCREMENT COMMENT 'pk',
+  `uid` mediumint(8) NOT NULL COMMENT 'poster',
+  `breed` mediumint(6) NOT NULL COMMENT 'color code',
+  `gender` tinyint(1) NOT NULL COMMENT '0 maile 1 female',
+  `birthday` int(10) NOT NULL COMMENT 'birthday',
+  `weight` smallint(7) NOT NULL,
+  `white` tinyint(1) NOT NULL COMMENT '白色 0无 1有',
+  `black` tinyint(1) NOT NULL COMMENT '黑色 0无 1浅 2中 3深 4纯',
+  `beige` tinyint(1) NOT NULL COMMENT '0无 1 米色 2金色',
+  `velvet` tinyint(1) NOT NULL COMMENT '丝绒 0 无 1有',
+  `violet` tinyint(1) NOT NULL COMMENT '紫色 0 无 3紫灰 5带紫灰基因',
+  `sapphire` tinyint(1) NOT NULL COMMENT '蓝色 0 无 1蓝灰 4带蓝灰基因',
+  `ip` char(15) NOT NULL,
+  `contact` char(60) NOT NULL COMMENT 'contact',
+  `title` char(60) NOT NULL COMMENT 'title',
+  `description` text NOT NULL,
+  `price` int(10) NOT NULL,
+  `pic` char(150) NOT NULL COMMENT 'trade cover',
+  `expiredDate` int(10) NOT NULL,
+  `mode` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0classic 1advanced',
+  `dateline` int(10) NOT NULL COMMENT 'post time',
+  `displayorder` tinyint(2) NOT NULL COMMENT '-1 done -2 expired 0 normal 1 2 3',
+  PRIMARY KEY (`tradeId`),
+  KEY `displayorder` (`displayorder`,`dateline`),
+  KEY `uid` (`uid`),
+  KEY `breed` (`breed`),
+  KEY `gender` (`gender`),
+  KEY `birthday` (`birthday`),
+  KEY `weight` (`weight`),
+  KEY `white` (`white`),
+  KEY `black` (`black`),
+  KEY `beige` (`beige`),
+  KEY `velvet` (`velvet`),
+  KEY `violet` (`violet`),
+  KEY `sapphire` (`sapphire`),
+  KEY `price` (`price`),
+  KEY `expiredDate` (`expiredDate`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='chinchilla market trade';
+
+--
+-- Table structure for table `tp_chinchilla_market_trade_pic`
+--
+
+CREATE TABLE IF NOT EXISTS `tp_chinchilla_market_trade_pic` (
+  `picid` int(10) NOT NULL AUTO_INCREMENT,
+  `uid` mediumint(8) NOT NULL,
+  `tradeId` mediumint(8) NOT NULL,
+  `ip` char(15) NOT NULL,
+  `filename` varchar(255) NOT NULL,
+  `type` char(10) NOT NULL,
+  `size` int(10) NOT NULL,
+  `filepath` varchar(255) NOT NULL,
+  `thumb` tinyint(1) NOT NULL COMMENT '0 no thumb 1 thumb',
+  `status` tinyint(1) NOT NULL COMMENT '-1 delete',
+  `dateline` int(10) NOT NULL COMMENT 'post time',
+  PRIMARY KEY (`picid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='trade pictures';
+

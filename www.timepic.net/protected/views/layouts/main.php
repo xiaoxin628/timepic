@@ -53,6 +53,7 @@ if (!Yii::app()->user->isGuest && isset(Yii::app()->user->username)) {
 
                                 <ul class="dropdown-menu">
                                         '.$adminLogin.'
+                                        <li><a href="'.Yii::app()->createUrl('chinchilla/market/admin/').'">我的龙猫</a></li>
                                         <li><a href="/TPUser/logout">'.Yii::t('Base', 'Logout').'</a></li>
                                 </ul>
                          </li>

@@ -381,7 +381,7 @@ class MarketController extends TPController
 		$query = $command->query();
 		while($row = $query->read()){
 			if ($row['uid']) {
-				$row['memberInfo'] = member::model()->getMemberInfo($row['uid']); 
+				$row['memberInfo'] = Member::model()->getMemberInfo($row['uid']); 
 			}
 			$data[] = $row;
 		}
