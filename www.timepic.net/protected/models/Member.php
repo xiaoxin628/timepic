@@ -124,4 +124,14 @@ class Member extends CActiveRecord
 		return $memberInfo->attributes;
 
 	}
+    
+    public function getMemberHomeUrl($openID, $openIDType){
+        if ($openID && $openIDType) {
+            if (!empty(Yii::app()->params['openIds'][$openIDType])) {
+                $url = Yii::app()->params['openIds'][$openIDType]['url'].$openID;
+                return $url;
+            };
+        }
+        return '';
+    }
 }

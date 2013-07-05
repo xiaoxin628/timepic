@@ -71,6 +71,10 @@ class MarketController extends TPController
 	{
         $model = ChinchillaMarketTrade::model()->with('author')->findByPk($id);
         $tradeImages = ChinchillaMarketTradePic::model()->findAll('uid=:uid and tradeId=:tradeId', array(':uid'=>Yii::app()->user->uid, ':tradeId'=>$model->tradeId));
+        //该交易已经过期
+        if ($model->expiredDate < time() && $model->displayorder >= 0) {
+            $model->updateByPk($model->tradeId, array('displayorder'=>'-2'));
+        }
 		$this->render('view',array(
 			'model'=> $model,
             'tradeImages'=>$tradeImages,

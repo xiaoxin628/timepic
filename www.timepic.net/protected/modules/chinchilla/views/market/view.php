@@ -1,9 +1,3 @@
-<?php
-//该交易已经过期
-if ($model->expiredDate < time()) {
-    $model->updateByPk($model->tradeId, array('displayorder'=>'-2'));
-}
-?>
 <div class="row-fluid">
 <?php $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
     'links'=>array('龙猫市场'=>array('index'), CommonHelper::cutstr($model->title, 30)),
@@ -21,7 +15,14 @@ if ($model->expiredDate < time()) {
     'htmlOptions'=>array('class'=> 'pull-right'),
 )); ?>
 </div>
-<p class='text-left muted'>发表时间：<?php echo CHtml::encode(date("Y-m-d H:i:s", $model->dateline)); ?></p>
+<div class="row-fluid">
+    <a target='_blank' href='<?php echo Member::getMemberHomeUrl($model->author->openID, $model->author->openIDType);?>'>
+        <img class="pull-left img-rounded" src="<?php echo $model->author->avatar;?>" style='margin:5px;'/>
+    </a>
+    <p><strong class='text-info'><?php echo $model->author->username;?></strong></p>
+    <p><a target='_blank' href='<?php echo Member::getMemberHomeUrl($model->author->openID, $model->author->openIDType);?>'>>去他的微博</a></p>
+</div>
+<p class='text-left muted'>    发表于：<?php echo CHtml::encode(date("Y-m-d H:i:s", $model->dateline)); ?></p>
 <div class="row-fluid">
     <div class="row-fluid span7">
         <h3><?php echo CHtml::encode($model->title);?></h3>
@@ -46,7 +47,7 @@ if ($model->expiredDate < time()) {
                     <dt><span class="label label-success">出生日期</span></dt>
                     <dd><span class="badge badge-info"><?php echo CHtml::encode(date("Y-m-d", $model->birthday)); ?></span></dd>
                     <dt><span class="label label-important">交易过期时间</span></dt>
-                    <dd><span class="badge <?php echo $model->displayorder >=0 ? 'badge-info' : 'badge-important';?>"><?php echo $model->displayorder >=0 ? '' : '(已结束)';?><?php echo CHtml::encode(date("Y-m-d", $model->expiredDate)); ?></span></dd>
+                    <dd><span class="badge <?php echo $model->displayorder >=0 ? 'badge-info' : 'badge-important';?>"><?php echo $model->displayorder >=0 ? CHtml::encode(date("Y-m-d", $model->expiredDate)) : '已结束';?></span></dd>
                 </dl>
             </div>
             <div class="span2 pull-right">
@@ -74,6 +75,21 @@ if ($model->expiredDate < time()) {
             <blockquote class="text-info">
                 <?php echo TimePicCode::TpCode($model->description); ?>
             </blockquote>
+        </div>
+        <div class="row-fluid well show_nave">
+            <script type="text/javascript">
+                (function(){
+                    var url = "http://widget.weibo.com/distribution/comments.php?width=0&url=auto&color=cccccc,ffffff,4c4c4c,5093d5,cccccc,f0f0f0&colordiy=1&ralateuid=<?php echo $model->author->openIDType == 1 ? $model->author->openID : "2734978073"?>&appkey=3706708774&dpc=1";
+                    url = url.replace("url=auto", "url=" + document.URL); 
+                    document.write('<iframe id="WBCommentFrame" src="' + url + '" scrolling="no" frameborder="0" style="width:100%"></iframe>');
+                })();
+            </script>
+            <script src="http://tjs.sjs.sinajs.cn/open/widget/js/widget/comment.js" type="text/javascript" charset="utf-8"></script>
+            <script type="text/javascript">
+                window.WBComment.init({
+                    "id": "WBCommentFrame"
+                });
+            </script>
         </div>
     </div>
     <div class="row-fluid span4 pull-right well">
