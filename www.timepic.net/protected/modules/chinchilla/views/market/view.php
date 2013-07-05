@@ -1,7 +1,9 @@
 <div class="row-fluid">
 <?php $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
     'links'=>array('龙猫市场'=>array('index'), CommonHelper::cutstr($model->title, 30)),
-)); ?>
+)); 
+$this->pageTitle .= "-".$model->title;
+?>
 </div>
 <div class="row-fluid">
     <?php $this->widget('bootstrap.widgets.TbMenu', array(
@@ -28,7 +30,7 @@
         <h3><?php echo CHtml::encode($model->title);?></h3>
         <div class="row-fluid">
             <div class="span4">
-                <img class='img-polaroid' src="<?php echo CommonHelper::getImageByType($model->pic, 'chinchillaMarket', 'normal', 'url') ?>" />
+                <img class='img-polaroid' src="<?php echo CommonHelper::getImageByType($model->pic, 'chinchillaMarket', 'normal', 'url') ?>" onerror='javascript:this.src ="<?php echo Yii::app()->baseUrl."/images/static/common/default_320.png";?>"'/>
             </div>
             <div class="span5">
                 <dl class="dl-horizontal">
@@ -85,7 +87,7 @@
                         <li class="span3">
                             <div class="thumbnail">
                                 <a class='lightbox' href="<?php echo CommonHelper::getImageByType($image->filepath, "chinchillaMarket", "big", 'url',1); ?>">
-                                    <img src="<?php echo CommonHelper::getImageByType($image->filepath, "chinchillaMarket", "normal", 'url'); ?>" />
+                                    <img src="<?php echo CommonHelper::getImageByType($image->filepath, "chinchillaMarket", "normal", 'url'); ?>" onerror='javascript:this.src ="<?php echo Yii::app()->baseUrl."/images/static/common/default_320.png";?>"'/>
                                 </a>
                             </div>
                         </li>

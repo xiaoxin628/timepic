@@ -286,16 +286,17 @@ var TPPHPSESSID = '<?php echo Yii::app()->session->sessionID; ?>';
                                 <img src="<?php echo CommonHelper::getImageByType($image->filepath, "chinchillaMarket", "thumb", 'url');?>" />
                             </div>
                             <div class="text-center">
-                                封面
+                                
                                 <?php
+                                     $isChecked = false;
                                      if ($model->pic == $image->filepath) {
                                          $isChecked = true;
-                                     }elseif($key != 0){
-                                         $isChecked = false;
+                                     }elseif($key === 0){
+                                         $isChecked = true;
                                      }
-                                     
                                     echo CHtml::radioButton('ChinchillaMarketTrade[cover]', $isChecked, array('onclick'=>'$("#coverPic").val("'.$image->filepath.'");'));
-                                ?>
+                                ?>封面
+                                <a href="<?php echo $this->createUrl('deleteTradePic',array('id'=>$image->picid,'tradeId'=>$model->tradeId))?>"><i class="icon-trash"></i></a>
                             </div>
                         </li>
                     <?php endforeach;?>

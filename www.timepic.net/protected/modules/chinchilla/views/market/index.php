@@ -1,6 +1,8 @@
 <?php $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
     'links'=>array('龙猫市场'),
-)); ?>
+)); 
+$this->pageTitle .= "-首页";
+?>
 </div>
 <div class="row-fluid">
     <?php $this->widget('bootstrap.widgets.TbMenu', array(
@@ -9,7 +11,7 @@
     'items'=>array(
         array('label'=>'龙猫市场', 'url'=>array('index'), 'active'=>true),
         array('label'=>'创建龙猫交易', 'url'=>array('create')),
-        array('label'=>'我的龙猫交易', 'url'=>array('admin')),
+        array('label'=>'我的龙猫市场', 'url'=>array('admin')),
     ),
     'htmlOptions'=>array('class'=> 'pull-right'),
 )); ?>
@@ -94,11 +96,11 @@
             <div class="row-fluid well well-large trade">
                 <div class="span2">
                     <a href="<?php echo $this->createUrl('view', array('id'=>$item['tradeId']))?>" target="_blank">
-                        <img class="tradeImage" src="<?php echo CommonHelper::getImageByType($item['pic'], 'chinchillaMarket', 'thumb', 'url');?>">
+                        <img class="tradeImage" src="<?php echo CommonHelper::getImageByType($item['pic'], 'chinchillaMarket', 'thumb', 'url');?>" onerror='javascript:this.src ="<?php echo Yii::app()->baseUrl."/images/static/common/default_100.png";?>"'>
                     </a>
                 </div>
                 <div class="offset2 row-fluid detail">
-                    <p class=""><a href="<?php echo $this->createUrl('view', array('id'=>$item['tradeId']))?>" target="_blank"><strong><?php echo CHtml::encode($item['title']);?></strong></a></p>
+                    <p class=""><a href="<?php echo $this->createUrl('view', array('id'=>$item['tradeId']))?>" target="_blank"><strong>[<?php echo $item['gender'] ? 'MM' :'DD';?>] <?php echo CHtml::encode($item['title']);?></strong></a></p>
                     <p class="label label-info price">￥<?php echo CHtml::encode($item['price']);?></p>
                     <p class="muted"><?php echo CHtml::encode($item['memberInfo']['username']); ?> - <?php echo CHtml::encode(date("Y-m-d H:i:s", $item['dateline'])); ?></p>
                 </div>

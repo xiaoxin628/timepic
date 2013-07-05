@@ -6,6 +6,7 @@ class MarketController extends TPController
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
+    public $pageTitle = 'TimePic-龙猫市场';
 	public $translate = array();
 
 	public function init(){
@@ -36,7 +37,7 @@ class MarketController extends TPController
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'getChinchillaColor', 'showTmpThumbnail', 'tradeSwitch'),
+				'actions'=>array('create','update', 'getChinchillaColor', 'showTmpThumbnail', 'tradeSwitch', 'deleteTradePic'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -70,8 +71,10 @@ class MarketController extends TPController
 	 */
 	public function actionView($id)
 	{
+        
         $model = ChinchillaMarketTrade::model()->with('author')->findByPk($id);
-        $tradeImages = ChinchillaMarketTradePic::model()->findAll('uid=:uid and tradeId=:tradeId', array(':uid'=>Yii::app()->user->uid, ':tradeId'=>$model->tradeId));
+
+        $tradeImages = ChinchillaMarketTradePic::model()->findAll('tradeId=:tradeId', array(':tradeId'=>$model->tradeId));
         //该交易已经过期
         if ($model->expiredDate < time() && $model->displayorder >= 0) {
             $model->updateByPk($model->tradeId, array('displayorder'=>'-2'));
@@ -347,16 +350,6 @@ class MarketController extends TPController
                 }
             }
         }
-        // if ($black!='-') {
-        //     $whereStr .= 'black>:black';
-        //     $whereParams[':black'] = 0;
-        // }
-        // if ($black!='-') {
-        //     $whereStr .= 'black>:black';
-        //     $whereParams[':black'] = 0;
-        // }
-        // var_dump($whereParams);
-        // exit;
 
 		$model=new ChinchillaMarketTrade;
         $command = Yii::app()->db->createCommand();
@@ -375,7 +368,7 @@ class MarketController extends TPController
 		$pages->applyLimit($criteria);
 
         $command = Yii::app()->db->createCommand();
-        $command->select('tradeId, uid, title, price, dateline, pic');
+        $command->select('tradeId, uid, gender, title, price, dateline, pic');
         $command->from('{{chinchilla_market_trade}}');
         if (!empty($whereParams)) {
             foreach ($whereParams as $whereStr => $whereParam) {
@@ -399,10 +392,6 @@ class MarketController extends TPController
                     'linkParams'=>$linkParams,
 					)
 				);
-		// $dataProvider=new CActiveDataProvider('ChinchillaMarketTrade');
-		// $this->render('index',array(
-		// 	'dataProvider'=>$dataProvider,
-		// ));
 	}
 
 	/**
@@ -483,7 +472,19 @@ class MarketController extends TPController
 			Yii::app()->end();
 		}
 	}
-
+    
+    
+    public function actionDeleteTradePic($id,$tradeId){
+        if (intval($id) && intval($tradeId)) {
+                $data = ChinchillaMarketTradePic::model()->findByPk($id, "uid=:uid and tradeId=:tradeId", array(":uid"=>Yii::app()->user->uid, 'tradeId'=>$tradeId));
+                if ($data->picid) {
+                    ChinchillaMarketTradePic::model()->deletePic($data->picid);
+                }
+                if(!isset($_GET['ajax']))
+                    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('update','id'=>$tradeId)); 
+        }
+        throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+    }
     /** 
      * multiupload images
      */

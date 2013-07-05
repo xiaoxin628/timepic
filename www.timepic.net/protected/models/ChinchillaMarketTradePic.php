@@ -113,4 +113,31 @@ class ChinchillaMarketTradePic extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+    
+    public function deletePic($id) {
+        if (intval($id)) {
+            $data = $this->findByPk($id);
+            $data->delete();
+            $image_origin = CommonHelper::getImageByType($data->filepath, 'chinchillaMarket' , "origin");
+            $image_big = CommonHelper::getImageByType($data->filepath,'chinchillaMarket', "big");
+            $image_normal = CommonHelper::getImageByType($data->filepath,'chinchillaMarket', "normal");
+            $image_thumb = CommonHelper::getImageByType($data->filepath, 'chinchillaMarket', "thumb");
+            
+            $image_big_water = CommonHelper::getImageByType($data->filepath,'chinchillaMarket', "big", 'path', 1);
+            $image_normal_water = CommonHelper::getImageByType($data->filepath,'chinchillaMarket', "normal", 'path', 1);
+            $image_thumb_water = CommonHelper::getImageByType($data->filepath, 'chinchillaMarket', "thumb", 'path', 1);
+            if (file_exists($image_origin)) {
+                @unlink($image_origin);
+                @unlink($image_normal);
+                @unlink($image_big);
+                @unlink($image_thumb);
+                
+                @unlink($image_big_water);
+                @unlink($image_normal_water);
+                @unlink($image_thumb_water);
+                
+            }
+            
+        }
+    }
 }

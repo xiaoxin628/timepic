@@ -100,7 +100,12 @@ class CommonHelper {
                                 if ($size == 'origin') {
                                         $filename = $basePath . '/' . $path;
                                 } else {
-                                        $filename = $basePath . '/' . $fileinfo['dirname'] . '/' . $size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'];
+                                    if ($watermark) {
+                                        $filename = $basePath . '/' . $fileinfo['dirname'] . '/mark/' . md5($size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension'] . $watermarkKey) . '.' . $fileinfo['extension'];
+                                    }  else {
+                                        $filename = $basePath . '/' . $fileinfo['dirname'] . '/' . $size . '_' . $fileinfo['filename'] . '.' . $fileinfo['extension']; 
+                                    }
+
                                 }
                         }
 

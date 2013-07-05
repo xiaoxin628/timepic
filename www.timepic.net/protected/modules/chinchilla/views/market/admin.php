@@ -1,31 +1,10 @@
 <?php
-$this->breadcrumbs=array(
-	'Chinchilla Market Trades'=>array('index'),
-	'Manage',
-);
-
-$this->menu=array(
-	array('label'=>'List ChinchillaMarketTrade','url'=>array('index')),
-	array('label'=>'Create ChinchillaMarketTrade','url'=>array('create')),
-);
-
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('chinchilla-market-trade-grid', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
+$this->pageTitle .= "-我的龙猫市场";
 ?>
 
 <div class="row-fluid">
 <?php $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
-    'links'=>array('龙猫市场'=>array('index'), '我的龙猫交易'),
+    'links'=>array('龙猫市场'=>array('index'), '我的龙猫市场'),
 )); ?>
 </div>
 <div class="row-fluid">
@@ -35,11 +14,12 @@ $('.search-form form').submit(function(){
     'items'=>array(
         array('label'=>'龙猫市场', 'url'=>array('index')),
         array('label'=>'创建龙猫交易', 'url'=>array('create')),
-        array('label'=>'我的龙猫交易', 'url'=>array('admin'), 'active'=>true),
+        array('label'=>'我的龙猫市场', 'url'=>array('admin'), 'active'=>true),
     ),
     'htmlOptions'=>array('class'=> 'pull-right'),
 )); ?>
-
+</div>
+<div class='row-fluid'>
 <?php $this->widget('bootstrap.widgets.TbGridView',array(
 	'id'=>'chinchilla-market-trade-grid',
 	'dataProvider'=>$dataprovider,
@@ -77,3 +57,4 @@ $('.search-form form').submit(function(){
 		),
 	),
 )); ?>
+</div>
