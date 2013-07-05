@@ -223,3 +223,12 @@ CREATE TABLE IF NOT EXISTS `tp_chinchilla_market_trade_pic` (
   PRIMARY KEY (`picid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='trade pictures';
 
+--
+-- Table structure for table `tp_totoro_color`
+--
+
+CREATE TABLE IF NOT EXISTS `tp_totoro_color` (
+  `imageid` char(10) NOT NULL COMMENT '图片id',
+  `color` char(100) NOT NULL COMMENT '颜色'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
