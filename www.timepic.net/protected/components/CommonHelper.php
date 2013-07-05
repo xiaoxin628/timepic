@@ -253,6 +253,8 @@ class CommonHelper {
                     '/wallpaper' => array('label' => Yii::t('Base', 'Wallpapermenu'), 'url' => '/wallpaper'),
                     '---',
                     'totoro' => array('label' => Yii::t('Base', 'About Totoro'), 'url' => '#', 'items' => array(
+                            '/chinchilla/market' => array('label' => Yii::t('Base', 'chinchillaMarket'), 'url' => '/chinchilla/market'),
+                            '---',
                             '/totoroTalk' => array('label' => Yii::t('Base', 'totorotalk'), 'url' => '/totoroTalk'),
                             '---',
                             '/totoroCrossCalculator' => array('label' => Yii::t('Base', 'totoroCrossCalculator'), 'url' => '/totoroCrossCalculator'),

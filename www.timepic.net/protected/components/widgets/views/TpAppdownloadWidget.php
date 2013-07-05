@@ -1,11 +1,10 @@
 	<?php $this->widget('bootstrap.widgets.TbButton', array(
-	'label'=>  Yii::t('Base','Wallpaper'),
+	'label'=>Yii::t('Base','chinchillaMarket'),
 	'buttonType'=>'link',
-	'icon'=>'icon-download-alt icon-white',
+	'icon'=>' icon-camera icon-white',
 	'type'=>'primary',
-	'url'=>'http://itunes.apple.com/cn/app/timepic-bi-zhi-wallpaper/id502370929?mt=8',
-	'encodeLabel'=>false,
-	'htmlOptions'=>array('target'=>'_blank', 'data-title'=>Yii::t('Base','Wallpaper_App_caption'), 'rel'=>'tooltip', 'data-placement'=>'right'),
+	'url'=>'/chinchilla/market',
+	'htmlOptions'=>array('target'=>'_blank', 'data-title'=>Yii::t('Base','chinchillaMarketContent'), 'rel'=>'tooltip', 'data-placement'=>'right'),
 	)); ?>
 	<?php $this->widget('bootstrap.widgets.TbButton', array(
 	'label'=>Yii::t('Base','totorotalk'),
@@ -30,4 +29,14 @@
 	'type'=>'primary',
 	'url'=>'/totoroPic',
 	'htmlOptions'=>array('target'=>'_blank', 'data-title'=>Yii::t('Base','totoroPicContent'), 'rel'=>'tooltip', 'data-placement'=>'right'),
+	)); ?>
+
+	<?php $this->widget('bootstrap.widgets.TbButton', array(
+	'label'=>  Yii::t('Base','Wallpaper'),
+	'buttonType'=>'link',
+	'icon'=>'icon-download-alt icon-white',
+	'type'=>'primary',
+	'url'=>'http://itunes.apple.com/cn/app/timepic-bi-zhi-wallpaper/id502370929?mt=8',
+	'encodeLabel'=>false,
+	'htmlOptions'=>array('target'=>'_blank', 'data-title'=>Yii::t('Base','Wallpaper_App_caption'), 'rel'=>'tooltip', 'data-placement'=>'right'),
 	)); ?>

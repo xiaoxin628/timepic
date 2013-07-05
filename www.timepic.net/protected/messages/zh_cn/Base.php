@@ -93,7 +93,9 @@ Any calculation involving ebony is treated a bit differently than the rest, sinc
     /*     * *********totoroVideo***************** */
     'totoroVideomenu' => '龙猫视频',
     'totoroVideo' => '龙猫视频',
-    
+    /*     * *********Chinchilla Market***************** */
+    'chinchillaMarket' =>'龙猫市场',
+    'chinchillaMarketContent' =>'您家的小龙猫是否已经出生？是不是在寻找靠谱的主人？是不是在百度贴吧发帖子被删掉而怒摔？嘿嘿，龙猫市场是为猫友打造的龙猫交易发布平台并与微博互通达到信息快速传播并集中体现。第一时间找到靠谱主人',
 );
 
 ?>

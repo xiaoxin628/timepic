@@ -93,7 +93,10 @@
         </div>
     </div>
     <div class="row-fluid span4 pull-right well">
-        asdfasdfasdfasf
+        <div class='alert alert-block'>
+            <h4>提示：</h4>
+            直接评论并勾选同步到微博，将在weibo@发布者。他会收到通知并回复您。
+        </div>
     </div>
 </div>
 <script type="text/javascript">

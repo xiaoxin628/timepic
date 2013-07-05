@@ -69,6 +69,9 @@ Any calculation involving ebony is treated a bit differently than the rest, sinc
     /*     * *********totoroVideo***************** */
     'totoroVideomenu' => 'Chinchilla videos',
     'totoroVideo' => 'Chinchilla videos',
+    /*     * *********Chinchilla Market***************** */
+    'chinchillaMarket' =>'Chinchilla Market',
+    'chinchillaMarketContent' =>'did your baby chinchilla has born? Are you looking up a resiponsibile owner for it? Chinchilla market is designed for this which enables you can find anything you want about chinchilla.',
 );
 
 ?>
