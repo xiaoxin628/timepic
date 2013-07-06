@@ -73,8 +73,8 @@ class MarketController extends TPController
 	{
         
         $model = ChinchillaMarketTrade::model()->with('author')->findByPk($id);
-
         $tradeImages = ChinchillaMarketTradePic::model()->findAll('tradeId=:tradeId', array(':tradeId'=>$model->tradeId));
+        
         //该交易已经过期
         if ($model->expiredDate < time() && $model->displayorder >= 0) {
             $model->updateByPk($model->tradeId, array('displayorder'=>'-2'));
@@ -93,16 +93,12 @@ class MarketController extends TPController
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionCreate()
-	{
+	{   
 		$model=new ChinchillaMarketTrade;
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-        //distroy the images uploaded before in this action to keep upload images being available.
-        
-        
+           
 		if(isset($_POST['ChinchillaMarketTrade']))
 		{
+            $cover = '';
             $uploadList = isset(Yii::app()->user->uploadList) ? Yii::app()->user->uploadList : array();
 			$model->attributes=$_POST['ChinchillaMarketTrade'];
 			$model->uid = Yii::app()->user->uid;
@@ -137,6 +133,7 @@ class MarketController extends TPController
                         //the cover will be the first element in the uploadList;
                         if ($setCover) {
                             $model->updateByPk($model->tradeId, array('pic'=>$picmodel->filepath));
+                            $cover = $picmodel->filepath;
                             $setCover = false;
                         }
                         unset($upload);
@@ -145,7 +142,18 @@ class MarketController extends TPController
                 }
                 //reset the attachment list
                 unset(Yii::app()->user->uploadList);
-				$this->redirect(array('view','id'=>$model->tradeId));
+                $gender = $model->gender ? "MM" :"DD";
+                //send new WB
+                if (intval($_POST['ChinchillaMarketTrade']['syncWB'])) {
+                    $wbText = " 发布龙猫交易【".$model->getChinchillaColor($model->breed)." ".$gender."】:".$model->title."，靠谱主人看过来，猫友们帮忙转起。@TimePic #TimePic龙猫市场# 来自TimePic龙猫市场";
+                    Member::model()->sendWB(Yii::app()->user->uid, $wbText, CommonHelper::getImageByType($cover, 'chinchillaMarket', 'big'), $this->createAbsoluteUrl('/chinchilla/market/view', array('id'=>$model->tradeId)));
+                }
+				//synchroniz with WB robot
+                $wbText = "@".Yii::app()->user->username." 发布龙猫交易【".$model->getChinchillaColor($model->breed)." ".$gender."】:".$model->title."，靠谱主人看过来，猫友们帮忙转起。@TimePic #TimePic龙猫市场# 来自TimePic龙猫市场。";
+                Member::model()->sendWB(Yii::app()->params['robotMember'], $wbText, CommonHelper::getImageByType($cover, 'chinchillaMarket', 'big'), $this->createAbsoluteUrl('/chinchilla/market/view', array('id'=>$model->tradeId)));
+                //be a barrer to form reposed
+                $this->refresh(false);
+                $this->redirect(array('view','id'=>$model->tradeId));
             }
 		}
         //reset the attachment list

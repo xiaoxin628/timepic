@@ -348,6 +348,9 @@ var TPPHPSESSID = '<?php echo Yii::app()->session->sessionID; ?>';
 			<div class="row-fluid">
 				<?php echo $form->error($model,'description', array('class'=>'help-inline error')); ?>
 			</div>
+            <div class="row-fluid">
+                同步到微博<?php echo CHtml::checkBox('ChinchillaMarketTrade[syncWB]', true)?>
+            </div>
 		</div>
 	</div>
     <?php echo $form->HiddenField($model,'mode', array('id'=>'picMode')); ?>

@@ -134,4 +134,47 @@ class Member extends CActiveRecord
         }
         return '';
     }
+    
+    public function sendWB($uid, $text, $image="", $url=""){
+        if ($uid && $text) {
+            Yii::import('ext.openID.SDK.sina.SaeTOAuthV2');
+            Yii::import('ext.openID.SDK.sina.SaeTClientV2');
+            if (is_array($uid)) {
+                foreach($uid as $uidItem){
+                    $memberInfo = Member::model()->getMemberInfo($uidItem);
+                    if ($memberInfo) {
+                        //sina
+                        $openIdInfo = Yii::app()->params['openIds'][$memberInfo['openIDType']];
+                        $openClient = new SaeTClientV2($openIdInfo['akey'], $openIdInfo['skey'], $memberInfo['accessToken']);
+                        if ($url) {
+                            $wbResult = $openClient->oauth->get('short_url/shorten', array('url_long' => $url));
+                            $text .= $wbResult['urls'][0]['url_short'];
+                        }
+                        if ($image) {
+                            $openClient->upload($text, $image);
+                        } else {
+                            $openClient->update($text);
+                        }
+                    }
+                }
+            }else{
+                $memberInfo = Member::model()->getMemberInfo($uid);
+                if ($memberInfo) {
+                    //sina
+                    $openIdInfo = Yii::app()->params['openIds'][$memberInfo['openIDType']];
+                    $openClient = new SaeTClientV2($openIdInfo['akey'], $openIdInfo['skey'], $memberInfo['accessToken']);
+                    if ($url) {
+                        $wbResult=$openClient->oauth->get( 'short_url/shorten', array('url_long'=>$url));
+                        $text .= $wbResult['urls'][0]['url_short'];
+                    }
+                    if ($image) {
+                        $openClient->upload($text, $image);
+                    }else{
+                        $openClient->update($text);   
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

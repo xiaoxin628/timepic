@@ -70,6 +70,7 @@ class TPUserIdentity extends CUserIdentity {
                 switch ($this->openIDType) {
                         case 1:
                                 Yii::import('ext.openID.SDK.sina.SaeTOAuthV2');
+                                Yii::import('ext.openID.SDK.sina.SaeTClientV2');
                                 $openIdInfo = Yii::app()->params['openIds']['1'];
                                 $openClient = new SaeTClientV2($openIdInfo['akey'], $openIdInfo['skey'], $this->accessToken);
                                 $uid_get = $openClient->get_uid();

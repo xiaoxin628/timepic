@@ -8,6 +8,7 @@ return array(
     'attachurl' => 'http://test.timepic.net',
     'tmpPath' => '/images/upload/tmp',
     'watermarkKey' => 'timepic719',
+    'robotMember' => array('xxx'),
     'coffee_category' => array(
         '1' => array(
             'catid' => '1',
