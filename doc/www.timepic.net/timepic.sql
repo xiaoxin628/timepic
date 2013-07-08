@@ -233,3 +233,28 @@ CREATE TABLE IF NOT EXISTS `tp_totoro_color` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE  `tp_chinchilla_market_trade` ADD  `views` INT( 10 ) NOT NULL COMMENT  '浏览数' AFTER  `dateline`
+
+
+--
+-- Table structure for table `tp_ieltseye_weibo`
+--
+
+CREATE TABLE IF NOT EXISTS `tp_ieltseye_weibo` (
+  `eid` bigint(255) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `uid` bigint(255) NOT NULL COMMENT '用户uid',
+  `uidstr` char(255) NOT NULL COMMENT 'uid字符串',
+  `screen_name` char(100) NOT NULL COMMENT '用户名',
+  `wbid` bigint(255) NOT NULL COMMENT '微博id',
+  `wbmid` bigint(255) NOT NULL COMMENT '微博mid',
+  `text` text NOT NULL COMMENT '微博内容',
+  `created_at` int(10) NOT NULL COMMENT '微博创建时间',
+  `keywords` char(100) DEFAULT NULL COMMENT '搜搜关键字',
+  `dateline` int(10) NOT NULL COMMENT '入库时间',
+  `status` tinyint(1) NOT NULL COMMENT '-1失败0正常',
+  `source` tinyint(1) NOT NULL COMMENT '来源 0搜索 1@我的微博',
+  PRIMARY KEY (`eid`),
+  UNIQUE KEY `wbid` (`wbid`),
+  KEY `status` (`status`),
+  KEY `source` (`source`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='雅思口语回忆记录库';
+
