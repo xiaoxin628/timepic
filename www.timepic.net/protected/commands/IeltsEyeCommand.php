@@ -2,17 +2,20 @@
 /**
  * this is a command for searching IELST oral test memories from Sina weibo and release them to ieltseye weibo and websit.
  * crontab
- * *\/2 * * * * /Users/lixiaoxin/Sites/company/timepic/www.timepic.net/protected/yiic ieltseye 1>/tmp/ieltseye.log 2>&1 &
- * *\/3 * * * * /opt/local/bin/php /Users/lixiaoxin/Sites/company/timepic/www.timepic.net/protected/yiic ieltseye checkWeibo 1>/tmp/ieltseye.log 2>&1 &
+ * #timepic crontab
+ * *\/5 7-23 * * * /usr/local/php/bin/php /home/wwwroot/www.timepic.net/protected/yiic ieltseye 1>/var/log/ieltseyeCron.log 2>&1 &
+ * *\/3 7-23 * * * /usr/local/php/bin/php /home/wwwroot/www.timepic.net/protected/yiic ieltseye mentions 1>/var/log/ieltseyeCron.log 2>&1 &
+ * *\/5 7-23 * * * /usr/local/php/bin/php /home/wwwroot/www.timepic.net/protected/yiic ieltseye checkWeibo 1>/var/log/ieltseyeCron.log 2>&1 &
  */
 Yii::import('ext.openID.SDK.sina.SaeTOAuthV2');
 Yii::import('ext.openID.SDK.sina.SaeTClientV2');
 set_time_limit(0);
+$_SERVER['REMOTE_ADDR'] = '106.187.55.225';
 class IeltsEyeCommand extends CConsoleCommand{
-    public $akey = 'xxxx';
-    public $skey='xxxx';
-    public $username = 'xxxx';
-    public $password = 'xxxxx';
+    public $akey = '211160679';
+    public $skey='63b64d531b98c2dbff2443816f274dd3';
+    public $username = 'ieltseye@gmail.com';
+    public $password = 'ieltseye#@!#@!';
     public $openService = '';
     public $openClient = '';
     public $accessToken = '';
@@ -21,14 +24,15 @@ class IeltsEyeCommand extends CConsoleCommand{
     //关键字
     public $keywords = array("room", "rm", "p1", 'part1', 'p2', 'part2');
     //搜多久之前的微博 3600 一个小时 86400 一天
-    public $startTime = 72000;
+    public $startTime = 3600;
     //每页微博数量
-    public $pageCount = 20;
+    public $pageCount = 40;
     public $errorTryTimes = 0;
 
 
     public function init() {
         parent::init();
+		Yii::app()->db->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
         $tokenFile = Yii::app()->getBasePath(true).$this->tokenFile;
         if (file_exists($tokenFile)) {
              $filetime = filemtime($tokenFile);
@@ -60,10 +64,12 @@ class IeltsEyeCommand extends CConsoleCommand{
 	}
     
     public function actionIndex(){
-        $this->actionMentions();
         $this->actionSearch("room p1 p2");
+        sleep(60);
         $this->actionSearch("room part1 part2");
+        sleep(60);
         $this->actionSearch("rm p1 p2");
+        sleep(60);
         $this->actionSearch("rm part1 part2");
         Yii::app()->end();
     }
@@ -71,8 +77,9 @@ class IeltsEyeCommand extends CConsoleCommand{
     //@我的微博采集
     public function actionMentions(){
         $weibos = $data= array();
+        $keywords = '';
         $page = 1;
-        $count = 1;
+        $count = 100;
         $since_id = 0;
         $since_id = Yii::app()->db->createCommand()->select('wbid')->from('{{ieltseye_weibo}}')->where('source=:source', array(':source'=>'1'))->order("wbid DESC")->queryScalar();
         $weibos = $this->openClient->mentions( $page, $count, intval($since_id), 0, 0, 0, 1 );
@@ -146,14 +153,15 @@ class IeltsEyeCommand extends CConsoleCommand{
             @touch($lockFile);
         }
         
-        $query = Yii::app()->db->createCommand()->select('wbid, text, created_at')->from('{{ieltseye_weibo}}')->where('status!=:status', array(':status'=>'1'))->order("eid DESC")->query();//dubg
-        if ($query->rowCount) {
+        $count = Yii::app()->db->createCommand()->select('count(eid)')->from('{{ieltseye_weibo}}')->where('status!=:status', array(':status'=>'1'))->queryScalar();
+        if ($count) {
+            $query = Yii::app()->db->createCommand()->select('wbid, text, created_at')->from('{{ieltseye_weibo}}')->where('status!=:status', array(':status'=>'1'))->order("eid DESC")->query();
             while ($row = $query->read()) {
                 //加上时间
-                $row['text'] = '#'.date("ymd", $row['created_at']).'IELTS# '. $row['text'];
-                $res = $this->openClient->repost($row['wbid'], $row['text'], 1);
+//                $row['text'] = '#'.date("ymd", $row['created_at']).'IELTS# '. $row['text'];
                 //多久发一条微博。
                 sleep($this->wbInterval);
+                $res = $this->openClient->repost($row['wbid'], $row['text'], 1);
                 if (isset($res['error'])) {
                     Yii::log("IeltsEyeCommand.reposeWeibo:id:".$row['wbid'].',error:'.$res['error'], 'info', 'ieltseye.log.weibo');
                     Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>-1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
@@ -185,6 +193,7 @@ class IeltsEyeCommand extends CConsoleCommand{
     }
     
     function recordWeibo($weibos, $keywords='', $source='0'){
+        $data = array();
         if ($weibos['statuses']) {
             foreach($weibos['statuses'] as $weibo){
                 $item['created_at'] = strtotime($weibo['created_at']);
@@ -199,18 +208,33 @@ class IeltsEyeCommand extends CConsoleCommand{
                 $item['status'] = '0';
                 $item['source'] = $source;
                 //repose weibo
-                $isExist = Yii::app()->db->createCommand()->select('count(wbid)')->from('{{ieltseye_weibo}}')->where('wbid=:wbid', array(':wbid'=>$item['wbid']))->queryScalar();
-                if (!$isExist) {
-                    try {
-                        Yii::app()->db->createCommand()->insert("{{ieltseye_weibo}}",$item);
-                    } catch (Exception $exc) {
-                        Yii::log("IeltsEyeCommand.recordWeibo:".$exc->getMessage(), 'info', 'ieltseye.log.sql');
+                if ($this->checkKeywords($item['text'])) {
+                    $isExist = Yii::app()->db->createCommand()->select('count(wbid)')->from('{{ieltseye_weibo}}')->where('wbid=:wbid', array(':wbid'=>$item['wbid']))->queryScalar();
+                    if (!$isExist) {
+                        try {
+                            Yii::app()->db->createCommand()->insert("{{ieltseye_weibo}}",$item);
+                        } catch (Exception $exc) {
+                            Yii::log("IeltsEyeCommand.recordWeibo:".$exc->getMessage(), 'info', 'ieltseye.log.sql');
+                        }
                     }
+                    $data[] = $item;
                 }
-                $data[] = $item;
+
             }
         }
         return $data;
+    }
+    
+    //检查 关键字 如果没有关键字 就收录
+    function checkKeywords($text){
+        if ($text) {
+            foreach ($this->keywords as $word) {
+                if (strpos(strtolower($text), $word) !== false) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
 ?>
