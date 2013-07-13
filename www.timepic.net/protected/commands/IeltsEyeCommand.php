@@ -13,15 +13,21 @@ Yii::import('ext.openID.SDK.sina.SaeTClientV2');
 set_time_limit(0);
 $_SERVER['REMOTE_ADDR'] = '106.187.55.225';
 class IeltsEyeCommand extends CConsoleCommand{
-    public $akey = '211160679';
-    public $skey='63b64d531b98c2dbff2443816f274dd3';
+    public $akey = '2323547071';
+    public $skey='16ed80cc77fea11f7f7e96eca178ada3';
+    public $appKeys = array(
+        'weicoPro' => array('akey' => '2323547071','skey'=>'16ed80cc77fea11f7f7e96eca178ada3'),
+        'weicoAndroid' => array('akey' => '211160679','skey'=>'63b64d531b98c2dbff2443816f274dd3'),
+        'weicoIphone' => array('akey' => '82966982','skey'=>'72d4545a28a46a6f329c4f2b1e949e6a'),
+    );
+    public $app = 'weicoPro';
     public $username = 'ieltseye@gmail.com';
     public $password = 'ieltseye#@!#@!';
     public $openService = '';
     public $openClient = '';
     public $accessToken = '';
-    public $tokenFile = '/runtime/IeltsEyeToken.cache';
-    public $wbInterval = 31;//second
+    public $tokenFile = '/runtime/ielts.token';
+    public $wbInterval = 40;//second
     //关键字
     public $keywords = array("room", "rm", "p1", 'part1', 'p2', 'part2', 'p', 'rom', '人人网雅思哥', 'part');
     //famous 过滤关键字
@@ -39,18 +45,24 @@ class IeltsEyeCommand extends CConsoleCommand{
     public function init() {
         parent::init();
 		Yii::app()->db->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-        $tokenFile = Yii::app()->getBasePath(true).$this->tokenFile;
+        $app = array_rand($this->appKeys);
+        $this->app = $app;
+        $this->akey = $this->appKeys[$app]['akey'];
+        $this->skey = $this->appKeys[$app]['skey'];
+        $tokenFile = Yii::app()->getBasePath(true).$this->tokenFile.'.'.$this->app;
+        $this->accessToken = @file_get_contents(Yii::app()->getBasePath(true).$this->tokenFile.'.'.$this->app);
+
         if (file_exists($tokenFile)) {
              $filetime = filemtime($tokenFile);
             //two month
-            if ($filetime < time() - 5184000 || empty($this->accessToken)) {
+            if ($filetime < (time() - 5184000) || empty($this->accessToken)) {
                 $this->getToken();
             }
         }else{
             $this->getToken();
         }
 
-        $this->accessToken = file_get_contents(Yii::app()->getBasePath(true).$this->tokenFile);
+
         
         $openClient = new SaeTClientV2($this->akey, $this->skey, $this->accessToken);
         $this->openClient = $openClient;
@@ -71,13 +83,13 @@ class IeltsEyeCommand extends CConsoleCommand{
     
     public function actionIndex(){
         $this->actionSearch("人人网雅思哥 p");
-        sleep(30);
+        sleep(60);
         $this->actionSearch("room p1 p2");
-        sleep(30);
+        sleep(60);
         $this->actionSearch("room part1 part2");
-        sleep(30);
+        sleep(60);
         $this->actionSearch("rm p1 p2");
-        sleep(30);
+        sleep(60);
         $this->actionSearch("rm part1 part2");
         Yii::app()->end();
     }
@@ -196,6 +208,7 @@ class IeltsEyeCommand extends CConsoleCommand{
     
     public function actionCheckWeibo(){
         $lockFile = Yii::app()->getBasePath(true).'/runtime/ielts.lock';
+        $res = $resUpdate = array();
         if (file_exists($lockFile)) {
             if (filemtime($lockFile) < (time()-1800)) {
                 //删除锁文件
@@ -219,8 +232,19 @@ class IeltsEyeCommand extends CConsoleCommand{
                 sleep($this->wbInterval);
                 $res = $this->openClient->repost($row['wbid'], $row['text'], 1);
                 if (isset($res['error'])) {
-                    Yii::log("IeltsEyeCommand.reposeWeibo:id:".$row['wbid'].',error:'.$res['error'], 'info', 'ieltseye.log.weibo');
-                    Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>-1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
+                    //target weibo does not exist!
+                    if ($res['error_code'] == '20101') {
+                            $resUpdate = $this->openClient->update($row['text']);
+                            if (isset($resUpdate['error'])) {
+                                Yii::log("IeltsEyeCommand.updateWeibo:id:".$row['wbid'].',errorCode:'.$resUpdate['error_code'].',error:'.$resUpdate['error'], 'info', 'ieltseye.log.weibo');
+                                Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>-1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
+                            }else{
+                                Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
+                            }
+                    }else{
+                        Yii::log("IeltsEyeCommand.reposeWeibo:id:".$row['wbid'].',errorCode:'.$res['error_code'].',error:'.$res['error'], 'info', 'ieltseye.log.weibo');
+                        Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>-1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
+                    }
                 }else{
                     Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
                 }
@@ -244,7 +268,7 @@ class IeltsEyeCommand extends CConsoleCommand{
 //            echo 'error';
         }
         $this->accessToken = $serviceBack['access_token'];
-        file_put_contents(Yii::app()->getBasePath(true).$this->tokenFile, $this->accessToken);
+        file_put_contents(Yii::app()->getBasePath(true).$this->tokenFile.'.'.$this->app, $this->accessToken);
         $this->errorTryTimes++;
     }
     
