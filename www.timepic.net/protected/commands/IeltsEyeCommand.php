@@ -4,8 +4,9 @@
  * crontab
  * #timepic crontab
  * *\/5 7-23 * * * /usr/local/php/bin/php /home/wwwroot/www.timepic.net/protected/yiic ieltseye 1>/var/log/ieltseyeCron.log 2>&1 &
+ * *\/4 7-23 * * * /usr/local/php/bin/php /home/wwwroot/www.timepic.net/protected/yiic ieltseye searchFromUID 1>/var/log/ieltseyeCron.log 2>&1 &
  * *\/3 7-23 * * * /usr/local/php/bin/php /home/wwwroot/www.timepic.net/protected/yiic ieltseye mentions 1>/var/log/ieltseyeCron.log 2>&1 &
- * *\/5 7-23 * * * /usr/local/php/bin/php /home/wwwroot/www.timepic.net/protected/yiic ieltseye checkWeibo 1>/var/log/ieltseyeCron.log 2>&1 &
+ * *\/2 7-23 * * * /usr/local/php/bin/php /home/wwwroot/www.timepic.net/protected/yiic ieltseye checkWeibo 1>/var/log/ieltseyeCron.log 2>&1 &
  */
 Yii::import('ext.openID.SDK.sina.SaeTOAuthV2');
 Yii::import('ext.openID.SDK.sina.SaeTClientV2');
@@ -22,12 +23,17 @@ class IeltsEyeCommand extends CConsoleCommand{
     public $tokenFile = '/runtime/IeltsEyeToken.cache';
     public $wbInterval = 31;//second
     //关键字
-    public $keywords = array("room", "rm", "p1", 'part1', 'p2', 'part2');
+    public $keywords = array("room", "rm", "p1", 'part1', 'p2', 'part2', 'p', 'rom', '人人网雅思哥', 'part');
+    //famous 过滤关键字
+    public $retweetedKeywords = array("room", "rm", "p1", 'part1', 'p2', 'part2', 'rom', 'part');
     //搜多久之前的微博 3600 一个小时 86400 一天
     public $startTime = 3600;
     //每页微博数量
     public $pageCount = 40;
     public $errorTryTimes = 0;
+    //微博名人
+    //人人网雅思哥 2060127212
+    public $famousUids = '2060127212';
 
 
     public function init() {
@@ -64,12 +70,14 @@ class IeltsEyeCommand extends CConsoleCommand{
 	}
     
     public function actionIndex(){
+        $this->actionSearch("人人网雅思哥 p");
+        sleep(30);
         $this->actionSearch("room p1 p2");
-        sleep(60);
+        sleep(30);
         $this->actionSearch("room part1 part2");
-        sleep(60);
+        sleep(30);
         $this->actionSearch("rm p1 p2");
-        sleep(60);
+        sleep(30);
         $this->actionSearch("rm part1 part2");
         Yii::app()->end();
     }
@@ -96,7 +104,57 @@ class IeltsEyeCommand extends CConsoleCommand{
             echo "none\r\n";
         }
     }
+    
+  //微博特定采集
+    public function actionSearchFromUID(){
+        $weibos = $data= $query = $retweeted = array();
+        $totalPages = 1;
+        $count = 150;
+        $page = 1;
+        $weibos = $this->openClient->timeline_batch_by_id($this->famousUids, $page, $count, 0, 0);
+        //首页 入库
+        if ($weibos['statuses']) {
+            foreach($weibos['statuses'] as $weibo){
+                //必须是转发且转发时间不超过1个小时
+                if (isset($weibo['retweeted_status']) && strtotime($weibo['created_at'])> time()-3600 ) {
+                    $retweeted['statuses'][] = $weibo['retweeted_status'];
+                }
+            }
+            if (!empty($retweeted)) {
+                $formatWeibos = $this->recordWeibo($retweeted, '', 2);
+                foreach ($formatWeibos as $weibo){
+                    echo $weibo['wbid']."\r\n";
+                }
+            }else{
+                echo "none\r\n";
+            }
 
+        }else{
+            echo "none\r\n";
+        }
+        /*
+        //分页 入库
+        if ($weibos['statuses']) {
+           $totalPages = @ceil($weibos['total_number']/$count);
+
+           for($page=1;$page<=$totalPages;$page++){
+                $weibos = $this->openClient->timeline_batch_by_id($this->famousUids, $page, $count, 0, 0);
+                foreach($weibos['statuses'] as $weibo){
+                    //必须是转发且时间不超过6个小时
+                    if ($weibo['retweeted_status'] && strtotime($weibo['retweeted_status']['created_at'])> time()-43200 ) {
+                        $Retweeted['statuses'][] = $weibo['retweeted_status'];
+                    }
+                }
+                $formatWeibos = $this->recordWeibo($Retweeted, '', 2);
+                foreach ($formatWeibos as $weibo){
+                    echo $weibo['wbid']."\r\n";
+                }
+           }
+        }else{
+            echo "none\r\n";
+        }
+         */
+    }
     //微博搜索采集
     public function actionSearch($keywords){
         $weibos = $data= array();
@@ -134,8 +192,6 @@ class IeltsEyeCommand extends CConsoleCommand{
         }else{
             echo "none\r\n";
         }
-        
-//        Yii::app()->end();
     }
     
     public function actionCheckWeibo(){
@@ -192,6 +248,13 @@ class IeltsEyeCommand extends CConsoleCommand{
         $this->errorTryTimes++;
     }
     
+    /**
+     * 
+     * @param type $weibos
+     * @param type $keywords
+     * @param type $source 0 搜索 1@我的微博 2从名人微博
+     * @return type $data 入库微博
+     */
     function recordWeibo($weibos, $keywords='', $source='0'){
         $data = array();
         if ($weibos['statuses']) {
@@ -208,7 +271,7 @@ class IeltsEyeCommand extends CConsoleCommand{
                 $item['status'] = '0';
                 $item['source'] = $source;
                 //repose weibo
-                if ($this->checkKeywords($item['text'])) {
+                if ($this->checkKeywords($item['text'], $source)) {
                     $isExist = Yii::app()->db->createCommand()->select('count(wbid)')->from('{{ieltseye_weibo}}')->where('wbid=:wbid', array(':wbid'=>$item['wbid']))->queryScalar();
                     if (!$isExist) {
                         try {
@@ -225,10 +288,20 @@ class IeltsEyeCommand extends CConsoleCommand{
         return $data;
     }
     
-    //检查 关键字 如果没有关键字 就收录
-    function checkKeywords($text){
+    /**
+     * 检查 关键字 如果没有关键字 就收录
+     * @param type $text
+     * @param type $type 0 搜索 1@我的微博 2从名人微博
+     * @return boolean
+     */
+    function checkKeywords($text, $source='0'){
+        $keywords = $this->keywords;
+        if ($source == '2') {
+            $keywords = $this->retweetedKeywords;            
+        }
+        
         if ($text) {
-            foreach ($this->keywords as $word) {
+            foreach ($keywords as $word) {
                 if (strpos(strtolower($text), $word) !== false) {
                     return true;
                 }

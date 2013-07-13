@@ -257,4 +257,4 @@ CREATE TABLE IF NOT EXISTS `tp_ieltseye_weibo` (
   KEY `status` (`status`),
   KEY `source` (`source`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='雅思口语回忆记录库';
-
+ALTER TABLE  `tp_ieltseye_weibo` CHANGE  `source`  `source` TINYINT( 1 ) NOT NULL COMMENT  '来源 0搜索 1@我的微博 2名人微博采集';
