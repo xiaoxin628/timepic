@@ -207,6 +207,7 @@ class IeltsEyeCommand extends CConsoleCommand{
     }
     
     public function actionCheckWeibo(){
+        $message = '';
         $lockFile = Yii::app()->getBasePath(true).'/runtime/ielts.lock';
         $res = $resUpdate = array();
         if (file_exists($lockFile)) {
@@ -227,9 +228,18 @@ class IeltsEyeCommand extends CConsoleCommand{
             $query = Yii::app()->db->createCommand()->select('wbid, text, created_at')->from('{{ieltseye_weibo}}')->where('status!=:status', array(':status'=>'1'))->order("eid DESC")->query();
             while ($row = $query->read()) {
                 //加上时间
-//                $row['text'] = '#'.date("ymd", $row['created_at']).'IELTS# '. $row['text'];
+                $message = $row['text'];
+                $topic = '#IELTS'.date("ymd", $row['created_at']).'# ';
+                //去掉@某人
+                $message = preg_replace("/@[\\x{4e00}-\\x{9fa5}\\w\\-]+/u", "", $message);
+                //保证长度
+                $length = 140 - ceil(strlen( urlencode($topic) ) * 0.5) ;   //2个字母为1个字
+                $message = $this->sina_weibo_substr($message, $length);
+                //加上话题
+                $row['text'] = $topic.$message;
                 //多久发一条微博。
                 sleep($this->wbInterval);
+                
                 $res = $this->openClient->repost($row['wbid'], $row['text'], 1);
                 if (isset($res['error'])) {
                     //target weibo does not exist!
@@ -259,6 +269,38 @@ class IeltsEyeCommand extends CConsoleCommand{
     
     
     /***********lib*****************/
+    /**
+     * $length = 140 - ceil(strlen( urlencode($link) ) * 0.5) ;   //2个字母为1个字
+	 * $content = sina_weibo_substr($content, $length);
+     * @param type $str
+     * @param type $length
+     * @return type
+     */
+    public function sina_weibo_substr($str, $length) {
+        $str = trim(strip_tags($str));
+            if( strlen($str) > $length + 600 ){
+            $str = substr($str, 0, $length + 600);
+        }
+
+        $p = '/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/';
+        preg_match_all($p,$str,$o);
+        $size = sizeof($o[0]);
+        $count = 0;
+        for ($i=0; $i<$size; $i++) {
+            if (strlen($o[0][$i]) > 1) {
+                $count += 1;
+            } else {
+                $count += 0.5;
+            }
+
+            if ($count  > $length) {
+                $i-=1;
+                break;
+            }
+
+        }
+        return implode('', array_slice($o[0],0, $i));
+    }
     public function getToken(){
         $serviceBack = array();
         $this->openService = new SaeTOAuthV2($this->akey, $this->skey);
