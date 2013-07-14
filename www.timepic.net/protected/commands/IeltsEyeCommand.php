@@ -61,6 +61,10 @@ class IeltsEyeCommand extends CConsoleCommand{
     //微博名人
     //人人网雅思哥 2060127212
     public $famousUids = '2060127212';
+    public $blacklist = array(
+        '3594633532',//雅思口语网蹲哥 不转发自己的微博
+        '1964300185',//各城市雅思口语 重复的微博
+    );
 
 
     public function init() {
@@ -293,7 +297,7 @@ class IeltsEyeCommand extends CConsoleCommand{
                                 }
                         }elseif($res['error_code'] == '20016'){
                             //update weibo too fast 直接退出
-                            Yii::log("IeltsEyeCommand.reposeWeibo:app:".$this->classicApp.",id:".$row['wbid'].',errorCode:'.$res['error_code'].',error:'.$res['error'], 'info', 'ieltseye.log.weibo');
+                            Yii::log("IeltsEyeCommand.reposeWeibo:app:".$this->classicApp.",id:".$row['wbid'].',errorCode:'.$res['error_code'].',error:'.$res['error'].",command:kill myself", 'info', 'ieltseye.log.weibo');
                             Yii::app()->end();
                         }else{
                             Yii::log("IeltsEyeCommand.reposeWeibo:app:".$this->classicApp.",id:".$row['wbid'].',errorCode:'.$res['error_code'].',error:'.$res['error'], 'info', 'ieltseye.log.weibo');
@@ -409,7 +413,7 @@ class IeltsEyeCommand extends CConsoleCommand{
                 $item['status'] = '0';
                 $item['source'] = $source;
                 //repose weibo
-                if ($this->checkKeywords($item['text'], $source)) {
+                if ($this->checkKeywords($item['text'], $source, $item['uid'])) {
                     $isExist = Yii::app()->db->createCommand()->select('count(wbid)')->from('{{ieltseye_weibo}}')->where('wbid=:wbid', array(':wbid'=>$item['wbid']))->queryScalar();
                     if (!$isExist) {
                         try {
@@ -417,8 +421,8 @@ class IeltsEyeCommand extends CConsoleCommand{
                         } catch (Exception $exc) {
                             Yii::log("IeltsEyeCommand.recordWeibo:".$exc->getMessage(), 'info', 'ieltseye.log.sql');
                         }
+                        $data[] = $item;
                     }
-                    $data[] = $item;
                 }
 
             }
@@ -430,15 +434,21 @@ class IeltsEyeCommand extends CConsoleCommand{
      * 检查 关键字 如果没有关键字 就收录
      * @param type $text
      * @param type $type 0 搜索 1@我的微博 2从名人微博
+     * @param type $uid 看该用户是否在黑名单中
      * @return boolean
      */
-    function checkKeywords($text, $source='0'){
+    function checkKeywords($text, $source='0', $uid = ''){
         $keywords = $this->keywords;
         if ($source == '2') {
             $keywords = $this->retweetedKeywords;            
         }
         
         if ($text) {
+            if ($uid) {
+                if (in_array($uid, $this->blacklist)) {
+                    return false;
+                }
+            }
             foreach ($keywords as $word) {
                 if (strpos(strtolower($text), $word) !== false) {
                     return true;
