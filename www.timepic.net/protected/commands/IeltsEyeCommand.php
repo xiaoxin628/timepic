@@ -15,12 +15,32 @@ $_SERVER['REMOTE_ADDR'] = '106.187.55.225';
 class IeltsEyeCommand extends CConsoleCommand{
     public $akey = '2323547071';
     public $skey='16ed80cc77fea11f7f7e96eca178ada3';
+    //可以搜索的高级key
     public $appKeys = array(
         'weicoPro' => array('akey' => '2323547071','skey'=>'16ed80cc77fea11f7f7e96eca178ada3'),
         'weicoAndroid' => array('akey' => '211160679','skey'=>'63b64d531b98c2dbff2443816f274dd3'),
         'weicoIphone' => array('akey' => '82966982','skey'=>'72d4545a28a46a6f329c4f2b1e949e6a'),
         'weigeIphone' => array('akey' => '2027761570','skey'=>'5042214816d14b2d9e8ae8255f96180d'),
     );
+    //普通key
+    public $classicApp = 'weicoPro';
+    public $classicAkey = '2323547071';
+    public $classicSkey='16ed80cc77fea11f7f7e96eca178ada3';
+    //发微博专用key 防止发送太快。
+    public $classicKeys = array(
+        'weicoPro' => array('akey' => '2323547071','skey'=>'16ed80cc77fea11f7f7e96eca178ada3'),
+        'weicoAndroid' => array('akey' => '211160679','skey'=>'63b64d531b98c2dbff2443816f274dd3'),
+        'weicoIphone' => array('akey' => '82966982','skey'=>'72d4545a28a46a6f329c4f2b1e949e6a'),
+        'weigeIphone' => array('akey' => '2027761570','skey'=>'5042214816d14b2d9e8ae8255f96180d'),
+        'androidTablet' => array('akey' => '2540340328','skey'=>'886cfb4e61fad4e4e9ba9dee625284dd'),
+        'meituxiuxiu' => array('akey' => '4229079448','skey'=>'bc58f8c7179369d4bfa914656c161b15'),
+        'WeicoGIF' => array('akey' => '1078446352','skey'=>'c698c95df62b060734d3d0a9e8787a9a'),
+        'fit' => array('akey' => '31024382','skey'=>'25c3e6b5763653d1e5b280884b45c51f'),
+        'ArmingWeibo' => array('akey' => '2612767607','skey'=>'4f988ffd2fba40eaab89dc4aa4c5389d'),
+        'webOS' => array('akey' => '1262673699','skey'=>'6185cf040b403dfa35de9678b5e35baf'),
+    );
+    public $classicService = '';
+    public $classicClient = '';
     public $app = 'weicoPro';
     public $username = 'ieltseye@gmail.com';
     public $password = 'ieltseye#@!#@!';
@@ -46,6 +66,8 @@ class IeltsEyeCommand extends CConsoleCommand{
     public function init() {
         parent::init();
 		Yii::app()->db->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+        Yii::getLogger()->autoFlush = 1;
+        Yii::getLogger()->autoDump = true;
         $app = array_rand($this->appKeys);
         $this->app = $app;
         $this->akey = $this->appKeys[$app]['akey'];
@@ -208,11 +230,13 @@ class IeltsEyeCommand extends CConsoleCommand{
     }
     
     public function actionCheckWeibo(){
-        $message = '';
+        $message = $openClient = $res = '';
+        
         $lockFile = Yii::app()->getBasePath(true).'/runtime/ielts.lock';
         $res = $resUpdate = array();
         if (file_exists($lockFile)) {
-            if (filemtime($lockFile) < (time()-1800)) {
+            //4 hours
+            if (filemtime($lockFile) < (time()-3600)) {
                 //删除锁文件
                 @unlink($lockFile);
             }else{
@@ -226,7 +250,8 @@ class IeltsEyeCommand extends CConsoleCommand{
         
         $count = Yii::app()->db->createCommand()->select('count(eid)')->from('{{ieltseye_weibo}}')->where('status!=:status', array(':status'=>'1'))->queryScalar();
         if ($count) {
-            $query = Yii::app()->db->createCommand()->select('wbid, text, created_at')->from('{{ieltseye_weibo}}')->where('status!=:status', array(':status'=>'1'))->order("eid DESC")->query();
+            //每次只发10条最新的
+            $query = Yii::app()->db->createCommand()->select('wbid, text, created_at')->from('{{ieltseye_weibo}}')->where('status!=:status', array(':status'=>'1'))->limit(10)->order("eid DESC")->query();
             while ($row = $query->read()) {
                 //加上时间
                 $message = $row['text'];
@@ -239,25 +264,46 @@ class IeltsEyeCommand extends CConsoleCommand{
                 //加上话题
                 $row['text'] = $topic.$message;
                 //多久发一条微博。
-                sleep($this->wbInterval);
+                $classicToken = $this->getClassicToken();
                 
-                $res = $this->openClient->repost($row['wbid'], $row['text'], 1);
-                if (isset($res['error'])) {
-                    //target weibo does not exist!
-                    if ($res['error_code'] == '20101') {
-                            $resUpdate = $this->openClient->update($row['text']);
-                            if (isset($resUpdate['error'])) {
-                                Yii::log("IeltsEyeCommand.updateWeibo:id:".$row['wbid'].',errorCode:'.$resUpdate['error_code'].',error:'.$resUpdate['error'], 'info', 'ieltseye.log.weibo');
-                                Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>-1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
-                            }else{
-                                Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
-                            }
-                    }else{
-                        Yii::log("IeltsEyeCommand.reposeWeibo:id:".$row['wbid'].',errorCode:'.$res['error_code'].',error:'.$res['error'], 'info', 'ieltseye.log.weibo');
-                        Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>-1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
+                if ($classicToken) {
+                    $openClient = new SaeTClientV2($this->classicAkey, $this->classicSkey, $classicToken);
+                    $this->classicClient = $openClient;
+                    $uid = $this->classicClient->get_uid();
+                    if (isset($uid['error'])) {
+                         echo "classic token error:".$uid['error']."\r\n";
+                        continue;
                     }
                 }else{
-                    Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
+                    echo "no classic token\r\n";
+                    continue;
+                }
+
+                if ($this->classicClient) {
+                    $res = $this->classicClient->repost($row['wbid'], $row['text'], 1);
+                    if (isset($res['error'])) {
+                        //target weibo does not exist!
+                        if (in_array($res['error_code'], array(20101, 20205))) {
+                                $resUpdate = $this->openClient->update($row['text']);
+                                if (isset($resUpdate['error'])) {
+                                    Yii::log("IeltsEyeCommand.updateWeibo:app:".$this->classicApp.",id:".$row['wbid'].',errorCode:'.$resUpdate['error_code'].',error:'.$resUpdate['error'], 'info', 'ieltseye.log.weibo');
+                                    Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>-1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
+                                }else{
+                                    Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
+                                }
+                        }elseif($res['error_code'] == '20016'){
+                            //update weibo too fast 直接退出
+                            Yii::log("IeltsEyeCommand.reposeWeibo:app:".$this->classicApp.",id:".$row['wbid'].',errorCode:'.$res['error_code'].',error:'.$res['error'], 'info', 'ieltseye.log.weibo');
+                            Yii::app()->end();
+                        }else{
+                            Yii::log("IeltsEyeCommand.reposeWeibo:app:".$this->classicApp.",id:".$row['wbid'].',errorCode:'.$res['error_code'].',error:'.$res['error'], 'info', 'ieltseye.log.weibo');
+                            Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>-1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
+                        }
+                    }elseif(!empty($res)){
+                        Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
+                    }
+                    //睡眠50秒 避免发微博太快。
+                    sleep(45);
                 }
             }
         }else{
@@ -266,6 +312,7 @@ class IeltsEyeCommand extends CConsoleCommand{
 
         //删除锁文件
         @unlink($lockFile);
+        Yii::app()->end();
     }
     
     
@@ -302,6 +349,30 @@ class IeltsEyeCommand extends CConsoleCommand{
         }
         return implode('', array_slice($o[0],0, $i));
     }
+    
+    public function getClassicToken(){
+        $accessToken = $app = $akey = $skey = $tokenFile = '';
+        $app = array_rand($this->classicKeys);
+        $this->classicApp = $app;
+        $this->classicAkey = $this->classicKeys[$app]['akey'];
+        $this->classicSkey = $this->classicKeys[$app]['skey'];
+        $tokenFile = Yii::app()->getBasePath(true).$this->tokenFile.'.classic.'.$app;
+        $accessToken = @file_get_contents(Yii::app()->getBasePath(true).$this->tokenFile.'.classic.'.$app);
+        //5 days
+        if (!file_exists($tokenFile) || filemtime($tokenFile)<(time() - 43200) || empty($accessToken)) {
+            try {
+                $this->classicService = new SaeTOAuthV2($this->classicAkey, $this->classicSkey);
+                $serviceBack = $this->classicService->getAccessToken('password', array('username'=>$this->username, 'password'=>$this->password));
+                $accessToken = $serviceBack['access_token'];
+                @file_put_contents(Yii::app()->getBasePath(true).$this->tokenFile.'.classic.'.$app, $accessToken);
+            } catch (Exception $exc) {
+                Yii::log("IeltsEyeCommand.getClassicToken:app:".$app.',errorCode:'.$exc->getCode().',error:'.$exc->getMessage(), 'info', 'ieltseye.log.weibo');
+            }
+        }
+        return $accessToken;
+    }
+    
+    
     public function getToken(){
         $serviceBack = array();
         $this->openService = new SaeTOAuthV2($this->akey, $this->skey);
