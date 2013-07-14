@@ -11,7 +11,7 @@
 Yii::import('ext.openID.SDK.sina.SaeTOAuthV2');
 Yii::import('ext.openID.SDK.sina.SaeTClientV2');
 set_time_limit(0);
-$_SERVER['REMOTE_ADDR'] = '106.187.55.225';
+$_SERVER['REMOTE_ADDR'] = '106.187.55.255';
 class IeltsEyeCommand extends CConsoleCommand{
     public $akey = '2323547071';
     public $skey='16ed80cc77fea11f7f7e96eca178ada3';
@@ -48,7 +48,7 @@ class IeltsEyeCommand extends CConsoleCommand{
     public $openClient = '';
     public $accessToken = '';
     public $tokenFile = '/runtime/ielts.token';
-    public $wbInterval = 40;//second
+    public $wbInterval = 60;//second
     //关键字
     public $keywords = array("room", "rm", "p1", 'part1', 'p2', 'part2', 'p', 'rom', '人人网雅思哥', 'part');
     //famous 过滤关键字
@@ -243,6 +243,7 @@ class IeltsEyeCommand extends CConsoleCommand{
             if (filemtime($lockFile) < (time()-3600)) {
                 //删除锁文件
                 @unlink($lockFile);
+                @touch($lockFile);
             }else{
                 Yii::log("IeltsEyeCommand.checkWeibo:command is running", 'info', 'ieltseye.log.weibo.command');
                 Yii::app()->end(); 
@@ -254,7 +255,7 @@ class IeltsEyeCommand extends CConsoleCommand{
         
         $count = Yii::app()->db->createCommand()->select('count(eid)')->from('{{ieltseye_weibo}}')->where('status!=:status', array(':status'=>'1'))->queryScalar();
         if ($count) {
-            //每次只发10条最新的
+            //每次只发10条最新的 大约10分钟处理完成。
             $query = Yii::app()->db->createCommand()->select('wbid, text, created_at')->from('{{ieltseye_weibo}}')->where('status!=:status', array(':status'=>'1'))->limit(10)->order("eid DESC")->query();
             while ($row = $query->read()) {
                 //加上时间
@@ -296,9 +297,10 @@ class IeltsEyeCommand extends CConsoleCommand{
                                     Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
                                 }
                         }elseif($res['error_code'] == '20016'){
-                            //update weibo too fast 直接退出
+                            //update weibo too fast 并且直接退出，并且不删除锁文件，这样一个小时以后自动删除并重建。直接退出
                             Yii::log("IeltsEyeCommand.reposeWeibo:app:".$this->classicApp.",id:".$row['wbid'].',errorCode:'.$res['error_code'].',error:'.$res['error'].",command:kill myself", 'info', 'ieltseye.log.weibo');
-                            @unlink($lockFile);
+                            
+//                            @unlink($lockFile);
                             Yii::app()->end();
                         }else{
                             Yii::log("IeltsEyeCommand.reposeWeibo:app:".$this->classicApp.",id:".$row['wbid'].',errorCode:'.$res['error_code'].',error:'.$res['error'], 'info', 'ieltseye.log.weibo');
@@ -308,7 +310,7 @@ class IeltsEyeCommand extends CConsoleCommand{
                         Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
                     }
                     //睡眠50秒 避免发微博太快。
-                    sleep(45);
+                    sleep($this->wbInterval);
                 }
             }
         }else{
