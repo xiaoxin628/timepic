@@ -19,6 +19,7 @@ class IeltsEyeCommand extends CConsoleCommand{
         'weicoPro' => array('akey' => '2323547071','skey'=>'16ed80cc77fea11f7f7e96eca178ada3'),
         'weicoAndroid' => array('akey' => '211160679','skey'=>'63b64d531b98c2dbff2443816f274dd3'),
         'weicoIphone' => array('akey' => '82966982','skey'=>'72d4545a28a46a6f329c4f2b1e949e6a'),
+        'weigeIphone' => array('akey' => '2027761570','skey'=>'5042214816d14b2d9e8ae8255f96180d'),
     );
     public $app = 'weicoPro';
     public $username = 'ieltseye@gmail.com';
@@ -229,7 +230,7 @@ class IeltsEyeCommand extends CConsoleCommand{
             while ($row = $query->read()) {
                 //加上时间
                 $message = $row['text'];
-                $topic = '#IELTS'.date("ymd", $row['created_at']).'# ';
+                $topic = '#IELTSEYE'.date("ymd", $row['created_at']).'# ';
                 //去掉@某人
                 $message = preg_replace("/@[\\x{4e00}-\\x{9fa5}\\w\\-]+/u", "", $message);
                 //保证长度
