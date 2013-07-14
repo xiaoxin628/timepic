@@ -244,7 +244,7 @@ class IeltsEyeCommand extends CConsoleCommand{
                 //删除锁文件
                 @unlink($lockFile);
             }else{
-                echo "Command is running!\r\n";
+                Yii::log("IeltsEyeCommand.checkWeibo:command is running", 'info', 'ieltseye.log.weibo.command');
                 Yii::app()->end(); 
             }
         }else{
@@ -275,11 +275,11 @@ class IeltsEyeCommand extends CConsoleCommand{
                     $this->classicClient = $openClient;
                     $uid = $this->classicClient->get_uid();
                     if (isset($uid['error'])) {
-                         echo "classic token error:".$uid['error']."\r\n";
+                        Yii::log("IeltsEyeCommand.checkWeibo:classic token error:".$uid['error'], 'info', 'ieltseye.log.weibo.command');                                 
                         continue;
                     }
                 }else{
-                    echo "no classic token\r\n";
+                    Yii::log("IeltsEyeCommand.checkWeibo:no classic token!", 'info', 'ieltseye.log.weibo.command');
                     continue;
                 }
 
@@ -298,6 +298,7 @@ class IeltsEyeCommand extends CConsoleCommand{
                         }elseif($res['error_code'] == '20016'){
                             //update weibo too fast 直接退出
                             Yii::log("IeltsEyeCommand.reposeWeibo:app:".$this->classicApp.",id:".$row['wbid'].',errorCode:'.$res['error_code'].',error:'.$res['error'].",command:kill myself", 'info', 'ieltseye.log.weibo');
+                            @unlink($lockFile);
                             Yii::app()->end();
                         }else{
                             Yii::log("IeltsEyeCommand.reposeWeibo:app:".$this->classicApp.",id:".$row['wbid'].',errorCode:'.$res['error_code'].',error:'.$res['error'], 'info', 'ieltseye.log.weibo');
@@ -311,7 +312,7 @@ class IeltsEyeCommand extends CConsoleCommand{
                 }
             }
         }else{
-            echo "No weibos to be send!\r\n";
+            Yii::log("IeltsEyeCommand.checkWeibo:No weibos to be send!", 'info', 'ieltseye.log.weibo.command');
         }
 
         //删除锁文件
