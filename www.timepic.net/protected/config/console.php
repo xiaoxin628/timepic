@@ -13,7 +13,7 @@ return array(
             'connectionString' => 'mysql:host=localhost;dbname=timepic',
             'emulatePrepare' => true,
             'username' => 'root',
-            'password' => 'xxxxx',
+            'password' => 'lishuzu511',
             'charset' => 'utf8',
             'tablePrefix' => 'tp_'
         ),

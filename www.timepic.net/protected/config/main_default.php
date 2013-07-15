@@ -49,6 +49,9 @@ return array(
 		),
 		'totorotalk',
         'chinchilla',
+		'ieltseye' => array(
+			'defaultController'=> 'Weibo',	
+        ),
 	),
 
 	// application components
@@ -75,6 +78,13 @@ return array(
 			'showScriptName' => false,
 			'urlSuffix' => '.html',
 			'rules'=>array(
+               //ieltseye
+                'http://test.ieltseye.com/'=>'ieltseye/',
+				'http://test.ieltseye.com/<controller:\w+>/<action:\w+>/page/<page:\d+>'=>'ieltseye/<controller>/<action>',
+				'http://test.ieltseye.com/<controller:\w+>/<id:\d+>'=>'ieltseye/<controller>/view',
+				'http://test.ieltseye.com/<controller:\w+>/<action:\w+>/<id:\d+>'=>'ieltseye/<controller>/<action>',
+				'http://test.ieltseye.com/<controller:\w+>/<action:\w+>'=>'ieltseye/<controller>/<action>',
+                
 				'<controller:\w+>/<action:\w+>/page/<page:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',

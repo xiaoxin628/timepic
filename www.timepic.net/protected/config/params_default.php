@@ -81,5 +81,6 @@ return array(
                 "or" => "或",
             )
         ),
+    'ieltseye'=>  require_once(dirname(__FILE__).'/params_ieltseye.php'),
 );
 ?>
