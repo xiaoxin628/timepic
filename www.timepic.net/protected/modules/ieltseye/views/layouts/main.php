@@ -4,10 +4,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="language" content="zh-CN" />
 
-    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->getBaseUrl(true); ?>/css/ieltseye.css" />
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
-
+    <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl."/js/backtotop.js",CClientScript::POS_END); ?>
 	<?php Yii::app()->bootstrap->register(); ?>
 </head>
 

@@ -1,0 +1,43 @@
+/* 
+    Document   : ieltseye
+    Created on : 2013-7-16, 5:00:54
+    Author     : lixiaoxin
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+#back-to-top{
+        position:fixed;
+        bottom:100px;
+        left:5px;
+}
+#back-to-top a{
+        width: 10px;
+        word-wrap: break-word;
+        text-align:center;
+        text-decoration:none;
+        color:#d1d1d1;
+        display:block;
+        /*使用CSS3中的transition属性给跳转链接中的文字添加渐变效果*/
+        -moz-transition:color 1s; 
+        -webkit-transition:color 1s;
+        -o-transition:color 1s;
+}
+#back-to-top a:hover{
+        color:#979797;
+}
+#back-to-top a span{
+        background:#d1d1d1;
+        border-radius:6px;
+        display:block;
+        height:10px;
+        width:10px;
+        background:#d1d1d1 no-repeat center center;
+        margin-bottom:5px;
+        -moz-transition:background 1s;
+        -webkit-transition:background 1s;
+        -o-transition:background 1s;
+}
+#back-to-top a:hover span{
+        background:#979797 no-repeat center center;
+}

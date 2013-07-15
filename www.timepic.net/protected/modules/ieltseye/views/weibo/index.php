@@ -22,19 +22,19 @@ $(function () {
 })
 </script> 
 <?php endif;?>
+
+<p id="back-to-top"><a href="#top">TOP</a></p>
+
 <div class="row-fluid" style="margin-bottom: 10px;">
     
-    <div class="span1">
-        <button class="btn btn-primary pull-left" type="button" onclick="window.location.reload()">刷新</button>
-    </div>
-    <div class="span3">
+    <div class="span3 pull-left">
         
         <?php $form=$this->beginWidget('CActiveForm',array(
             'id'=>'oralTopicSearch',
             'enableAjaxValidation'=>false,
         )); ?>
 
-        <?php echo CHtml::textField('keyword', CHtml::encode($keyword), array('class'=>'input-medium search-query')); ?>
+        <?php echo CHtml::textField('keyword', CHtml::encode($keyword), array('class'=>'input-small search-query')); ?>
         <?php 
         $htmlOptionsArr = !empty($keyword) ? array('id'=>'topicSearch','disabled'=>'true') : array('id'=>'topicSearch');
         $this->widget('bootstrap.widgets.TbButton', array(
@@ -43,7 +43,7 @@ $(function () {
             'label'=>'搜索',
             'htmlOptions' =>$htmlOptionsArr,
         )); ?>
-
+        <button class="btn btn-primary pull-right" type="button" onclick="window.location.reload()">刷新</button>
         <?php $this->endWidget(); ?>
     </div>
 </div>
@@ -81,3 +81,13 @@ $(function () {
                 )
         );?>
 </div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42471034-1', 'ieltseye.com');
+  ga('send', 'pageview');
+
+</script>
