@@ -11,7 +11,7 @@
 Yii::import('ext.openID.SDK.sina.SaeTOAuthV2');
 Yii::import('ext.openID.SDK.sina.SaeTClientV2');
 set_time_limit(0);
-$_SERVER['REMOTE_ADDR'] = '106.187.55.255';
+//$_SERVER['REMOTE_ADDR'] = rand(1,255).'.'.rand(1,255).'.'.rand(1,255).'.'.rand(1,255);
 class IeltsEyeCommand extends CConsoleCommand{
     public $akey = '2323547071';
     public $skey='16ed80cc77fea11f7f7e96eca178ada3';
@@ -66,9 +66,13 @@ class IeltsEyeCommand extends CConsoleCommand{
         '1964300185',//各城市雅思口语 重复的微博
     );
 
-
+    /**
+     * get accessToken.If failed to get access token then will try again untile 3 times.
+     */
     public function init() {
         parent::init();
+        //make Chinese IP for sina.
+        $_SERVER['REMOTE_ADDR'] = $this->makeIp();
 		Yii::app()->db->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
         Yii::getLogger()->autoFlush = 1;
         Yii::getLogger()->autoDump = true;
@@ -107,7 +111,9 @@ class IeltsEyeCommand extends CConsoleCommand{
     public function run($args) {
 		parent::run($args);
 	}
-    
+    /**
+     * default action: search keywords by crond
+     */
     public function actionIndex(){
         $this->actionSearch("人人网雅思哥 p");
         sleep(60);
@@ -233,6 +239,9 @@ class IeltsEyeCommand extends CConsoleCommand{
         }
     }
     
+    /**
+     * check and send weibo by crond per minute
+     */
     public function actionCheckWeibo(){
         $message = $openClient = $res = '';
         
@@ -240,7 +249,7 @@ class IeltsEyeCommand extends CConsoleCommand{
         $res = $resUpdate = array();
         if (file_exists($lockFile)) {
             //4 hours
-            if (filemtime($lockFile) < (time()-3600)) {
+            if (filemtime($lockFile) < (time()-1800)) {
                 //删除锁文件
                 @unlink($lockFile);
                 @touch($lockFile);
@@ -255,8 +264,8 @@ class IeltsEyeCommand extends CConsoleCommand{
         
         $count = Yii::app()->db->createCommand()->select('count(eid)')->from('{{ieltseye_weibo}}')->where('status!=:status', array(':status'=>'1'))->queryScalar();
         if ($count) {
-            //每次只发10条最新的 大约10分钟处理完成。
-            $query = Yii::app()->db->createCommand()->select('wbid, text, created_at')->from('{{ieltseye_weibo}}')->where('status!=:status', array(':status'=>'1'))->limit(10)->order("eid DESC")->query();
+            //每次只发5条最新的 大约10分钟处理完成。
+            $query = Yii::app()->db->createCommand()->select('wbid, text, created_at')->from('{{ieltseye_weibo}}')->where('status!=:status', array(':status'=>'1'))->limit(5)->order("eid DESC")->query();
             while ($row = $query->read()) {
                 //加上时间
                 $message = $row['text'];
@@ -324,6 +333,27 @@ class IeltsEyeCommand extends CConsoleCommand{
     
     
     /***********lib*****************/
+    /**
+     * make Chinese IP
+     * @return type sring Chinese Ip
+     */
+    public static function makeIp(){
+        $ip_long = array(
+            array('607649792', '608174079'), //36.56.0.0-36.63.255.255
+            array('1038614528', '1039007743'), //61.232.0.0-61.237.255.255
+            array('1783627776', '1784676351'), //106.80.0.0-106.95.255.255
+            array('2035023872', '2035154943'), //121.76.0.0-121.77.255.255
+            array('2078801920', '2079064063'), //123.232.0.0-123.235.255.255
+            array('-1950089216', '-1948778497'), //139.196.0.0-139.215.255.255
+            array('-1425539072', '-1425014785'), //171.8.0.0-171.15.255.255
+            array('-1236271104', '-1235419137'), //182.80.0.0-182.92.255.255
+            array('-770113536', '-768606209'), //210.25.0.0-210.47.255.255
+            array('-569376768', '-564133889'), //222.16.0.0-222.95.255.255
+        );
+        $rand_key = mt_rand(0, 9);
+        $ip= long2ip(mt_rand($ip_long[$rand_key][0], $ip_long[$rand_key][1]));
+        return $ip;
+    }
     /**
      * $length = 140 - ceil(strlen( urlencode($link) ) * 0.5) ;   //2个字母为1个字
 	 * $content = sina_weibo_substr($content, $length);
