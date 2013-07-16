@@ -26,8 +26,7 @@ $(function () {
 <p id="back-to-top"><a href="#top">TOP</a></p>
 <div class="row-fluid">
     
-    <div class="span3 pull-left">
-        
+    <div class="span4">
         <?php $form=$this->beginWidget('CActiveForm',array(
             'id'=>'oralTopicSearch',
             'enableAjaxValidation'=>false,
@@ -42,7 +41,7 @@ $(function () {
             'label'=>'Search',
             'htmlOptions' =>$htmlOptionsArr,
         )); ?>
-        <button class="btn btn-primary pull-right" type="button" onclick="window.location.reload()">Refresh</button>
+        <button class="btn btn-primary" type="button" onclick="window.location.reload()">Refresh</button>
         <?php $this->endWidget(); ?>
     </div>
 </div>
@@ -58,7 +57,7 @@ $(function () {
                 </div>
                 <div class="row-fluid">
                     <p>
-                        <?php echo CHtml::encode($item['text']);?>
+                        <?php echo $item['text'];?>
                     </p>
                     <p class="muted"><?php echo CHtml::encode(date("Y-m-d H:i:s", $item['created_at']))?></p>
                 </div>

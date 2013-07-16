@@ -36,6 +36,9 @@ class WeiboController extends IeltseyeController
 		while($row = $query->read()){
             //去掉@某人
             $row['text'] = preg_replace("/@[\\x{4e00}-\\x{9fa5}\\w\\-]+/u", "", $row['text']);
+            if (!empty($keyword)) {
+                $row['text'] = str_ireplace($keyword, '<span class="badge badge-info">'.$keyword.'</span>', CHtml::encode($row['text']));   
+            }
 			$data[] = $row;
 		}
 		$this->render('index',
