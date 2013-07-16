@@ -4,27 +4,25 @@ $this->breadcrumbs=array(
 );?>
 
 <?php if ($_POST):?>
-<div class="container-fluid">
+<div class="row-fluid">
 	<div class="well well-small">
-            <div class="row-fluid">
-                <?php if($kits):?>
-                    <div class="alert alert-success">
-                        查询结果（<?php echo count($kits);?>）：查看详细信息，请鼠标移动到相应的图片之上。   
-                    </div>
-                <?php endif?>
-            </div>
-            <div class="row-fluid">
-		<ul class="thumbnails">
-			<?php foreach($kits as $kide):?>
-				<li class="span2" style="margin-left: 10px;">
-                                    <a class="thumbnail" href="#" rel="Popover" rel="tooltip" data-content="<?php echo $kide['color'];?>"  data-title="<?php echo $kide['probalility'];?>" data-placement="right" data-trigger="hover" >
-                                        <img style="height:81px;" class="img-circle" src="<?php echo Yii::app()->request->getBaseUrl(true)."/images/static/totorocross/".$kide['imageid'].".jpg";?>" />
-					<div style="height:50px;"><?php echo $kide['color'];?> </div>
-					<div><?php echo $kide['probalility'];?></div>
-                                    </a>
-				</li>
-			<?php endforeach;?>
-		</ul>
+            <?php if($kits):?>
+                <div class="alert alert-success">
+                    查询结果（<?php echo count($kits);?>）：查看详细信息，请鼠标移动到相应的图片之上。   
+                </div>
+            <?php endif?>
+            <div>
+                <ul class="thumbnails">
+                    <?php foreach($kits as $kide):?>
+                        <li style="height:194px;width:194px;" class="text-center">
+                            <a style="height:100%;width:100%;" class="thumbnail" href="#" rel="tooltip" data-title="<?php echo $kide['probalility']; ?>" data-trigger="hover" >
+                                <img style="height:81px;" class="img-circle" src="<?php echo Yii::app()->request->getBaseUrl(true) . "/images/static/totorocross/" . $kide['imageid'] . ".jpg"; ?>" />
+                                <div><?php echo $kide['color'];?> </div>
+                                <div><?php echo $kide['probalility']; ?></div>
+                            </a>
+                        </li>
+                    <?php endforeach;?>
+                </ul>
             </div>
 	</div>
 </div>
@@ -175,20 +173,22 @@ $this->breadcrumbs=array(
 	<?php $this->widget('application.components.widgets.TpAppdownloadWidget');?>
 </div>
 <!--comment-->
-<div class="row-fluid well show_nave">
-    <script type="text/javascript">
-        (function(){
-            var url = "http://widget.weibo.com/distribution/comments.php?width=0&url=auto&color=cccccc,ffffff,4c4c4c,5093d5,cccccc,f0f0f0&colordiy=1&ralateuid=2734978073&appkey=3706708774&dpc=1";
-            url = url.replace("url=auto", "url=" + document.URL); 
-            document.write('<iframe id="WBCommentFrame" src="' + url + '" scrolling="no" frameborder="0" style="width:100%"></iframe>');
-        })();
-    </script>
-    <script src="http://tjs.sjs.sinajs.cn/open/widget/js/widget/comment.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript">
-        window.WBComment.init({
-            "id": "WBCommentFrame"
-        });
-    </script>
+<div class="row-fluid show_nave">
+    <div class="well">
+        <script type="text/javascript">
+            (function(){
+                var url = "http://widget.weibo.com/distribution/comments.php?width=0&url=auto&color=cccccc,ffffff,4c4c4c,5093d5,cccccc,f0f0f0&colordiy=1&ralateuid=2734978073&appkey=3706708774&dpc=1";
+                url = url.replace("url=auto", "url=" + document.URL); 
+                document.write('<iframe id="WBCommentFrame" src="' + url + '" scrolling="no" frameborder="0" style="width:100%"></iframe>');
+            })();
+        </script>
+        <script src="http://tjs.sjs.sinajs.cn/open/widget/js/widget/comment.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            window.WBComment.init({
+                "id": "WBCommentFrame"
+            });
+        </script>
+    </div>
 </div>
 
 

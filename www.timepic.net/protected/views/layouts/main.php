@@ -10,6 +10,7 @@
 </head>
 
 <body>
+<?php if(!CommonHelper::checkmobile()):?>
 <div class="row-fluid">
 	<div id="cloud1" class="clouds">
 		<div id="clouds_small"></div>
@@ -18,8 +19,10 @@
 		<div id="clouds_big"></div>
 	</div>
 </div><!-- end clouds -->
+<?php endif;?>
 
 <?php
+
 //memberinfo
 $memberInfo = array();
 if (!Yii::app()->user->isGuest && isset(Yii::app()->user->username)) {
