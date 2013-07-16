@@ -14,7 +14,7 @@ $this->breadcrumbs=array(
 	<div class="span6 ">
 		<div id="wallpaperscreen"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/images/static/wallpaper/iphonescreen.png"/></div>
 	</div>
-	<div class="row-fluid download">
-		<?php $this->widget('application.components.widgets.TpAppdownloadWidget');?>
-	</div>
+</div>
+<div class="row-fluid download">
+    <?php $this->widget('application.components.widgets.TpAppdownloadWidget');?>
 </div>

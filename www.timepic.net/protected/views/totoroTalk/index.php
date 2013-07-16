@@ -16,7 +16,7 @@ $this->breadcrumbs=array(
 	<div class="span6">
 		<div id="totoroscreen"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/images/static/totorotalk/iphonescreen.png"/></div>
 	</div>
-	<div class="row-fluid download">
-		<?php $this->widget('application.components.widgets.TpAppdownloadWidget');?>
-	</div>
+</div>
+<div class="row-fluid download">
+    <?php $this->widget('application.components.widgets.TpAppdownloadWidget');?>
 </div>
