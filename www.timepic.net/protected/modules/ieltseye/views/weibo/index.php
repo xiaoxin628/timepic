@@ -1,8 +1,8 @@
 <?php
 $this->pageTitle = Yii::app()->params['ieltseye']['seoTitle']."-雅思口语考题实时回忆";
-$this->breadcrumbs=array(
-	'Topic',
-);
+//$this->breadcrumbs=array(
+//	'Topic',
+//);
 ?>
 <?php if(!empty($keyword)):?>
 <script type="text/javascript">
@@ -22,7 +22,10 @@ $(function () {
 })
 </script> 
 <?php endif;?>
-
+<div class="alert">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>友情提醒!</strong> 雅思口语回忆，请新浪微博<?php echo CHtml::link('@雅思口语网蹲哥', Yii::app()->params['ieltseye']['adminWeibo'])?>
+</div>
 <p id="back-to-top"><a href="#top">TOP</a></p>
 <div class="row-fluid">
     
@@ -30,6 +33,7 @@ $(function () {
         <?php $form=$this->beginWidget('CActiveForm',array(
             'id'=>'oralTopicSearch',
             'enableAjaxValidation'=>false,
+            'method'=>'get',
         )); ?>
 
         <?php echo CHtml::textField('keyword', CHtml::encode($keyword), array('class'=>'input-small search-query')); ?>

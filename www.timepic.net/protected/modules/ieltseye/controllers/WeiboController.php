@@ -7,7 +7,7 @@ class WeiboController extends IeltseyeController
 	public function actionIndex()
 	{
         $keyword = '';
-        if (isset($_POST['keyword'])) {
+        if (Yii::app()->request->getParam('keyword')) {
             $keyword = Yii::app()->request->getParam('keyword');
             $keyword=strtr($keyword, array('%'=>'\%', '_'=>'\_'));
         }

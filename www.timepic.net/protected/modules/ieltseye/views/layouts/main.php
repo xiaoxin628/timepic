@@ -14,6 +14,8 @@
 <body>
 
 <?php $this->widget('bootstrap.widgets.TbNavbar',array(
+    'fixed' => false,
+    'fluid'=> false,
     'collapse'=>true,
     'items'=>array(
         array(
