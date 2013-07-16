@@ -5,7 +5,30 @@
     Description:
         Purpose of the stylesheet follows.
 */
+body
+{
+	margin: 0;
+	padding: 0;
+	font: normal 10pt Arial,Helvetica,sans-serif;
+}
 
+#header
+{
+	margin: 30px 0px;
+	padding: 0;
+}
+
+#content
+{
+    padding: 20px;
+}
+
+#footer
+{
+	padding: 10px;
+	margin: 10px 20px;
+	border-top: 1px solid #C9E0ED;
+}
 #back-to-top{
         position:fixed;
         bottom:100px;

@@ -25,10 +25,8 @@
     ),
 )); ?>
 
+<div class="row-fluid" id="header"></div>
 <div class="container" id="page">
-    <div class="row-fluid">&nbsp;</div>
-    <div class="row-fluid">&nbsp;</div>
-    <div class="row-fluid">&nbsp;</div>
 	<?php if(isset($this->breadcrumbs)):?>
 		<?php $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
 			'links'=>$this->breadcrumbs,
