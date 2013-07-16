@@ -16,10 +16,7 @@ class TPController extends Controller
 	public function init() {
 		$this->checkLang();
 		if (CommonHelper::checkmobile()) {
-			Yii::app()->theme = 'mobile';
-			//前台首页需要兼容手机模式，开启 bootstrap组件的初始化css 达到自动变换整体宽度的要求
-			Yii::app()->getComponent('bootstrap')->responsiveCss = true;
-			Yii::app()->getComponent('bootstrap')->init();
+//			Yii::app()->theme = 'mobile';
 		}
 
 	}
