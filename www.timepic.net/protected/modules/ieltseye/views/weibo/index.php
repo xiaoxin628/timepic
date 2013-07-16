@@ -9,7 +9,7 @@ $this->pageTitle = Yii::app()->params['ieltseye']['seoTitle']."-雅思口语考�
 $(function () { 
     var count = 3;
     var countdown = setInterval(CountDown, 1000); 
-    var btn = $("#topicSearch");
+    var btn = $("[name='topicSearch']");
     function CountDown() {
         btn.attr("disabled", true); 
         btn.text("wait " + count + "s!"); 
@@ -38,14 +38,14 @@ $(function () {
 
         <?php echo CHtml::textField('keyword', CHtml::encode($keyword), array('class'=>'input-small search-query')); ?>
         <?php 
-        $htmlOptionsArr = !empty($keyword) ? array('id'=>'topicSearch','disabled'=>'true') : array('id'=>'topicSearch');
+        $htmlOptionsArr = !empty($keyword) ? array('name'=>'topicSearch','disabled'=>'true') : array('name'=>'topicSearch');
         $this->widget('bootstrap.widgets.TbButton', array(
             'buttonType'=>'submit',
             'type'=>'btn',
             'label'=>'Search',
             'htmlOptions' =>$htmlOptionsArr,
         )); ?>
-        <button class="btn btn-primary" type="button" onclick="window.location.reload()">Refresh</button>
+        <a class="btn btn-primary" href="<?php echo Yii::app()->params['ieltseye']['homeUrl'];?>">Refresh</a>
         <?php $this->endWidget(); ?>
     </div>
 </div>
@@ -74,6 +74,28 @@ $(function () {
                 </div>
             </div>
         <?php endif; ?>
+    </div>
+</div>
+<div class="row-fluid">
+    
+    <div class="span4">
+        <?php $form=$this->beginWidget('CActiveForm',array(
+            'id'=>'oralTopicSearch',
+            'enableAjaxValidation'=>false,
+            'method'=>'get',
+        )); ?>
+
+        <?php echo CHtml::textField('keyword', CHtml::encode($keyword), array('class'=>'input-small search-query')); ?>
+        <?php 
+        $htmlOptionsArr = !empty($keyword) ? array('name'=>'topicSearch','disabled'=>'true') : array('name'=>'topicSearch');
+        $this->widget('bootstrap.widgets.TbButton', array(
+            'buttonType'=>'submit',
+            'type'=>'btn',
+            'label'=>'Search',
+            'htmlOptions' =>$htmlOptionsArr,
+        )); ?>
+        <a class="btn btn-primary" href="<?php echo Yii::app()->params['ieltseye']['homeUrl'];?>">Refresh</a>
+        <?php $this->endWidget(); ?>
     </div>
 </div>
 <div class="pagination">
