@@ -24,8 +24,7 @@ $(function () {
 <?php endif;?>
 
 <p id="back-to-top"><a href="#top">TOP</a></p>
-
-<div class="row-fluid" style="margin-bottom: 10px;">
+<div class="row-fluid">
     
     <div class="span3 pull-left">
         
@@ -51,7 +50,7 @@ $(function () {
     <div class="row-fluid">
         <?php if(isset($data)): ?>
           <?php  foreach ($data as $item):?>
-            <div class="row-fluid well well-small">
+            <div class="well well-small">
                 <div class="row-fluid">
                     <a href="http://weibo.com/u/<?php echo $item['uid'];?>" target="_blank">
                         <?php echo CHtml::encode($item['screen_name']);?>
@@ -66,7 +65,7 @@ $(function () {
             </div>
           <?php endforeach;?>
         <?php else: ?>
-            <div class="row-fluid well well-large">
+            <div class="well well-large">
                 <div class="alert alert-error">
                   哦呦,貌似还木有微博，刷新试试...
                 </div>
@@ -81,6 +80,10 @@ $(function () {
                 )
         );?>
 </div>
+<div class="gad">
+    <?php $this->renderPartial('application.modules.ieltseye.views.public.gad');?>
+</div>
+
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
