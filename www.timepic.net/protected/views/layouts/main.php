@@ -13,33 +13,13 @@
 <div class="row-fluid">
 	<div id="cloud1" class="clouds">
 		<div id="clouds_small"></div>
-	</div><!-- end clouds -->
+	</div>
 	<div id="cloud_front" class="clouds">
 		<div id="clouds_big"></div>
 	</div>
 </div><!-- end clouds -->
-<script>
-	var small_scrollSpeed = 50;
-	var small_step = 5;
-	var small_current = 0;
-	var small_imageWidth = 600;
-	var small_headerWidth = 800;   
-//	var small_restartPosition = (small_headerWidth - small_imageWidth);
-        var small_restartPosition = 500;
-	var small_clouds = $('#clouds_small');
-	
-	function scrollBg(){
-		small_current += small_step;
-		if (small_current == small_restartPosition){
-		  small_current = 0;
-		}
-		small_clouds.css("background-position",small_current+"px 0");
-	}
-	// init = setInterval("scrollBg()", small_scrollSpeed);
-	//var init_big = setInterval("scrollBg('big')", big_scrollSpeed);
-</script>
-<?php
 
+<?php
 //memberinfo
 $memberInfo = array();
 if (!Yii::app()->user->isGuest && isset(Yii::app()->user->username)) {
