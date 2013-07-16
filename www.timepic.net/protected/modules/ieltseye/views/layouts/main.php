@@ -29,6 +29,7 @@
 <div class="container" id="page">
 	<?php if(isset($this->breadcrumbs)):?>
 		<?php $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
+            'homeLink'=>  CHtml::link('Home', Yii::app()->params['ieltseye']['homeUrl']),
 			'links'=>$this->breadcrumbs,
 		)); ?><!-- breadcrumbs -->
 	<?php endif?>

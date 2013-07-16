@@ -12,9 +12,9 @@ $(function () {
     var btn = $("#topicSearch");
     function CountDown() {
         btn.attr("disabled", true); 
-        btn.text("wait " + count + " s!"); 
+        btn.text("wait " + count + "s!"); 
         if (count == 0) { 
-            btn.text("搜索").removeAttr("disabled"); 
+            btn.text("Search").removeAttr("disabled"); 
             clearInterval(countdown); 
         } 
         count--; 
@@ -39,10 +39,10 @@ $(function () {
         $this->widget('bootstrap.widgets.TbButton', array(
             'buttonType'=>'submit',
             'type'=>'btn',
-            'label'=>'搜索',
+            'label'=>'Search',
             'htmlOptions' =>$htmlOptionsArr,
         )); ?>
-        <button class="btn btn-primary pull-right" type="button" onclick="window.location.reload()">刷新</button>
+        <button class="btn btn-primary pull-right" type="button" onclick="window.location.reload()">Refresh</button>
         <?php $this->endWidget(); ?>
     </div>
 </div>
