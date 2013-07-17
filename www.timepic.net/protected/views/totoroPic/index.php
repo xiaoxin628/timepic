@@ -13,6 +13,7 @@ $this->breadcrumbs=array(
     <?php $this->widget('bootstrap.widgets.TbThumbnails', array(
     'dataProvider'=>$dataProvider,
     'template'=>"{items}\n{pager}",
+    'pager'=>array('class'=>'application.components.widgets.TpPager'),
     'itemView'=>'_thumb',
     'ajaxUpdate'=>false,
 )); ?>

@@ -101,7 +101,7 @@ $(function () {
 <div class="pagination">
           <?php $this->widget('application.components.widgets.TpPager', 
               array('pages'=>$pages,
-                  
+                    'maxButtonCount'=>'6',
                 )
         );?>
 </div>
