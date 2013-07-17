@@ -28,7 +28,7 @@ return array(
     'share' => '分享',
     'shareTitle' => '您可以分享到您喜欢的地方：',
     'ShareTotorotalk' => 'TimePic龙猫语言翻译器',
-    'pagenumber' => '第{number}页-',
+    'pagenumber' => '第{number}页',
     'seototoropic' => 'TimePic-龙猫图片-龙猫照片-龙猫大全',
     'Login' => '登陆',
     'Logout' => '退出',

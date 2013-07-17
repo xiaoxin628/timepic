@@ -26,7 +26,7 @@ return array(
     'share' => '몫',
     'shareTitle' => '좋아하는 사진을 공유',
     'ShareTotorotalk' => 'TimePic 친칠라 언어 통역',
-    'pagenumber' => 'Page {number}-',
+    'pagenumber' => 'Page {number}',
     'seototoropic' => 'Timepic-친칠라 픽-친칠라 사진-친칠라에 관한 모듬',
     'Login' => '로그인',
     'Logout' => '로그 아웃',

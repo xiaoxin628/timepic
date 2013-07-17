@@ -99,7 +99,7 @@ $(function () {
     </div>
 </div>
 <div class="pagination">
-          <?php $this->widget('bootstrap.widgets.TbPager', 
+          <?php $this->widget('application.components.widgets.TpPager', 
               array('pages'=>$pages,
                   
                 )

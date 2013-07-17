@@ -45,7 +45,7 @@ $this->breadcrumbs=array(
 <div class="pagination">  
 	<?php  
 
-	$this->widget('bootstrap.widgets.TbPager',array(  
+	$this->widget('application.components.widgets.TpPager',array(  
 		'header'=>'',  
 		'pages' => $pages,  
 		'maxButtonCount'=>10  

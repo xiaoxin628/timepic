@@ -26,7 +26,7 @@ return array(
     'share' => 'Share',
     'shareTitle' => 'Share your favorite photo：',
     'ShareTotorotalk' => 'TimePic TotoroTalk',
-    'pagenumber' => 'Page {number}-',
+    'pagenumber' => 'Page {number}',
     'seototoropic' => 'Timepic-chinchilla photo-chinchilla picture-chinchillapedia',
     'About Totoro' => 'About Chinchilla',
     'Login' => 'Login',

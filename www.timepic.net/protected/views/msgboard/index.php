@@ -17,7 +17,7 @@ $this->breadcrumbs=array(
 		</div>
 	  <?php endforeach;?>
 	  <div class="pagination">
-	  <?php $this->widget('bootstrap.widgets.TbPager', 
+	  <?php $this->widget('application.components.widgets.TpPager', 
 			  array('pages'=>$pages,
 				)
 		);?>
