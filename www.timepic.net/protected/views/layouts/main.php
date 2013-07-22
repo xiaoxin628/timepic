@@ -86,12 +86,9 @@ $this->widget('bootstrap.widgets.TbNavbar', array(
         </address>                
     </div>
 </footer><!-- footer -->
-
-<script type="text/javascript"> 
-if (top.location !== self.location) { 
-top.location=self.location; 
-} 
-</script> 
+<div class="gad">
+    <?php $this->renderPartial('application.views.public.gad');?>
+</div>
 
 </body>
 </html>
