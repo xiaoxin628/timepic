@@ -24,7 +24,16 @@ $(function () {
 <?php endif;?>
 <div class="alert">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
-  <strong>友情提醒!</strong> 雅思口语回忆，请新浪微博<?php echo CHtml::link('@雅思口语网蹲哥', Yii::app()->params['ieltseye']['adminWeibo'])?>
+  <strong>友情提醒!</strong> 
+  <p>雅思口语回忆，请新浪微博<?php echo CHtml::link('@雅思口语网蹲哥', Yii::app()->params['ieltseye']['adminWeibo'])?></p>
+  <p>下载：<?php echo CHtml::link('Android', 'http://shouji.360tpcdn.com/360sj/dev/20130723/com.ieltseye.IELTSEye_1_114851.apk')?>版 
+    <!--下载按钮开始-->
+    <a title="使用360手机助手安装" href="zhushou360://type=apk&name=雅思口语网蹲哥&icon=http://p2.qhimg.com/t01a746d814c3a53a4c.png&url=http://shouji.360tpcdn.com/360sj/dev/20130723/com.ieltseye.IELTSEye_1_114851.apk"><img alt="使用360手机助手安装" src="http://p3.qhimg.com/t01943097a6b50d1e96.png"></a>
+    <!--下载按钮结束-->
+    <!--请把这段代码放在页面最底部加载-->
+    <script src="http://zhushou.360.cn/script/360mobilemgrdownload.js"></script>
+    <!--代码结束-->
+  </p>
 </div>
 <p id="back-to-top"><a href="#top">TOP</a></p>
 <div class="row-fluid">
@@ -105,10 +114,6 @@ $(function () {
                 )
         );?>
 </div>
-<div class="gad">
-    <?php $this->renderPartial('application.modules.ieltseye.views.public.gad');?>
-</div>
-
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
