@@ -13,6 +13,7 @@ class AdminModule extends CWebModule
 		$this->setImport(array(
 			'admin.models.*',
 			'admin.components.*',
+            'application.modules.ieltseye.models.*',
 		));
 	}
 

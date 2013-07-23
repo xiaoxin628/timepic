@@ -12,6 +12,9 @@
 			'/admin/msgboard' => array('label'=>'用户留言板',  'url'=>'/admin/msgboard'),
 			array('label'=>'TimePic Coffee'),
 			'/admin/coffeeArticle/admin' => array('label'=>'咖啡教程',  'url'=>'/admin/coffeeArticle/admin'),
+			array('label'=>'IELTS EYE'),
+			'/admin/ieltseyeSpeakingTopicCard/admin' => array('label'=>'Topic Cards',  'url'=>'/admin/ieltseyeSpeakingTopicCard/admin'),
+            '/admin/ieltseyeSpeakingTopicSample/admin' => array('label'=>'Topic Samples',  'url'=>'/admin/ieltseyeSpeakingTopicSample/admin'),
 		);	
 		if ($adminSideMenu[$uri]) {
 			$adminSideMenu[$uri]['active'] = true;
