@@ -97,6 +97,7 @@ class IeltseyeSpeakingTopicSampleController extends adminController
 	public function actionAdmin()
 	{
 		$model=new IeltseyeSpeakingTopicSample('search');
+        $model->with('topicCard');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['IeltseyeSpeakingTopicSample']))
 			$model->attributes=$_GET['IeltseyeSpeakingTopicSample'];

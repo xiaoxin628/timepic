@@ -11,8 +11,6 @@
 
 	<?php echo $form->textFieldRow($model,'author',array('class'=>'span5','maxlength'=>30)); ?>
 
-	<?php echo $form->textFieldRow($model,'dateline',array('class'=>'span5')); ?>
-
 	<?php echo $form->textAreaRow($model,'source',array('rows'=>6, 'cols'=>50, 'class'=>'span8')); ?>
 
 	<?php echo $form->textFieldRow($model,'displayorder',array('class'=>'span5')); ?>

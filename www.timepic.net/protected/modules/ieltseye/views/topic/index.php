@@ -1,9 +1,20 @@
 <?php
-$this->pageTitle = Yii::app()->params['ieltseye']['seoTitle']."-雅思口语考题实时回忆";
-//$this->breadcrumbs=array(
-//	'Topic',
-//);
+$this->pageTitle = Yii::app()->params['ieltseye']['seoTitle']."-Topic-口语卡";
+$this->breadcrumbs=array(
+	'IELTS Speaking Topic'=>array('/topic'),
+);
 ?>
+<div class="row-fluid">
+    <?php $this->widget('bootstrap.widgets.TbMenu', array(
+    'type'=>'pills', // '', 'tabs', 'pills' (or 'list')
+    'stacked'=>false, // whether this is a stacked menu
+    'items'=>array(
+        array('label'=>'Part1', 'url'=>array('/topic/part1')),
+        array('label'=>'Part2', 'url'=>array('/topic/part2'),'active'=>true),
+        array('label'=>'Part3', 'url'=>array('/topic/part3')),
+    ),
+)); ?>
+</div>
 <?php if(!empty($keyword)):?>
 <script type="text/javascript">
 $(function () { 
@@ -41,7 +52,6 @@ $(function () {
             'label'=>'Search',
             'htmlOptions' =>$htmlOptionsArr,
         )); ?>
-        <a class="btn btn-primary" href="<?php echo Yii::app()->params['ieltseye']['homeUrl'];?>">Refresh</a>
         <?php $this->endWidget(); ?>
     </div>
 </div>
@@ -49,49 +59,24 @@ $(function () {
     <div class="row-fluid">
         <?php if(isset($data)): ?>
           <?php  foreach ($data as $item):?>
-            <div class="well well-small">
-                <div class="row-fluid">
-                    <a href="http://weibo.com/u/<?php echo $item['uid'];?>" target="_blank">
-                        <?php echo CHtml::encode($item['screen_name']);?>
-                    </a>
-                </div>
-                <div class="row-fluid">
-                    <p>
-                        <?php echo $item['text'];?>
-                    </p>
-                    <p class="muted"><?php echo CHtml::encode(date("Y-m-d H:i:s", $item['created_at']))?></p>
-                </div>
+            <div class="topicCard">
+                <legend><?php echo $item['question'];?></legend>
+                <?php if($item['type'] == 2):?>
+                    <p>You should say:</p>
+                    <div class="description">
+                        <?php echo $item['description'];?>
+                    </div>
+                <?php endif;?>
+                    <p><a class="btn btn-primary btn-small" href="<?php echo $this->createUrl("/sample/speakingTopic", array('id'=>$item['cardid']));?>">Samples</a></p>
             </div>
           <?php endforeach;?>
         <?php else: ?>
             <div class="well well-large">
                 <div class="alert alert-error">
-                  哦呦,貌似还木有微博，刷新试试...
+                  哦呦,貌似还木有这样的答题卡
                 </div>
             </div>
         <?php endif; ?>
-    </div>
-</div>
-<div class="row-fluid">
-    
-    <div class="span4">
-        <?php $form=$this->beginWidget('CActiveForm',array(
-            'id'=>'oralTopicSearch',
-            'enableAjaxValidation'=>false,
-            'method'=>'get',
-        )); ?>
-
-        <?php echo CHtml::textField('keyword', CHtml::encode($keyword), array('class'=>'input-small search-query')); ?>
-        <?php 
-        $htmlOptionsArr = !empty($keyword) ? array('name'=>'topicSearch','disabled'=>'true') : array('name'=>'topicSearch');
-        $this->widget('bootstrap.widgets.TbButton', array(
-            'buttonType'=>'submit',
-            'type'=>'btn',
-            'label'=>'Search',
-            'htmlOptions' =>$htmlOptionsArr,
-        )); ?>
-        <a class="btn btn-primary" href="<?php echo Yii::app()->params['ieltseye']['homeUrl'];?>">Refresh</a>
-        <?php $this->endWidget(); ?>
     </div>
 </div>
 <div class="pagination">

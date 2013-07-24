@@ -43,12 +43,24 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'filter'=>$model,
 	'columns'=>array(
 		'cardid',
-		'question',
-		'descripiton',
-		'type',
-		'dateline',
+        array('name' => 'question',
+            'type'=>'html',
+            'headerHtmlOptions'=>array('width'=>'50%'),
+            'value' => '"<h4>".$data->question."</h4><p class=\"muted\">".TimePicCode::TpCode($data->description)."</p>"'),
+		array('name' => 'type',  'headerHtmlOptions'=>array('width'=>'10%'), 'value' => '"Part ".$data->type'),
+        array('name' => 'dateline', 'value' => 'date("Y-m-d H:i:s", $data->dateline)'),
 		array(
+            'header'=>'操作',
+            'headerHtmlOptions'=>array('width'=>'10%'),
 			'class'=>'bootstrap.widgets.TbButtonColumn',
+            'template'=>'{samples}{view}{update}{delete}',
+            'buttons'=>array(
+                'samples' => array(
+                    'label'=>'<i class="icon-th-list"></i>',
+                    'options'=>array('title'=>'例文'),
+                    'url' => 'Yii::app()->createUrl("admin/ieltseyeSpeakingTopicSample/admin",array("id"=>"$data->cardid"))',
+                ),
+            ),
 		),
 	),
 )); ?>

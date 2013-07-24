@@ -43,14 +43,25 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'filter'=>$model,
 	'columns'=>array(
 		'sampleid',
-		'content',
+        array(
+            'name'=>'content',
+                        'type'=>'html',
+                        'headerHtmlOptions'=>array('width'=>'100%'),
+                        'value'=>'"<p>
+                                        <h5>
+                                            <span class=\"badge badge-info\">Part ".$data->topicCard->type."</span>
+                                            ".$data->topicCard->question."
+                                        </h5>
+                                   </p>
+                                   <p>
+                                            ".CommonHelper::cutstr(TimePicCode::TpCode($data->content), 300)."
+                                   </p>
+                                   <p class=\"muted\">".date("Y-m-d H:i:s", $data->dateline)."</p>"' 
+        ),
 		'author',
-		'dateline',
-		'source',
-		'displayorder',
-		/*
-		'cardid',
-		*/
+        array('name'=>'source', 'type'=>'html','value'=>'CHtml::link("URL", $data->source, array("target"=>"_blank"))', ),
+        'cardid',
+        'displayorder',
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
 		),

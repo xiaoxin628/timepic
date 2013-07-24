@@ -20,7 +20,7 @@ $this->menu=array(
 	'attributes'=>array(
 		'cardid',
 		'question',
-		'descripiton',
+		'description',
 		'type',
 		'dateline',
 	),

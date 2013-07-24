@@ -3,16 +3,12 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="language" content="zh-CN" />
-
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 	<?php Yii::app()->bootstrap->register(); ?>
     <?php Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl."/css/ieltseye.css"); ?>
     <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl."/js/backtotop.js",CClientScript::POS_END); ?>
-
 </head>
-
 <body>
-
 <?php $this->widget('bootstrap.widgets.TbNavbar',array(
     'fixed' => false,
     'fluid'=> false,
@@ -22,13 +18,28 @@
             'class'=>'bootstrap.widgets.TbMenu',
             'items'=>array(
                 array('label'=>'Home', 'url'=>array('/')),
+                array('label'=>'Topic', 'url'=>array('/topic/part2')),
             ),
         ),
     ),
 )); ?>
-
-<div class="row-fluid" id="header"></div>
 <div class="container" id="page">
+    <div class="row-fluid" id="header">
+        <div class="alert">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong>友情提醒!</strong> 
+          <p>雅思口语回忆，请新浪微博<?php echo CHtml::link('@雅思口语网蹲哥', Yii::app()->params['ieltseye']['adminWeibo'])?></p>
+          <p>下载：<?php echo CHtml::link('Android', 'http://shouji.360tpcdn.com/360sj/dev/20130723/com.ieltseye.IELTSEye_1_114851.apk')?>版 
+            <!--下载按钮开始-->
+            <a title="使用360手机助手安装" href="zhushou360://type=apk&name=雅思口语网蹲哥&icon=http://p2.qhimg.com/t01a746d814c3a53a4c.png&url=http://shouji.360tpcdn.com/360sj/dev/20130723/com.ieltseye.IELTSEye_1_114851.apk"><img alt="使用360手机助手安装" src="http://p3.qhimg.com/t01943097a6b50d1e96.png"></a>
+            <!--下载按钮结束-->
+            <!--请把这段代码放在页面最底部加载-->
+            <script src="http://zhushou.360.cn/script/360mobilemgrdownload.js"></script>
+            <!--代码结束-->
+          </p>
+        </div>    
+
+    </div>
 	<?php if(isset($this->breadcrumbs)):?>
 		<?php $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
             'homeLink'=>  CHtml::link('Home', Yii::app()->params['ieltseye']['homeUrl']),
@@ -46,6 +57,15 @@
 	</div><!-- footer -->
 
 </div><!-- page -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
+  ga('create', 'UA-42471034-1', 'ieltseye.com');
+  ga('send', 'pageview');
+
+</script>
 </body>
 </html>

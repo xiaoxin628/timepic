@@ -1,0 +1,75 @@
+<?php
+
+class TopicController extends IeltseyeController
+{
+	public function actionIndex($part="2")
+	{
+        $this->redirect('topic/part2');
+	}
+    
+    public function actionPart1(){
+        if (Yii::app()->request->getParam('keyword')) {
+            $keyword = Yii::app()->request->getParam('keyword');
+            $keyword=strtr($keyword, array('%'=>'\%', '_'=>'\_'));
+        }
+        $dataProvider = IeltseyeSpeakingTopicCard::model()->getPart(1);
+		$this->render('part1',
+                    array('dataProvider'=>$dataProvider,
+                        'keyword'=>$keyword,
+                    )
+				);
+    }
+    
+    public function actionPart2(){
+        if (Yii::app()->request->getParam('keyword')) {
+            $keyword = Yii::app()->request->getParam('keyword');
+            $keyword=strtr($keyword, array('%'=>'\%', '_'=>'\_'));
+        }
+        $dataProvider = IeltseyeSpeakingTopicCard::model()->getPart(2);
+		$this->render('part2',
+                    array('dataProvider'=>$dataProvider,
+                        'keyword'=>$keyword,
+                    )
+				);
+    }
+    
+    public function actionPart3(){
+        if (Yii::app()->request->getParam('keyword')) {
+            $keyword = Yii::app()->request->getParam('keyword');
+            $keyword=strtr($keyword, array('%'=>'\%', '_'=>'\_'));
+        }
+        $dataProvider = IeltseyeSpeakingTopicCard::model()->getPart(3);
+		$this->render('part3',
+                    array('dataProvider'=>$dataProvider,
+                        'keyword'=>$keyword,
+                    )
+				);
+    }
+
+	// Uncomment the following methods and override them if needed
+	/*
+	public function filters()
+	{
+		// return the filter configuration for this controller, e.g.:
+		return array(
+			'inlineFilterName',
+			array(
+				'class'=>'path.to.FilterClass',
+				'propertyName'=>'propertyValue',
+			),
+		);
+	}
+
+	public function actions()
+	{
+		// return external action classes, e.g.:
+		return array(
+			'action1'=>'path.to.ActionClass',
+			'action2'=>array(
+				'class'=>'path.to.AnotherActionClass',
+				'propertyName'=>'propertyValue',
+			),
+		);
+	}
+	*/
+}
