@@ -258,3 +258,34 @@ CREATE TABLE IF NOT EXISTS `tp_ieltseye_weibo` (
   KEY `source` (`source`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='雅思口语回忆记录库';
 ALTER TABLE  `tp_ieltseye_weibo` CHANGE  `source`  `source` TINYINT( 1 ) NOT NULL COMMENT  '来源 0搜索 1@我的微博 2名人微博采集';
+
+
+--
+-- Table structure for table `tp_ieltseye_speaking_topic_card`
+--
+
+CREATE TABLE IF NOT EXISTS `tp_ieltseye_speaking_topic_card` (
+  `cardid` mediumint(8) NOT NULL AUTO_INCREMENT,
+  `question` char(255) NOT NULL COMMENT 'question',
+  `description` text NOT NULL COMMENT 'description for part 2 question',
+  `type` tinyint(4) NOT NULL COMMENT '1 part 1 2part2 3part3',
+  `dateline` int(10) NOT NULL COMMENT 'generation time',
+  PRIMARY KEY (`cardid`),
+  UNIQUE KEY `question` (`question`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='topic card including part 1 ,part2 and part3';
+
+--
+-- Table structure for table `tp_ieltseye_speaking_topic_sample`
+--
+
+CREATE TABLE IF NOT EXISTS `tp_ieltseye_speaking_topic_sample` (
+  `sampleid` mediumint(8) NOT NULL AUTO_INCREMENT,
+  `content` text NOT NULL COMMENT 'sample content',
+  `author` char(30) NOT NULL DEFAULT '' COMMENT 'author name',
+  `dateline` int(10) NOT NULL COMMENT 'generation time',
+  `source` text NOT NULL COMMENT 'the url of fetching website',
+  `displayorder` tinyint(4) NOT NULL DEFAULT '0' COMMENT '-1 invisible',
+  `cardid` mediumint(8) NOT NULL COMMENT 'cardid',
+  PRIMARY KEY (`sampleid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+

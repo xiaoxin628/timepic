@@ -79,11 +79,12 @@ return array(
 			'urlSuffix' => '.html',
 			'rules'=>array(
                //ieltseye
-                'http://test.ieltseye.com/'=>'ieltseye/',
-				'http://test.ieltseye.com/<controller:\w+>/<action:\w+>/page/<page:\d+>'=>'ieltseye/<controller>/<action>',
-				'http://test.ieltseye.com/<controller:\w+>/<id:\d+>'=>'ieltseye/<controller>/view',
-				'http://test.ieltseye.com/<controller:\w+>/<action:\w+>/<id:\d+>'=>'ieltseye/<controller>/<action>',
-				'http://test.ieltseye.com/<controller:\w+>/<action:\w+>'=>'ieltseye/<controller>/<action>',
+                'http://test.ieltseye.com'=>array('/ieltseye', 'urlFormat'=>'path','showScriptName' => false,),
+				'http://test.ieltseye.com/<controller:\w+>/<action:\w+>/page/<page:\d+>'=>array('ieltseye/<controller>/<action>', 'urlFormat'=>'path', 'showScriptName' => false,),
+				'http://test.ieltseye.com/<controller:\w+>/<id:\d+>'=>array('ieltseye/<controller>/view', 'urlFormat'=>'path', 'urlSuffix'=>'','showScriptName' => false,),
+				'http://test.ieltseye.com/<controller:\w+>/<action:\w+>/<id:\d+>'=>array('ieltseye/<controller>/<action>', 'urlFormat'=>'path', 'showScriptName' => false,),
+				'http://test.ieltseye.com/<controller:\w+>/<action:\w+>'=>array('ieltseye/<controller>/<action>', 'urlFormat'=>'path', 'showScriptName' => false,),
+				'http://test.ieltseye.com/<controller:\w+>/'=>array('ieltseye/<controller>/index', 'urlFormat'=>'path', 'showScriptName' => false,),
                 
 				'<controller:\w+>/<action:\w+>/page/<page:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',

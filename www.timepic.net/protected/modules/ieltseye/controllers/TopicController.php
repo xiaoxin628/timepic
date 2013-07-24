@@ -4,10 +4,11 @@ class TopicController extends IeltseyeController
 {
 	public function actionIndex($part="2")
 	{
-        $this->redirect('topic/part2');
+        $this->redirect('/topic/part2');
 	}
     
     public function actionPart1(){
+        $keyword = '';
         if (Yii::app()->request->getParam('keyword')) {
             $keyword = Yii::app()->request->getParam('keyword');
             $keyword=strtr($keyword, array('%'=>'\%', '_'=>'\_'));
@@ -21,9 +22,10 @@ class TopicController extends IeltseyeController
     }
     
     public function actionPart2(){
+        $keyword = '';
         if (Yii::app()->request->getParam('keyword')) {
             $keyword = Yii::app()->request->getParam('keyword');
-            $keyword=strtr($keyword, array('%'=>'\%', '_'=>'\_'));
+            $keyword = strtr($keyword, array('%'=>'\%', '_'=>'\_'));
         }
         $dataProvider = IeltseyeSpeakingTopicCard::model()->getPart(2);
 		$this->render('part2',
@@ -34,6 +36,7 @@ class TopicController extends IeltseyeController
     }
     
     public function actionPart3(){
+        $keyword = '';
         if (Yii::app()->request->getParam('keyword')) {
             $keyword = Yii::app()->request->getParam('keyword');
             $keyword=strtr($keyword, array('%'=>'\%', '_'=>'\_'));
