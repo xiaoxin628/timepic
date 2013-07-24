@@ -12,12 +12,6 @@ $this->menu=array(
 	array('label'=>'管理','url'=>array('admin'), 'active'=>true),
 );
 
- $this->widget('bootstrap.widgets.TbMenu', array(
-    'type'=>'tabs', // '', 'tabs', 'pills' (or 'list')
-    'stacked'=>false, // whether this is a stacked menu
-    'items'=>$this->menu
-));
-
 ?>
 
 <h1>Update Totorotalk百科 <?php echo $model->aid; ?></h1>

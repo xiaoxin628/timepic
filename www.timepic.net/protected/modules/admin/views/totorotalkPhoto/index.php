@@ -7,11 +7,6 @@ $this->menu=array(
 	array('label'=>'Create TotorotalkPhoto','url'=>array('create')),
 	array('label'=>'Manage TotorotalkPhoto','url'=>array('admin')),
 );
-$this->widget('bootstrap.widgets.TbMenu', array(
-    'type'=>'tabs', // '', 'tabs', 'pills' (or 'list')
-    'stacked'=>false, // whether this is a stacked menu
-    'items'=>$this->menu
-));
 
 ?>
 

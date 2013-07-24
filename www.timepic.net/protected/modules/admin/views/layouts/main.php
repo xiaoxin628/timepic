@@ -48,6 +48,14 @@ Yii::app()->clientScript->registerScript('admin_lightbox',"$('a.lightbox').light
 				'links'=>$this->breadcrumbs,
 			)); ?><!-- breadcrumbs -->
 		<?php endif?>
+            <!--menu-->
+        <?php if(isset($this->menu)):?>
+            <?php $this->widget('bootstrap.widgets.TbMenu', array(
+                'type'=>'tabs', // '', 'tabs', 'pills' (or 'list')
+                'stacked'=>false, // whether this is a stacked menu
+                'items'=>$this->menu
+            ));?>
+        <?php endif?>
 	</div><!-- header -->
 
 

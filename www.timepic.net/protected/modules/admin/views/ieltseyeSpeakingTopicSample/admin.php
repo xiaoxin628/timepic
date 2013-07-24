@@ -46,7 +46,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
         array(
             'name'=>'content',
                         'type'=>'html',
-                        'headerHtmlOptions'=>array('width'=>'100%'),
+                        'headerHtmlOptions'=>array('width'=>'50%'),
                         'value'=>'"<p>
                                         <h5>
                                             <span class=\"badge badge-info\">Part ".$data->topicCard->type."</span>

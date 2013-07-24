@@ -11,11 +11,6 @@ $this->menu=array(
 	array('label'=>'Delete TotorotalkCategory','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->catid),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage TotorotalkCategory','url'=>array('admin')),
 );
-$this->widget('bootstrap.widgets.TbMenu', array(
-    'type'=>'tabs', // '', 'tabs', 'pills' (or 'list')
-    'stacked'=>false, // whether this is a stacked menu
-    'items'=>$this->menu
-));
 ?>
 
 <h1>View TotorotalkCategory #<?php echo $model->catid; ?></h1>
