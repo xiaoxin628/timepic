@@ -6,10 +6,10 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List IeltseyeSpeakingTopicCard','url'=>array('index')),
-	array('label'=>'Create IeltseyeSpeakingTopicCard','url'=>array('create')),
-	array('label'=>'View IeltseyeSpeakingTopicCard','url'=>array('view','id'=>$model->cardid)),
-	array('label'=>'Manage IeltseyeSpeakingTopicCard','url'=>array('admin')),
+	array('label'=>'List','url'=>array('index')),
+	array('label'=>'Create','url'=>array('create')),
+	array('label'=>'View','url'=>array('view','id'=>$model->cardid)),
+	array('label'=>'Manage','url'=>array('admin')),
 );
 ?>
 

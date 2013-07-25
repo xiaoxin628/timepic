@@ -28,7 +28,7 @@ class IeltseyeSpeakingTopicCardController extends adminController
 		{
 			$model->attributes=$_POST['IeltseyeSpeakingTopicCard'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->cardid));
+				$this->redirect(array('admin','id'=>$model->cardid));
 		}
 
 		$this->render('create',array(

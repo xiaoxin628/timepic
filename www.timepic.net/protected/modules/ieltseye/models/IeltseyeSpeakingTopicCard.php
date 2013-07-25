@@ -38,8 +38,10 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('question, description, type, dateline', 'required'),
+			array('question, type', 'required'),
 			array('type, dateline', 'numerical', 'integerOnly'=>true),
+            array('question', 'unique'),
+            array('type', 'in', 'range'=>array(1,2,3,)),
 			array('question', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -68,7 +70,7 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
 			'cardid' => 'Cardid',
 			'question' => 'Question',
 			'description' => 'Descripiton',
-			'type' => 'Type',
+			'type' => 'Part',
 			'dateline' => 'Dateline',
 		);
 	}
@@ -92,7 +94,15 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+            'sort' => array(
+                'defaultOrder' => array('dateline'=>'CSort::SORT_DESC'),
+            )
 		));
+	}
+    
+	public function beforeSave(){
+		$this->dateline = time();
+		return true;
 	}
     
     public function getPart($part, $keyword =''){

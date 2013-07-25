@@ -16,5 +16,4 @@ $this->breadcrumbs=array(
     ),
 )); ?>
 </div>
-<p id="back-to-top"><a href="#top">TOP</a></p>
 <?php $this->renderpartial('_cardItem', array('dataProvider'=>$dataProvider, 'keyword'=>$keyword));?>

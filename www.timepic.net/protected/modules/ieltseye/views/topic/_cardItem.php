@@ -42,6 +42,7 @@ $(function () {
         <?php if(!empty($dataProvider->data)): ?>
           <?php  foreach ($dataProvider->data as $item):?>
             <div class="topicCard">
+                <div class="part"><?php echo "Part ".$item['type']?></div>
                 <legend><?php echo str_ireplace($keyword, '<span class="alert alert-info ieltsKeyword">'.$keyword.'</span>', CHtml::encode($item['question']));;?></legend>
                 <?php if($item['type'] == 2):?>
                     <p>You should say:</p>
@@ -49,7 +50,7 @@ $(function () {
                         <?php echo TimePicCode::TpCode($item['description']);?>
                     </div>
                 <?php endif;?>
-                    <p><a class="btn btn-primary btn-small" href="<?php echo $this->createUrl("/sample/speakingTopic", array('id'=>$item['cardid']));?>">Samples</a></p>
+                <p><a class="btn btn-primary btn-small" href="<?php echo $this->createUrl("/sample/speakingTopic", array('id'=>$item['cardid']));?>">Samples</a></p>
             </div>
           <?php endforeach;?>
         <?php else: ?>

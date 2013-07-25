@@ -5,8 +5,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List IeltseyeSpeakingTopicCard','url'=>array('index')),
-	array('label'=>'Create IeltseyeSpeakingTopicCard','url'=>array('create')),
+	array('label'=>'List','url'=>array('index')),
+	array('label'=>'Create','url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -53,12 +53,17 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
             'header'=>'操作',
             'headerHtmlOptions'=>array('width'=>'10%'),
 			'class'=>'bootstrap.widgets.TbButtonColumn',
-            'template'=>'{samples}{view}{update}{delete}',
+            'template'=>'{samples}{createSample}{view}{update}{delete}',
             'buttons'=>array(
                 'samples' => array(
                     'label'=>'<i class="icon-th-list"></i>',
                     'options'=>array('title'=>'例文'),
                     'url' => 'Yii::app()->createUrl("admin/ieltseyeSpeakingTopicSample/admin",array("id"=>"$data->cardid"))',
+                ),
+                'createSample' => array(
+                    'label'=>'<i class="icon-plus"></i>',
+                    'options'=>array('title'=>'创建例文'),
+                    'url' => 'Yii::app()->createUrl("admin/ieltseyeSpeakingTopicSample/create",array("id"=>"$data->cardid"))',
                 ),
             ),
 		),

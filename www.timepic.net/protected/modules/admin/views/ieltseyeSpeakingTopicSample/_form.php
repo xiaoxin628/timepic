@@ -1,3 +1,22 @@
+<?php 
+        if($model->isNewRecord){
+            $model->cardid = Yii::app()->request->getParam('id');
+        }
+        $card = IeltseyeSpeakingTopicCard::model()->findByPk($model->cardid);
+?>
+
+<div class="row-fluid">
+    <div class="topicCard">
+        <legend><?php echo $card->question?></legend>
+        <?php if($card->type == 2):?>
+            <p>You should say:</p>
+            <div class="description">
+                <?php echo TimePicCode::TpCode($card->description);?>
+            </div>
+        <?php endif;?>
+    </div>
+</div>
+
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'ieltseye-speaking-topic-sample-form',
 	'enableAjaxValidation'=>false,

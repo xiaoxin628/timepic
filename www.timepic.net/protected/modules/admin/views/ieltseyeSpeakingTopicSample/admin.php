@@ -5,8 +5,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List IeltseyeSpeakingTopicSample','url'=>array('index')),
-	array('label'=>'Create IeltseyeSpeakingTopicSample','url'=>array('create')),
+	array('label'=>'List','url'=>array('index')),
 );
 
 Yii::app()->clientScript->registerScript('search', "

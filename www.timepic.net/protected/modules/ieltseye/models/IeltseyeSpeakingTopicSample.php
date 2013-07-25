@@ -7,6 +7,7 @@
  * @property integer $sampleid
  * @property string $content
  * @property string $author
+ * @property string $email
  * @property integer $dateline
  * @property string $source
  * @property integer $displayorder
@@ -14,6 +15,7 @@
  */
 class IeltseyeSpeakingTopicSample extends CActiveRecord
 {
+    public $verifyCode;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -40,12 +42,14 @@ class IeltseyeSpeakingTopicSample extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('content, dateline, source, cardid', 'required'),
+			array('content, cardid, email', 'required'),
 			array('dateline, displayorder, cardid', 'numerical', 'integerOnly'=>true),
 			array('author', 'length', 'max'=>30),
+            array('email', 'email'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('sampleid, content, author, dateline, source, displayorder, cardid', 'safe', 'on'=>'search'),
+            array('verifyCode', 'captcha', 'allowEmpty'=>!CCaptcha::checkRequirements()),
+			array('sampleid, content, author, email, dateline, source, displayorder, cardid', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -70,10 +74,12 @@ class IeltseyeSpeakingTopicSample extends CActiveRecord
 			'sampleid' => 'Sampleid',
 			'content' => 'Content',
 			'author' => 'Author',
+            'email' => 'Email',
 			'dateline' => 'Dateline',
 			'source' => 'Source',
 			'displayorder' => 'Displayorder',
 			'cardid' => 'Cardid',
+            'verifyCode'=>'Verification Code', 
 		);
 	}
 
@@ -91,6 +97,7 @@ class IeltseyeSpeakingTopicSample extends CActiveRecord
 		$criteria->compare('sampleid',$this->sampleid);
 		$criteria->compare('content',$this->content,true);
 		$criteria->compare('author',$this->author,true);
+        $criteria->compare('email',$this->email,true);
 		$criteria->compare('dateline',$this->dateline);
 		$criteria->compare('source',$this->source,true);
 		$criteria->compare('displayorder',$this->displayorder);

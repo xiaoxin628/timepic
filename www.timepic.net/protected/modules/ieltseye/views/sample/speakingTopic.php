@@ -9,11 +9,15 @@ $this->breadcrumbs=array(
     <div class="span7 pull-left">
         <div>
             <div class="topicCard">
+                <div class="part"><?php echo "Part ".$topicCard->type;?></div>
                 <legend><?php echo CHtml::encode($topicCard->question);?></legend>
                 <?php if ($topicCard->type == 2): ?>
                     <p>You should say:</p>
                     <div class="description">
                         <?php echo TimePicCode::TpCode(CHtml::encode($topicCard->description)); ?>
+                    </div>
+                    <p><a class="btn btn-primary btn-small" href="#sampleFormModal" data-toggle="modal">答题</a></p>
+                    <div id="sampleFormModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     </div>
                 <?php endif; ?>
             </div>
@@ -54,5 +58,12 @@ $this->breadcrumbs=array(
             });
         </script>
     </div>
-
 </div>
+
+<script type="text/javascript">
+$('#sampleFormModal').on('show', function () {
+    $.get('/sample/create/'+"<?php echo $topicCard->cardid;?>", function(data) {
+        $("#sampleFormModal").html(data);
+    });
+})
+</script>

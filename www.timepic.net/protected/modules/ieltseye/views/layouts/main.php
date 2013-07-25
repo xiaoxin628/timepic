@@ -7,6 +7,7 @@
 	<?php Yii::app()->bootstrap->register(); ?>
     <?php Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl."/css/ieltseye.css"); ?>
     <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl."/js/backtotop.js",CClientScript::POS_END); ?>
+    <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl."/js/ieltseye.js",CClientScript::POS_END); ?>
 </head>
 <body>
 <?php $this->widget('bootstrap.widgets.TbNavbar',array(
@@ -52,6 +53,7 @@
 	<div class="clear"></div>
 
 	<div id="footer">
+        <p id="back-to-top"><a href="#top">TOP</a></p>
 		Copyright &copy; <?php echo date('Y'); ?> by IELTSEYE.<br/>
 		All Rights Reserved.<br/>
 	</div><!-- footer -->

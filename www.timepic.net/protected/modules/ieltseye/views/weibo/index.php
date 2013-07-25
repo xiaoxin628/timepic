@@ -22,7 +22,6 @@ $(function () {
 })
 </script> 
 <?php endif;?>
-<p id="back-to-top"><a href="#top">TOP</a></p>
 <div class="row-fluid">
     
     <div class="span4">

@@ -7,6 +7,7 @@ $this->breadcrumbs=array(
 ?>
 <div class="row-fluid">
     <div class="topicCard">
+        <div class="part"><?php echo "Part ".$sample->topicCard->type;?></div>
         <legend><?php echo CHtml::encode($sample->topicCard->question);?></legend>
         <?php if ($sample->topicCard->type == 2): ?>
             <p>You should say:</p>

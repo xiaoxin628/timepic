@@ -289,3 +289,4 @@ CREATE TABLE IF NOT EXISTS `tp_ieltseye_speaking_topic_sample` (
   PRIMARY KEY (`sampleid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+ALTER TABLE  `tp_ieltseye_speaking_topic_sample` ADD  `email` CHAR( 60 ) NOT NULL AFTER  `author`

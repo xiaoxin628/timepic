@@ -5,8 +5,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List IeltseyeSpeakingTopicSample','url'=>array('index')),
-	array('label'=>'Manage IeltseyeSpeakingTopicSample','url'=>array('admin')),
+	array('label'=>'List','url'=>array('index')),
+	array('label'=>'Manage','url'=>array('admin')),
 );
 ?>
 
