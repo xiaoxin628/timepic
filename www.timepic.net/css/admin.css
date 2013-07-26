@@ -42,7 +42,6 @@ body
 
 #sidebar
 {
-	float: left;
 	padding: 0;
 }
 
@@ -56,14 +55,8 @@ body
 }
 
 .subnav{
-	border-radius: 4px 4px 4px 4px;
-    font-size: 12px;
-    padding: 9px 0;
-    position: fixed;
     left: 20px;
-    top: 60px;
-    width: 160px;
-    z-index: 1030;
+    top: 30px;
 }
 
 /*ieltseye*/

@@ -25,20 +25,20 @@
 	}
 ?>
 
-<div class="container">
-		<div id="sidebar">
-			<div class="subnav well">
+<div class="row-fluid">
+		<div id="sidebar" class="span2">
+			<div class="subnav">
 				<?php $this->widget('bootstrap.widgets.TbMenu', array(
 					'type'=>'list',
-					'items'=>adminSideMenu(Yii::app()->request->requestUri)
+					'items'=>adminSideMenu(Yii::app()->request->requestUri),
+                    'htmlOptions'=>array('class'=>'well affix')
 				)); ?>
 			</div>
 		</div>
 			<!-- sidebar -->
-	<div class="main">
-		<div id="content">
-			<?php echo $content; ?>
-		</div><!-- content -->
+        <div class="span10">
+                    <?php echo $content; ?>
+        </div>
 	</div>
 </div>
 <?php $this->endContent(); ?>
