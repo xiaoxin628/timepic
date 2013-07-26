@@ -1,5 +1,5 @@
 <?php
-$this->pageTitle = Yii::app()->params['ieltseye']['seoTitle']."-Topic-口语卡-Tag";
+$this->pageTitle = Yii::app()->params['ieltseye']['seoTitle']."-Topic-口语卡-Tag-".$keyword;
 $this->breadcrumbs=array(
 	'IELTS Speaking Topic'=>array('/topic'),
     'Tag:'.$keyword,
@@ -10,7 +10,7 @@ $this->breadcrumbs=array(
           <?php  foreach ($dataProvider->data as $item):?>
             <div class="topicCard">
                 <div class="part"><?php echo "Part ".$item['type']?></div>
-                <legend><?php echo str_ireplace($keyword, '<span class="alert alert-info ieltsKeyword">'.$keyword.'</span>', CHtml::encode($item['question']));;?></legend>
+                <legend><?php echo str_ireplace($keyword, '<span class="alert alert-info ieltsKeyword">'.$keyword.'</span>', CHtml::encode($item['question']));?></legend>
                 <?php if($item['type'] == 2):?>
                     <p>You should say:</p>
                     <div class="description">
@@ -20,7 +20,7 @@ $this->breadcrumbs=array(
                 <?php if(isset($item['tags']) && !empty($item['tags'])):?>
                     <p>Tags: <?php echo IeltseyeHelper::formatTags($item['tags'], 1);?></p>
                 <?php endif;?>
-                <p><a class="btn btn-primary btn-small" href="<?php echo $this->createUrl("/sample/speakingTopic", array('id'=>$item['cardid']));?>">Samples</a></p>
+                <p><a class="btn btn-primary btn-small" title="<?php echo CHtml::encode($item['question']);?>" href="<?php echo $this->createUrl("/sample/speakingTopic", array('id'=>$item['cardid']));?>">Samples</a></p>
             </div>
           <?php endforeach;?>
         <?php else: ?>

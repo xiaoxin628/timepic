@@ -53,7 +53,7 @@ $(function () {
                 <?php if(isset($item['tags']) && !empty($item['tags'])):?>
                     <p>Tags: <?php echo IeltseyeHelper::formatTags($item['tags'], 1);?></p>
                 <?php endif;?>
-                <p><a class="btn btn-primary btn-small" href="<?php echo $this->createUrl("/sample/speakingTopic", array('id'=>$item['cardid']));?>">Samples</a></p>
+                <p><a class="btn btn-primary btn-small" title="<?php echo CHtml::encode($item['question']);?>" href="<?php echo $this->createUrl("/sample/speakingTopic", array('id'=>$item['cardid']));?>">Samples</a></p>
             </div>
           <?php endforeach;?>
         <?php else: ?>
