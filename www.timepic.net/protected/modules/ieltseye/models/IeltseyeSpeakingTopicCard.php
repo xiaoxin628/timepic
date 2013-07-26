@@ -123,6 +123,8 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
     }
     
 	public function beforeSave(){
+        //all tags must be lowercase due to search factor.
+        $this->tags = strtolower($this->tags);
         //set tagstr for card
         $this->setTags();
 		if ($this->isNewRecord) {
