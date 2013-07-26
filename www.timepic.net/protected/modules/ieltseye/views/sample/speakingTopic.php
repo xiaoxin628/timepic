@@ -16,10 +16,9 @@ $this->breadcrumbs=array(
                     <div class="description">
                         <?php echo TimePicCode::TpCode(CHtml::encode($topicCard->description)); ?>
                     </div>
-                    <p><a class="btn btn-primary btn-small" href="#sampleFormModal" data-toggle="modal">答题</a></p>
-                    <div id="sampleFormModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    </div>
                 <?php endif; ?>
+                <p><a class="btn btn-primary btn-small" href="#sampleFormModal" data-toggle="modal">答题</a></p>
+                <div id="sampleFormModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
             </div>
         </div>
         <div>
