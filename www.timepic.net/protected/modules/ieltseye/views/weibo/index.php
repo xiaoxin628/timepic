@@ -58,7 +58,7 @@ $(function () {
                     <p>
                         <?php echo $item['text'];?>
                     </p>
-                    <p class="muted"><?php echo CHtml::encode(date("Y-m-d H:i:s", $item['created_at']))?></p>
+                    <p class="muted"><?php echo CommonHelper::sgmdate('Y-m-d H:i:s', CHtml::encode($item['created_at']), 1);?></p>
                 </div>
             </div>
           <?php endforeach;?>
