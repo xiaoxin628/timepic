@@ -27,7 +27,7 @@ class IeltsApiController extends Controller
             if (!empty($keyword)) {
                 $row['text'] = str_ireplace($keyword, '<span class="badge badge-info">'.$keyword.'</span>', CHtml::encode($row['text']));   
             }
-            $row['created_at'] = date("Y-m-d H:i:s", $row['created_at']);
+            $row['created_at'] = CommonHelper::sgmdate('Y-m-d H:i:s', CHtml::encode($row['created_at']), 1);
 			$data[] = $row;
 		}
 		$jsondata['datas'] = $data;
