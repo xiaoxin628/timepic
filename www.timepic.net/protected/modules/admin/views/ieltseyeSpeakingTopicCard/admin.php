@@ -46,7 +46,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
         array('name' => 'question',
             'type'=>'html',
             'headerHtmlOptions'=>array('width'=>'50%'),
-            'value' => '"<h4>".$data->question."</h4><p class=\"muted\">".TimePicCode::TpCode($data->description)."</p>"'),
+            'value' => '"<h4>".$data->question."</h4><p class=\"muted\">".TimePicCode::TpCode($data->description)."<br />Tags: ".IeltseyeHelper::formatTags($data->tags, 1)."</p>"'),
 		array('name' => 'type',  'headerHtmlOptions'=>array('width'=>'10%'), 'value' => '"Part ".$data->type'),
         array('name' => 'dateline', 'value' => 'date("Y-m-d H:i:s", $data->dateline)'),
 		array(

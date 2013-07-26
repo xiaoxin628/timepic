@@ -289,4 +289,29 @@ CREATE TABLE IF NOT EXISTS `tp_ieltseye_speaking_topic_sample` (
   PRIMARY KEY (`sampleid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-ALTER TABLE  `tp_ieltseye_speaking_topic_sample` ADD  `email` CHAR( 60 ) NOT NULL AFTER  `author`
+ALTER TABLE  `tp_ieltseye_speaking_topic_sample` ADD  `email` CHAR( 60 ) NOT NULL AFTER  `author`;
+ALTER TABLE  `tp_ieltseye_speaking_topic_card` ADD  `tags` CHAR( 255 ) NOT NULL COMMENT  'tag' AFTER  `type`;
+
+CREATE TABLE IF NOT EXISTS `tp_ieltseye_tag` (
+  `tagid` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
+  `tagname` varchar(20) NOT NULL DEFAULT '',
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`tagid`),
+  KEY `tagname` (`tagname`),
+  KEY `status` (`status`,`tagid`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+
+--
+-- Table structure for table `tp_ieltseye_tagitem`
+--
+
+CREATE TABLE IF NOT EXISTS `tp_ieltseye_tagitem` (
+  `tagid` smallint(6) NOT NULL DEFAULT '0',
+  `tagname` varchar(20) NOT NULL DEFAULT '',
+  `itemid` mediumint(8) NOT NULL DEFAULT '0',
+  `idtype` varchar(255) NOT NULL DEFAULT '',
+  KEY `tagid` (`tagid`,`idtype`),
+  KEY `idtype` (`idtype`,`itemid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+

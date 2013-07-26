@@ -1,43 +1,10 @@
-<?php if(!empty($keyword)):?>
-<script type="text/javascript">
-$(function () { 
-    var count = 3;
-    var countdown = setInterval(CountDown, 1000); 
-    var btn = $("[name='topicSearch']");
-    function CountDown() {
-        btn.attr("disabled", true); 
-        btn.text("wait " + count + "s!"); 
-        if (count == 0) { 
-            btn.text("Search").removeAttr("disabled"); 
-            clearInterval(countdown); 
-        } 
-        count--; 
-    }
-})
-</script> 
-<?php endif;?>
-
-<!--search-->
-<div class="row-fluid">
-    <div class="span4">
-        <?php $form=$this->beginWidget('CActiveForm',array(
-            'id'=>'oralTopicSearch',
-            'enableAjaxValidation'=>false,
-            'method'=>'get',
-        )); ?>
-
-        <?php echo CHtml::textField('keyword', CHtml::encode($keyword), array('class'=>'input-media search-query')); ?>
-        <?php 
-        $htmlOptionsArr = !empty($keyword) ? array('name'=>'topicSearch','disabled'=>'true') : array('name'=>'topicSearch');
-        $this->widget('bootstrap.widgets.TbButton', array(
-            'buttonType'=>'submit',
-            'type'=>'btn',
-            'label'=>'Search',
-            'htmlOptions' =>$htmlOptionsArr,
-        )); ?>
-        <?php $this->endWidget(); ?>
-    </div>
-</div>
+<?php
+$this->pageTitle = Yii::app()->params['ieltseye']['seoTitle']."-Topic-口语卡-Tag";
+$this->breadcrumbs=array(
+	'IELTS Speaking Topic'=>array('/topic'),
+    'Tag:'.$keyword,
+);
+?>
 <div class="row-fluid">
         <?php if(!empty($dataProvider->data)): ?>
           <?php  foreach ($dataProvider->data as $item):?>

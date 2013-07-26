@@ -13,7 +13,8 @@
 	<?php echo $form->textAreaRow($model,'description',array('rows'=>6, 'cols'=>50, 'class'=>'span8')); ?>
 
 	<?php echo $form->dropDownList($model, 'type', array('1'=>'Part 1', '2'=>'Part 2', '3'=>'Part 3') , array('class'=>'span5')); ?>
-
+    
+    <?php echo $form->textFieldRow($model,'tags',array('class'=>'span5','maxlength'=>255)); ?>
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType'=>'submit',

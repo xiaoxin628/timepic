@@ -14,6 +14,7 @@ class AdminModule extends CWebModule
 			'admin.models.*',
 			'admin.components.*',
             'application.modules.ieltseye.models.*',
+            'application.modules.ieltseye.components.*',
 		));
 	}
 

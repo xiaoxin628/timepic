@@ -48,6 +48,15 @@ class TopicController extends IeltseyeController
                     )
 				);
     }
+    //tag
+    public function actionTag($tag){
+        $data = IeltseyeSpeakingTopicCard::model()->getPartByTag($tag);
+		$this->render('tag',
+                    array('dataProvider'=>$data['dataProvider'],
+                        'keyword'=>$data['tagname'],
+                    )
+				);
+    }
 
 	// Uncomment the following methods and override them if needed
 	/*

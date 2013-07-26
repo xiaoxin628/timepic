@@ -12,4 +12,4 @@ $this->menu=array(
 
 <h1>Create IeltseyeSpeakingTopicCard</h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_create', array('model'=>$model)); ?>

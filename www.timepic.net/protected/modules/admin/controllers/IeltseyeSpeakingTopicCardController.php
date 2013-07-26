@@ -20,17 +20,43 @@ class IeltseyeSpeakingTopicCardController extends adminController
 	public function actionCreate()
 	{
 		$model=new IeltseyeSpeakingTopicCard;
-
+        //默认填充9个question
+        $model->questions = array_pad(array(), 9, '');
+        
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		if(isset($_POST['ajax']) && in_array($_POST['ajax'], array('ieltseye-speaking-topic-card-form-part2', 'ieltseye-speaking-topic-card-form-part13')))
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
 
 		if(isset($_POST['IeltseyeSpeakingTopicCard']))
 		{
 			$model->attributes=$_POST['IeltseyeSpeakingTopicCard'];
-			if($model->save())
-				$this->redirect(array('admin','id'=>$model->cardid));
-		}
 
+            if (isset($_POST['IeltseyeSpeakingTopicCard']['questions'])) {
+                $model->questions = $_POST['IeltseyeSpeakingTopicCard']['questions'];
+                if ($model->validate('questions')) {
+                   foreach($model->questions as $key=>$question){
+                       if (!empty($question)) {
+                           $model->type = $_POST['IeltseyeSpeakingTopicCard']['type'];
+                           $model->question = $question;
+                           $model->tags = $_POST['IeltseyeSpeakingTopicCard']['tags'];
+                           $model->cardid = NULL;
+                           unset($model->questions[$key]);
+                           $model->setIsNewRecord(true);
+                           $model->save();
+                       }
+                   }
+                   $this->redirect(array('admin'));
+                }
+            }else{
+                if($model->save())
+                    $this->redirect(array('admin','id'=>$model->cardid));                
+            }
+
+		}
+        $model->tags = IeltseyeHelper::formatTags($model->tags);
 		$this->render('create',array(
 			'model'=>$model,
 		));
@@ -54,7 +80,7 @@ class IeltseyeSpeakingTopicCardController extends adminController
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->cardid));
 		}
-
+        $model->tags = IeltseyeHelper::formatTags($model->tags);
 		$this->render('update',array(
 			'model'=>$model,
 		));
