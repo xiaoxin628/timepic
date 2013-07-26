@@ -125,7 +125,9 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
 	public function beforeSave(){
         //set tagstr for card
         $this->setTags();
-		$this->dateline = time();
+		if ($this->isNewRecord) {
+            $this->dateline = time();
+        }
 		return true;
 	}
     
@@ -303,7 +305,7 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
                 )
             );
             $data['dataProvider'] = $dataProvider;
-            $data['tagname'] = $tagname;
+            $data['tagname'] = $tag->tagname;
             return $data;
         }
         

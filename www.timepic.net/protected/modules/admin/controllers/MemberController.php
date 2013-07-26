@@ -32,7 +32,7 @@ class MemberController extends Controller
                 );
         }
         public function isAdmin($user){
-                if ($user->adminid) {
+                if (isset($user->adminid)) {
                      return true; 
                 }
                 return false;

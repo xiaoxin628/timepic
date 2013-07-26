@@ -15,14 +15,14 @@ class IeltseyeHelper{
             }
             if ($href) {
                 foreach ($threadtag_array as $tagid=>$tagname){
-                    $tagsStr .= CHtml::link($tagname, Yii::app()->createUrl('/topic/tag/'.$tagid)).", "; 
+                    $tagsStr .= CHtml::link(ucwords($tagname), Yii::app()->createUrl('/topic/tag/'.$tagid)).", "; 
                 }
 
             }else{
-                $tagsStr = implode(',', $threadtag_array);                
+                $tagsStr = ucwords(implode(',', $threadtag_array));                
             }
 
-            return $tagsStr;
+            return ucwords($tagsStr);
         }
         
         return false;

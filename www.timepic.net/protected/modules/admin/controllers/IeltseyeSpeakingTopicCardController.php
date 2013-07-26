@@ -21,7 +21,7 @@ class IeltseyeSpeakingTopicCardController extends adminController
 	{
 		$model=new IeltseyeSpeakingTopicCard;
         //默认填充9个question
-        $model->questions = array_pad(array(), 9, '');
+        $model->questions = array_pad(array(), 14, '');
         
 		// Uncomment the following line if AJAX validation is needed
 		if(isset($_POST['ajax']) && in_array($_POST['ajax'], array('ieltseye-speaking-topic-card-form-part2', 'ieltseye-speaking-topic-card-form-part13')))
