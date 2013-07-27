@@ -11,7 +11,7 @@ class IeltsApiController extends Controller
         }
 		$jsondata = $data = array();
 		$page = $page ? intval($page) : 0;
-		$pageSize = 10;
+		$pageSize = 6;
         $command = Yii::app()->db->createCommand();
         $command->select('uid, screen_name, text, created_at');
         $command->from('{{ieltseye_weibo}}');
