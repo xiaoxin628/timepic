@@ -19,7 +19,7 @@
         array(
             'class'=>'bootstrap.widgets.TbMenu',
             'items'=>array(
-                array('label'=>'Home', 'url'=>array('/')),
+                array('label'=>'Home', 'url'=>Yii::app()->params['ieltseye']['homeUrl']),
                 array('label'=>'Topic', 'url'=>array('/topic/part2')),
             ),
         ),

@@ -58,7 +58,10 @@ $(function () {
                     <p>
                         <?php echo $item['text'];?>
                     </p>
-                    <p class="muted"><?php echo CommonHelper::sgmdate('Y-m-d H:i:s', CHtml::encode($item['created_at']), 1);?></p>
+                    <p class="muted">
+                        <a href="<?php echo $this->createUrl('/topic/part2');?>" target="_blank" class="btn btn-primary btn-mini">Topics & Samples</a>
+                        - <?php echo CommonHelper::sgmdate('Y-m-d H:i:s', CHtml::encode($item['created_at']), 1);?>
+                    </p>
                 </div>
             </div>
           <?php endforeach;?>

@@ -1,5 +1,5 @@
 <?php
-$this->pageTitle .= "-".CHtml::encode(CommonHelper::cutstr($sample->content, 50));
+$this->pageTitle .= "-".CHtml::encode($sample->topicCard->question);
 $this->breadcrumbs=array(
 	'IELTS Speaking Topic Sample'=>$this->createUrl("sample/speakingTopic/", array("id"=>$sample->topicCard->cardid)),
     CHtml::encode(CommonHelper::cutstr($sample->content, 50))
