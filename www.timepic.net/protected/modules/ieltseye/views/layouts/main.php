@@ -6,9 +6,7 @@
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 	<?php Yii::app()->bootstrap->register(); ?>
     <?php Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl."/css/ieltseye.css"); ?>
-    <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl."/js/backtotop.js",CClientScript::POS_END); ?>
     <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl."/js/ieltseye.js",CClientScript::POS_END); ?>
-    <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl."/js/ieltseyeGa.js",CClientScript::POS_END); ?>
 </head>
 <body>
 <?php $this->widget('bootstrap.widgets.TbNavbar',array(
