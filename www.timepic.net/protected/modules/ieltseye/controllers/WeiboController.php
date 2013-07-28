@@ -6,10 +6,10 @@ class WeiboController extends IeltseyeController {
 
     public function filters() {
         return array(
-            array(
-                'CHttpCacheFilter + index',
-                'lastModified' => intval(Yii::app()->db->createCommand("SELECT MAX(`dateline`) FROM {{ieltseye_weibo}}")->queryScalar()),
-            ),
+//            array(
+//                'CHttpCacheFilter + index',
+//                'lastModified' => intval(Yii::app()->db->createCommand("SELECT MAX(`dateline`) FROM {{ieltseye_weibo}}")->queryScalar()),
+//            ),
         );
     }
 

@@ -39,7 +39,7 @@ $(function () {
             'label'=>'Search',
             'htmlOptions' =>$htmlOptionsArr,
         )); ?>
-        <a class="btn btn-primary" href="#" onclick="javascript:window.location.reload();">Refresh</a>
+        <a class="btn btn-primary" href="" onclick="javascript:window.location.reload();">Refresh</a>
         <?php $this->endWidget(); ?>
     </div>
 </div>
