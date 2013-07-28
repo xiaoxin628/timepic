@@ -32,7 +32,7 @@ class IeltsEyeCommand extends CConsoleCommand{
         'weicoAndroid' => array('akey' => '211160679','skey'=>'63b64d531b98c2dbff2443816f274dd3'),
         'weicoIphone' => array('akey' => '82966982','skey'=>'72d4545a28a46a6f329c4f2b1e949e6a'),
         'weigeIphone' => array('akey' => '2027761570','skey'=>'5042214816d14b2d9e8ae8255f96180d'),
-        'androidTablet' => array('akey' => '2540340328','skey'=>'886cfb4e61fad4e4e9ba9dee625284dd'),
+//        'androidTablet' => array('akey' => '2540340328','skey'=>'886cfb4e61fad4e4e9ba9dee625284dd'),
         'meituxiuxiu' => array('akey' => '4229079448','skey'=>'bc58f8c7179369d4bfa914656c161b15'),
         'WeicoGIF' => array('akey' => '1078446352','skey'=>'c698c95df62b060734d3d0a9e8787a9a'),
         'fit' => array('akey' => '31024382','skey'=>'25c3e6b5763653d1e5b280884b45c51f'),
@@ -285,11 +285,11 @@ class IeltsEyeCommand extends CConsoleCommand{
                     $this->classicClient = $openClient;
                     $uid = $this->classicClient->get_uid();
                     if (isset($uid['error'])) {
-                        Yii::log("IeltsEyeCommand.checkWeibo:classic token error:".$uid['error'], 'info', 'ieltseye.log.weibo.command');                                 
+                        Yii::log("IeltsEyeCommand.checkWeibo:app:".$this->classicApp.",classic token error:".$uid['error'], 'info', 'ieltseye.log.weibo.command');                                 
                         continue;
                     }
                 }else{
-                    Yii::log("IeltsEyeCommand.checkWeibo:no classic token!", 'info', 'ieltseye.log.weibo.command');
+                    Yii::log("IeltsEyeCommand.checkWeibo:app:".$this->classicApp.",no classic token!", 'info', 'ieltseye.log.weibo.command');
                     continue;
                 }
 
