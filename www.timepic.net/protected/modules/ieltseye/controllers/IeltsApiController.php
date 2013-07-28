@@ -12,7 +12,10 @@ class IeltsApiController extends Controller
 		$jsondata = $data = array();
 		$page = $page ? intval($page) : 0;
 		$pageSize = 6;
-        $command = Yii::app()->db->createCommand();
+        //cache
+        $dependency = new CDbCacheDependency('SELECT COUNT(*) FROM {{ieltseye_weibo}}');
+        $command = Yii::app()->db->cache(3600, $dependency)->createCommand();
+        
         $command->select('uid, screen_name, text, created_at');
         $command->from('{{ieltseye_weibo}}');
         $command->order('created_at DESC');
@@ -20,8 +23,9 @@ class IeltsApiController extends Controller
         if (!empty($keyword)) {
             $command->where(array('like', 'text', '%'.$keyword.'%'));
         }
-		$query = $command->query();
-		while($row = $query->read()){
+
+		$query = $command->queryAll();
+		foreach($query as $row){
             //去掉@某人
             $row['text'] = preg_replace("/@[\\x{4e00}-\\x{9fa5}\\w\\-]+/u", "", $row['text']);
             if (!empty($keyword)) {
@@ -35,31 +39,4 @@ class IeltsApiController extends Controller
 		echo Yii::app()->request->getParam('callback').'('.json_encode($jsondata).')';
 		Yii::app()->end();
 	}
-
-	// Uncomment the following methods and override them if needed
-	/*
-	public function filters()
-	{
-		// return the filter configuration for this controller, e.g.:
-		return array(
-			'inlineFilterName',
-			array(
-				'class'=>'path.to.FilterClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-
-	public function actions()
-	{
-		// return external action classes, e.g.:
-		return array(
-			'action1'=>'path.to.ActionClass',
-			'action2'=>array(
-				'class'=>'path.to.AnotherActionClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-	*/
 }
