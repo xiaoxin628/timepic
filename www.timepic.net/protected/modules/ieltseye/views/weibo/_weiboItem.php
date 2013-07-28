@@ -59,7 +59,7 @@ $(function () {
                     </p>
                     <p class="muted">
                         <a href="<?php echo $this->createUrl('/topic/part2');?>" target="_blank" class="btn btn-primary btn-mini">Topics & Samples</a>
-                        - <?php echo CommonHelper::sgmdate('Y-m-d H:i:s', CHtml::encode($item['created_at']), 1);?>
+                        - <span time="<?php echo CHtml::encode($item['created_at']);?>"><?php echo date('Y-m-d H:i:s', CHtml::encode($item['created_at']));?></span>
                     </p>
                 </div>
             </div>
@@ -103,3 +103,9 @@ $(function () {
                 )
         );?>
 </div>
+<script type="text/javascript">
+    $('span[time]').each(function(){
+        var date = jsDateDiff($(this).attr('time'));
+        $(this).text(date);
+    });
+</script>

@@ -6,6 +6,7 @@
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 	<?php Yii::app()->bootstrap->register(); ?>
     <?php Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl."/css/ieltseye.css"); ?>
+    <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl."/js/ieltseyeCore.js"); ?>
     <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl."/js/ieltseye.js",CClientScript::POS_END); ?>
 </head>
 <body>
