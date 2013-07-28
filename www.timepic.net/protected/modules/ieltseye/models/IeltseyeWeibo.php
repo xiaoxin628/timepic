@@ -115,4 +115,55 @@ class IeltseyeWeibo extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+    /*
+     * get Weibo
+     * keyword boolean  weather to get Weibo with keyword
+     */
+    public function getWeibo($keyword=''){
+        $command = $countSql = '';
+        //sql condition
+        if (!empty($keyword)) {
+            $keyword=strtr($keyword, array('%'=>'\%', '_'=>'\_'));
+        }
+        $data['keyword'] = $keyword;
+
+        $command = Yii::app()->db->createCommand();
+        $command->select('count(eid)');
+        $command->from('{{ieltseye_weibo}}');
+        if (!empty($keyword)) {
+            $command->where(array('like', 'text', '%'.$keyword.'%'));
+        }
+        
+        $countSql = $command->text;
+        //Pagination
+        $criteria = new CDbCriteria();
+		$pages=new CPagination($command->queryScalar());
+		$pages->pageSize = 20;
+		$pages->applyLimit($criteria);
+        $data['pages'] = $pages;
+        
+        //cache
+        $dependency = new CDbCacheDependency($countSql);
+ 
+        $command = Yii::app()->db->cache(3600, $dependency)->createCommand();
+        
+        $command->select('*');
+        $command->from('{{ieltseye_weibo}}');
+        if (!empty($keyword)) {
+            $command->where(array('like', 'text', '%'.$keyword.'%'));
+        }
+        $command->order('created_at DESC');
+        $command->limit($pages->pageSize, $pages->currentPage*$pages->pageSize);
+
+		$query = $command->queryAll();
+		foreach($query as $row){
+            //去掉@某人
+            $row['text'] = preg_replace("/@[\\x{4e00}-\\x{9fa5}\\w\\-]+/u", "", $row['text']);
+            if (!empty($keyword)) {
+                $row['text'] = str_ireplace($keyword, '<span class="alert alert-info ieltsKeyword">'.$keyword.'</span>', CHtml::encode($row['text']));   
+            }
+			$data['weibos'][] = $row;
+		}
+        return $data;
+    }
 }

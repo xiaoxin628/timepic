@@ -36,7 +36,7 @@
             <a title="使用360手机助手安装" href="zhushou360://type=apk&name=雅思口语网蹲哥&icon=http://p2.qhimg.com/t01a746d814c3a53a4c.png&url=http://shouji.360tpcdn.com/360sj/dev/20130723/com.ieltseye.IELTSEye_1_114851.apk"><img alt="使用360手机助手安装" src="http://p3.qhimg.com/t01943097a6b50d1e96.png"></a>
             <!--下载按钮结束-->
             <!--请把这段代码放在页面最底部加载-->
-            <script src="http://zhushou.360.cn/script/360mobilemgrdownload.js"></script>
+            <?php Yii::app()->clientScript->registerScriptFile("http://zhushou.360.cn/script/360mobilemgrdownload.js",CClientScript::POS_END); ?>
             <!--代码结束-->
           </p>
         </div>    
