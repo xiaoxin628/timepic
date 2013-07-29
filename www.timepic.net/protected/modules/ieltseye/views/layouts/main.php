@@ -30,10 +30,10 @@
           <button type="button" class="close" data-dismiss="alert">&times;</button>
           <strong>友情提醒!</strong> 
           <p>雅思口语回忆，请新浪微博<?php echo CHtml::link('@雅思口语网蹲哥', Yii::app()->params['ieltseye']['adminWeibo'])?></p>
-          <p>下载：<?php echo CHtml::link('Android', 'http://shouji.360tpcdn.com/360sj/dev/20130723/com.ieltseye.IELTSEye_1_114851.apk')?>版 
+          <p>下载：<?php echo CHtml::link('Android', Yii::app()->params['ieltseye']['appdownload']['android']);?>版 
               <?php if(!CommonHelper::checkmobile()):?>
                     <!--下载按钮开始-->
-                    <a title="使用360手机助手安装" href="zhushou360://type=apk&name=雅思口语网蹲哥&icon=http://p2.qhimg.com/t01a746d814c3a53a4c.png&url=http://shouji.360tpcdn.com/360sj/dev/20130723/com.ieltseye.IELTSEye_1_114851.apk"><img alt="使用360手机助手安装" src="http://p3.qhimg.com/t01943097a6b50d1e96.png"></a>
+                    <a title="使用360手机助手安装" href="zhushou360://type=apk&name=雅思口语网蹲哥&icon=http://p2.qhimg.com/t01a746d814c3a53a4c.png&url=<?php echo Yii::app()->params['ieltseye']['appdownload']['android'];?>"><img alt="使用360手机助手安装" src="http://p3.qhimg.com/t01943097a6b50d1e96.png"></a>
                     <!--下载按钮结束-->
                     <!--请把这段代码放在页面最底部加载-->
                     <?php Yii::app()->clientScript->registerScriptFile("http://zhushou.360.cn/script/360mobilemgrdownload.js",CClientScript::POS_END); ?>

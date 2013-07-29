@@ -7,5 +7,9 @@ return array(
     'seoTitle' => 'IELTSEYE-雅思口语网蹲哥',
     'homeUrl' => 'http://test.ieltseye.com',
     'name' => 'IELTS EYE',
+    'appdownload'=>array(
+        'android'=>'http://shouji.360tpcdn.com/360sj/dev/20130729/com.ieltseye.IELTSEye_1_141703.apk',
+        'iphone'=>'',
+     ),
 );
 ?>
