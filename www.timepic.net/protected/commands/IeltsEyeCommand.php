@@ -58,12 +58,14 @@ class IeltsEyeCommand extends CConsoleCommand{
     //每页微博数量
     public $pageCount = 40;
     public $errorTryTimes = 0;
-    //微博名人
+    //微博名人 需要查询的用户ID，用半角逗号分隔，一次最多20个。
     //人人网雅思哥 2060127212
     public $famousUids = '2060127212';
+    //加入黑名单 则不转发该人发的任何原创微博
     public $blacklist = array(
         '3594633532',//雅思口语网蹲哥 不转发自己的微博
         '1964300185',//各城市雅思口语 重复的微博
+        '1502448045',//卓叶全球雅思托福英语名师叶毅斌 博文微博，总结网友的，和网友微博重复
     );
 
     /**
