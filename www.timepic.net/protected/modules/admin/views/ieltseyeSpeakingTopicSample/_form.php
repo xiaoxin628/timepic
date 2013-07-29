@@ -29,6 +29,8 @@
 	<?php echo $form->textAreaRow($model,'content',array('rows'=>6, 'cols'=>50, 'class'=>'span8')); ?>
 
 	<?php echo $form->textFieldRow($model,'author',array('class'=>'span5','maxlength'=>30)); ?>
+    
+    <?php echo $form->textFieldRow($model,'email',array('class'=>'span5','maxlength'=>30)); ?>
 
 	<?php echo $form->textAreaRow($model,'source',array('rows'=>6, 'cols'=>50, 'class'=>'span8')); ?>
 

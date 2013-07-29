@@ -47,7 +47,7 @@ class SampleController extends IeltseyeController {
     }
 
     public function actionCreate($id) {
-        $model = new IeltseyeSpeakingTopicSample;
+        $model = new IeltseyeSpeakingTopicSample('userCreate');
         
         // Uncomment the following line if AJAX validation is needed
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'IELTSeyeSpeakingSampleForm') {

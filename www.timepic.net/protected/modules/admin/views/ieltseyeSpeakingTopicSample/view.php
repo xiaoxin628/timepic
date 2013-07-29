@@ -20,6 +20,7 @@ $this->menu=array(
 		'sampleid',
 		'content',
 		'author',
+        'email',
 		'dateline',
 		'source',
 		'displayorder',

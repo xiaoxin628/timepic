@@ -42,13 +42,14 @@ class IeltseyeSpeakingTopicSample extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('content, cardid, email', 'required'),
+			array('content, cardid', 'required'),
 			array('dateline, displayorder, cardid', 'numerical', 'integerOnly'=>true),
 			array('author', 'length', 'max'=>30),
-            array('email', 'email'),
+            array('email', 'required', 'on'=>'userCreate'),
+            array('email', 'email', 'on'=>'userCreate'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-            array('verifyCode', 'captcha', 'allowEmpty'=>!CCaptcha::checkRequirements()),
+            array('verifyCode', 'captcha', 'allowEmpty'=>!CCaptcha::checkRequirements(), 'on'=>'userCreate'),
 			array('sampleid, content, author, email, dateline, source, displayorder, cardid', 'safe', 'on'=>'search'),
 		);
 	}
