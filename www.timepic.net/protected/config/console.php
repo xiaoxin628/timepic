@@ -7,6 +7,13 @@ return array(
     'name' => 'TimePicConsole',
     'preload'=>array('log'),
     // application components
+	// autoloading model and component classes
+	'import'=>array(
+		'application.models.*',
+		'application.components.*',
+		'application.extensions.*',
+		'application.helpers.*'
+	),
     'components' => array(
         'db' => array(
             'class' => 'CDbConnection',

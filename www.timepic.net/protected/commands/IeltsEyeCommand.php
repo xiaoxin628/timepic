@@ -439,7 +439,7 @@ class IeltsEyeCommand extends CConsoleCommand{
                 $item['created_at'] = strtotime($weibo['created_at']);
                 $item['wbid'] = $weibo['id'];
                 $item['wbmid'] = $weibo['mid'];
-                $item['text'] = $weibo['text'];
+                $item['text'] = CommonHelper::removeEmoji($weibo['text']);
                 $item['uid'] = $weibo['user']['id'];
                 $item['uidstr'] = $weibo['user']['idstr'];
                 $item['screen_name'] = $weibo['user']['screen_name'];
