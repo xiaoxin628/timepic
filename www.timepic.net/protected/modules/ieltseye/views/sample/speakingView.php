@@ -18,7 +18,7 @@ $this->breadcrumbs=array(
     </div>
 </div>
 <div class="row-fluid">
-    <blockquote class="well-small">
+    <blockquote class="well-small sample">
     <?php echo TimePicCode::TpCode(CHtml::encode($sample->content));?>
     <small><?php echo $sample->author ? $sample->author : 'anonymous';?>  <cite title="<?php echo date("Y/m/d H:i:s", $sample->dateline);?>"><?php echo date("Y/m/d H:i:s", $sample->dateline);?></cite></small>
     </blockquote>
