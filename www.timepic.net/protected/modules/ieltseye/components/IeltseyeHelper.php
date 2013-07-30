@@ -27,5 +27,16 @@ class IeltseyeHelper{
         
         return false;
     }
+    
+    static public function textToTags($text) {
+        $tags = Yii::app()->cache->get('ieltseyeTags');
+        if (!empty($tags)) {
+            foreach ($tags as $tagid=>$tagname) {
+                $text = str_ireplace($tagname, CHtml::link($tagname, Yii::app()->createUrl('/topic/tag/' . $tagid)), $text);
+            }
+        }
+        
+        return $text;
+    }
 }
 ?>

@@ -295,7 +295,11 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
             while($row = $query->read()){
                 $cardids[] = $row['itemid'];
             }
-            $command = Yii::app()->db->createCommand()->select('*')->from('{{ieltseye_speaking_topic_card}}')->where(array('in', 'cardid', $cardids));
+            
+            //cache
+            $cardCacheSql = Yii::app()->db->createCommand()->select('count(*)')->from('{{ieltseye_speaking_topic_card}}')->where(array('in', 'cardid', $cardids))->text;
+            $dependency = new CDbCacheDependency($cardCacheSql);
+            $command = Yii::app()->db->cache(3600, $dependency)->createCommand()->select('*')->from('{{ieltseye_speaking_topic_card}}')->where(array('in', 'cardid', $cardids));
             $dataProvider = new CSqlDataProvider($command, array(
                     'totalItemCount'=>$count,
                     'pagination' => array(

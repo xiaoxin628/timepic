@@ -43,11 +43,20 @@ $(function () {
           <?php  foreach ($dataProvider->data as $item):?>
             <div class="topicCard">
                 <div class="part"><?php echo "Part ".$item['type']?></div>
-                <legend><?php echo str_ireplace($keyword, '<span class="alert alert-info ieltsKeyword">'.$keyword.'</span>', CHtml::encode($item['question']));;?></legend>
+                <legend>
+                    <?php 
+                        $question = str_ireplace($keyword, '<span class="alert alert-info ieltsKeyword">'.$keyword.'</span>', CHtml::encode($item['question']));
+//                        //replace tags
+                        $question = IeltseyeHelper::textToTags($question);
+                        echo $question;
+                    ?>
+                </legend>
                 <?php if($item['type'] == 2):?>
                     <p>You should say:</p>
                     <div class="description">
-                        <?php echo TimePicCode::TpCode($item['description']);?>
+                        <?php 
+                            echo TimePicCode::TpCode($item['description']);
+                        ?>
                     </div>
                 <?php endif;?>
                 <?php if(isset($item['tags']) && !empty($item['tags'])):?>

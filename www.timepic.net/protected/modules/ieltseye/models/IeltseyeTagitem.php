@@ -4,6 +4,7 @@
  * This is the model class for table "{{ieltseye_tagitem}}".
  *
  * The followings are the available columns in table '{{ieltseye_tagitem}}':
+ * @property integer $tid
  * @property integer $tagid
  * @property string $tagname
  * @property integer $itemid
@@ -42,7 +43,7 @@ class IeltseyeTagitem extends CActiveRecord
 			array('idtype', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('tagid, tagname, itemid, idtype', 'safe', 'on'=>'search'),
+			array('tid, tagid, tagname, itemid, idtype', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -54,6 +55,7 @@ class IeltseyeTagitem extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+            'tag' => array(self::BELONGS_TO, 'IeltseyeTag', 'tagid'),
 		);
 	}
 
@@ -63,6 +65,7 @@ class IeltseyeTagitem extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+			'tid' => 'Tid',
 			'tagid' => 'Tagid',
 			'tagname' => 'Tagname',
 			'itemid' => 'Itemid',
@@ -81,6 +84,7 @@ class IeltseyeTagitem extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		$criteria->compare('tid',$this->tid);
 		$criteria->compare('tagid',$this->tagid);
 		$criteria->compare('tagname',$this->tagname,true);
 		$criteria->compare('itemid',$this->itemid);

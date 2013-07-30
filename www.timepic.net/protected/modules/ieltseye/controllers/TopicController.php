@@ -1,8 +1,8 @@
 <?php
 
 class TopicController extends IeltseyeController
-{
-	public function actionIndex($part="2")
+{    
+    public function actionIndex($part="2")
 	{
         $this->redirect('/topic/part2');
 	}
@@ -57,7 +57,11 @@ class TopicController extends IeltseyeController
                     )
 				);
     }
-
+    
+    public function actionTagList(){
+        var_dump($this->tags);
+        exit;
+    }
 	// Uncomment the following methods and override them if needed
 	/*
 	public function filters()

@@ -55,11 +55,10 @@ $(function () {
                 </div>
                 <div class="row-fluid">
                     <p>
-                        <?php echo $item['text'];?>
+                        <?php echo IeltseyeHelper::textToTags($item['text']);?>
                     </p>
                     <p class="muted">
-                        <a href="<?php echo $this->createUrl('/topic/part2');?>" target="_blank" class="btn btn-primary btn-mini">Topics & Samples</a>
-                        - <span time="<?php echo CHtml::encode($item['created_at']);?>"><?php echo date('Y-m-d H:i:s', CHtml::encode($item['created_at']));?></span>
+                        <span time="<?php echo CHtml::encode($item['created_at']);?>"><?php echo date('Y-m-d H:i:s', CHtml::encode($item['created_at']));?></span>
                     </p>
                 </div>
             </div>
