@@ -53,6 +53,7 @@ class IeltseyeTagController extends adminController
 			$model->attributes=$_POST['IeltseyeTag'];
             if($model->save()){
                 IeltseyeTagitem::model()->updateAll(array('tagname'=>$model->tagname),'tagid=:tagid', array(':tagid'=>$model->tagid));
+                IeltseyeCache::loadCache('Tags', true);
 				$this->redirect(array('view','id'=>$model->tagid));                
             }
 

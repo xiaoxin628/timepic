@@ -314,4 +314,4 @@ CREATE TABLE IF NOT EXISTS `tp_ieltseye_tagitem` (
   KEY `tagid` (`tagid`,`idtype`),
   KEY `idtype` (`idtype`,`itemid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
+ALTER TABLE  `tp_ieltseye_tag` ADD  `aliasWords` VARCHAR( 255 ) NOT NULL COMMENT  '同义词逗号分割' AFTER  `tagname`;

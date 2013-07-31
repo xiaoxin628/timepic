@@ -20,16 +20,7 @@ class IeltseyeController extends Controller {
         }
         
         public function initCache(){
-            $this->cacheTags();
-        }
-        
-        public function cacheTags(){
-            $tags = Yii::app()->cache->get('ieltseyeTags');
-            if (empty($tags)) {
-                $tags = IeltseyeTag::model()->findAll();              
-                Yii::app()->cache->set('ieltseyeTags', CHtml::listData($tags, 'tagid', 'tagname'), 3600);
-            }
+            IeltseyeCache::loadCache('Tags');
         }
 }
-
 ?>

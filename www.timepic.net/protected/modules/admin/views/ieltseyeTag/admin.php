@@ -44,9 +44,9 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'columns'=>array(
 		'tagid',
 		'tagname',
+		'aliasWords',
 		'status',
 		array(
-            'template'=>'{view}{update}',
 			'class'=>'bootstrap.widgets.TbButtonColumn',
 		),
 	),

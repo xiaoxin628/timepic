@@ -8,6 +8,10 @@
 	<?php echo CHtml::encode($data->tagname); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('aliasWords')); ?>:</b>
+	<?php echo CHtml::encode($data->aliasWords); ?>
+	<br />
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
 	<?php echo CHtml::encode($data->status); ?>
 	<br />

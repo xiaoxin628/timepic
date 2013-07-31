@@ -29,18 +29,30 @@ class IeltseyeHelper{
     }
     
     static public function textToTags($text) {
-        $searcharray = $replacearray = array();
+        $searcharray = $replacearray = $tagsarray = $aliasWords = array();
         $tooltip = '';
-        $tags = Yii::app()->cache->get('ieltseyeTags');
-
+        $tags = IeltseyeCache::loadCache('Tags');
         if (!empty($tags)) {
-            foreach($tags as $tagid=>$tagname){
-                $searcharray[] = '/\b('.$tagname.')/';
+            
+            foreach($tags as $tag){
+                $tagsarray[$tag['tagname']] = $tag['tagid'];
+                if ($tag['aliasWords']) {
+                    $aliasWords = explode(',', $tag['aliasWords']);
+                    if ($aliasWords) {
+                        foreach($aliasWords as $aliasWord){
+                            $tagsarray[$aliasWord] = $tag['tagid'];
+                        }
+                    }
+                }
+            }
+            
+            foreach($tagsarray as $tagname=>$tagid){
+                $searcharray[] = '/\b('.$tagname.')/i';
                 //do not display tooltip when mobles visit
                 if (!CommonHelper::checkmobile()) {
                     $tooltip = 'rel="tooltip" ';
                 }
-                $replacearray[] = '<a href="/topic/tag/'.$tagid.'" '.$tooltip.' title="Topic about '.ucfirst($tagname).'">\\1</a>';
+                $replacearray[] = '<a href="/topic/tag/'.$tagid.'" '.$tooltip.' title="Topic About '.ucfirst($tagname).'">\\1</a>';
             }
             $text = preg_replace($searcharray, $replacearray ,$text);
         }

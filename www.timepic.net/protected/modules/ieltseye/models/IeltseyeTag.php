@@ -6,6 +6,7 @@
  * The followings are the available columns in table '{{ieltseye_tag}}':
  * @property integer $tagid
  * @property string $tagname
+ * @property string $aliasWords
  * @property integer $status
  */
 class IeltseyeTag extends CActiveRecord
@@ -36,11 +37,13 @@ class IeltseyeTag extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('tagname', 'required'),
 			array('status', 'numerical', 'integerOnly'=>true),
 			array('tagname', 'length', 'max'=>20),
+			array('aliasWords', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('tagid, tagname, status', 'safe', 'on'=>'search'),
+			array('tagid, tagname, aliasWords, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,6 +67,7 @@ class IeltseyeTag extends CActiveRecord
 		return array(
 			'tagid' => 'Tagid',
 			'tagname' => 'Tagname',
+			'aliasWords' => 'Alias Words',
 			'status' => 'Status',
 		);
 	}
@@ -81,10 +85,40 @@ class IeltseyeTag extends CActiveRecord
 
 		$criteria->compare('tagid',$this->tagid);
 		$criteria->compare('tagname',$this->tagname,true);
+        $criteria->compare('aliasWords',$this->aliasWords,true);
 		$criteria->compare('status',$this->status);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
+    
+    public function beforeSave() {
+        $this->checkAliasWords();
+        return true;
+    }
+    
+    public function checkAliasWords() {
+        $alias = $aliasStr = '';
+        if ($this->aliasWords) {
+            $alias = str_replace(array(chr(0xa3) . chr(0xac), chr(0xa1) . chr(0x41), chr(0xef) . chr(0xbc) . chr(0x8c)), ',', $this->aliasWords);
+            if (strpos($alias, ',') !== FALSE) {
+                $aliasArray = array_unique(explode(',', $alias));
+            } else {
+                $alias = str_replace('　', ' ', $alias);
+                $aliasArray = array_unique(explode(' ', $alias));
+            }
+            if ($aliasArray) {
+                foreach($aliasArray as $aliasWord) {
+                    $aliasWord = trim($aliasWord);
+                    if(preg_match('/^([\x7f-\xff_-]|\w|\s){1,20}$/', $aliasWord)) {
+                        $aliasStr[] = $aliasWord;
+                    }
+                }
+            }
+            $this->aliasWords = implode(',', $aliasStr);
+            return true;
+        }
+        return false;
+    }
 }

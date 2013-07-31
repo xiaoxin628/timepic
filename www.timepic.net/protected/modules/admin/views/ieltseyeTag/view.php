@@ -20,6 +20,7 @@ $this->menu=array(
 	'attributes'=>array(
 		'tagid',
 		'tagname',
+		'aliasWords',
 		'status',
 	),
 )); ?>

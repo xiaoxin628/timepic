@@ -7,6 +7,8 @@
 
 	<?php echo $form->textFieldRow($model,'tagname',array('class'=>'span5','maxlength'=>20)); ?>
 
+	<?php echo $form->textFieldRow($model,'aliasWords',array('class'=>'span5','maxlength'=>255)); ?>
+
 	<?php echo $form->textFieldRow($model,'status',array('class'=>'span5')); ?>
 
 	<div class="form-actions">
