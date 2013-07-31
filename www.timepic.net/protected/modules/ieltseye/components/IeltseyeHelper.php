@@ -30,12 +30,17 @@ class IeltseyeHelper{
     
     static public function textToTags($text) {
         $searcharray = $replacearray = array();
+        $tooltip = '';
         $tags = Yii::app()->cache->get('ieltseyeTags');
 
         if (!empty($tags)) {
             foreach($tags as $tagid=>$tagname){
                 $searcharray[] = '/\b('.$tagname.')/';
-                $replacearray[] = '<a href="/topic/tag/'.$tagid.'" rel="tooltip" data-title="Topic about '.  ucfirst($tagname).'">\\1</a>';
+                //do not display tooltip when mobles visit
+                if (!CommonHelper::checkmobile()) {
+                    $tooltip = 'rel="tooltip" ';
+                }
+                $replacearray[] = '<a href="/topic/tag/'.$tagid.'" '.$tooltip.' title="Topic about '.ucfirst($tagname).'">\\1</a>';
             }
             $text = preg_replace($searcharray, $replacearray ,$text);
         }
