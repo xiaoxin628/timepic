@@ -63,6 +63,7 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
             'topicSamples'=>array(self::HAS_MANY, 'IeltseyeSpeakingTopicCard', 'cardid'),
+            'tagItem'=>array(self::HAS_MANY, 'IeltseyeTagitem', array('itemid'=>'cardid'), 'together'=>true),
 		);
 	}
 

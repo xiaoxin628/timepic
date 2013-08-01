@@ -46,10 +46,13 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'tagid',
 		'tagname',
 		'aliasWords',
-		'status',
+//		'status',
         array('name'=>'IeltseyeTagitemCount',
             'header'=>'Cards',
-            'value'=>$data->IeltseyeTagitemCount),
+            'type'=>'html',
+            'value'=> 'CHtml::link($data->IeltseyeTagitemCount,Yii::app()->createUrl(\'admin/ieltseyeSpeakingTopicCard/tag\', array(\'id\'=>$data->tagid)))',
+//            
+        ),
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
             'buttons'=>array(

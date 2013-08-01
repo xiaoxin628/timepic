@@ -116,6 +116,25 @@ class IeltseyeSpeakingTopicCardController extends adminController
 			'dataProvider'=>$dataProvider,
 		));
 	}
+    
+	public function actionTag($id)
+	{
+        $tag = IeltseyeTag::model()->findByPk($id);
+        
+		$dataProvider=new CActiveDataProvider('IeltseyeSpeakingTopicCard', array(
+                        'criteria'=>array(
+                            'with'=>array(
+                                'tagItem'=>array(
+                                    'condition'=>'tagItem.tagid='.$id,
+                                )
+                            ),
+                        ),
+        ));
+		$this->render('tag',array(
+			'dataProvider'=>$dataProvider,
+            'tag'=>$tag,
+		));
+	}
 
 	/**
 	 * Manages all models.
