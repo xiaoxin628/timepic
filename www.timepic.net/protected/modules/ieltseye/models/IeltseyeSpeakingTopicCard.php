@@ -141,7 +141,7 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
     public function setTagItems($tags){
         $tagcount = 0;
         if ($tags) {
-            $tagarray_all = explode('\t', $tags);
+            $tagarray_all = explode(';', $tags);
             if($tagarray_all) {
                 foreach($tagarray_all as $var) {
                     if($var) {
@@ -199,7 +199,7 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
                         unset($tagModel);
                     }
                     if($tagid) {
-                        $tagstr .= $tagid.','.$tagname.'\t';
+                        $tagstr .= $tagid.','.$tagname.';';
                     }
                     $tagcount++;
                     if($tagcount > 4) {
@@ -245,7 +245,7 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
                                 $tagItem->itemid = $this->cardid;
                                 $tagItem->idtype = 'cardid';
                                 $tagItem->save();
-                                $tagstr .= $tagid.','.$tagname.'\t';
+                                $tagstr .= $tagid.','.$tagname.';';
                             }
                         }
                         $tagcount++;
@@ -261,7 +261,7 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
                 if(!in_array($tagname, $cardtagarraynew)) {
                     IeltseyeTagitem::model()->deleteAll('idtype=:idtype AND itemid=:itemid AND tagname=:tagname', array(':idtype'=>'cardid', ':itemid'=>$this->cardid, ':tagname'=>$tagname));
                     $tagid = $cardtagidarray[$key];
-                    $tagstr = str_replace($tagid.",".$tagname.'\t', '', $tagstr);
+                    $tagstr = str_replace($tagid.",".$tagname.';', '', $tagstr);
                 }
             }
             //没有任何新标签则为删除所有标签

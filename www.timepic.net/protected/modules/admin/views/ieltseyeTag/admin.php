@@ -7,6 +7,7 @@ $this->breadcrumbs=array(
 $this->menu=array(
 	array('label'=>'List IeltseyeTag','url'=>array('index')),
 	array('label'=>'Create IeltseyeTag','url'=>array('create')),
+    array('label'=>'Merge IeltseyeTag','url'=>array('Merge')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -46,8 +47,16 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'tagname',
 		'aliasWords',
 		'status',
+        array('name'=>'IeltseyeTagitemCount',
+            'header'=>'Cards',
+            'value'=>$data->IeltseyeTagitemCount),
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
+            'buttons'=>array(
+                'delete'=>array(
+                    'visible'=>'$data->IeltseyeTagitemCount == 0',
+                ),
+            ),
 		),
 	),
 )); ?>

@@ -315,3 +315,4 @@ CREATE TABLE IF NOT EXISTS `tp_ieltseye_tagitem` (
   KEY `idtype` (`idtype`,`itemid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 ALTER TABLE  `tp_ieltseye_tag` ADD  `aliasWords` VARCHAR( 255 ) NOT NULL COMMENT  '同义词逗号分割' AFTER  `tagname`;
+ALTER TABLE  `tp_ieltseye_tagitem` ADD  `tid` MEDIUMINT( 8 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;

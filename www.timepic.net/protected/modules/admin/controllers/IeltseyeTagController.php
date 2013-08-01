@@ -44,7 +44,6 @@ class IeltseyeTagController extends adminController
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -52,8 +51,13 @@ class IeltseyeTagController extends adminController
 		{
 			$model->attributes=$_POST['IeltseyeTag'];
             if($model->save()){
+                //update all tagItem
                 IeltseyeTagitem::model()->updateAll(array('tagname'=>$model->tagname),'tagid=:tagid', array(':tagid'=>$model->tagid));
+                //update all cards
+                IeltseyeTag::model()->updateCard($model->tagid);
+                //force reload cache
                 IeltseyeCache::loadCache('Tags', true);
+                
 				$this->redirect(array('view','id'=>$model->tagid));                
             }
 
@@ -63,6 +67,22 @@ class IeltseyeTagController extends adminController
 			'model'=>$model,
 		));
 	}
+    
+    public function actionMerge(){
+        $model=new IeltseyeTag('merge');
+        if (isset($_POST['IeltseyeTag'])) {
+            $model->attributes=$_POST['IeltseyeTag'];
+            if ($model->validate(array('fromTagid', 'toTagid'))) {
+                $model->mergeTags($model->fromTagid, $model->toTagid);
+                $this->redirect(array('admin')); 
+            }
+
+        }
+
+		$this->render('merge',array(
+			'model'=>$model,
+		));
+    }
 
 	/**
 	 * Deletes a particular model.
@@ -74,8 +94,11 @@ class IeltseyeTagController extends adminController
 		if(Yii::app()->request->isPostRequest)
 		{
 			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
+            IeltseyeTag::model()->updateCard($id, 'delete');
             IeltseyeTagitem::model()->deleteAll('tagid=:tagid', array(':tagid'=>$id));
+			$this->loadModel($id)->delete();
+            //update all cards
+
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 			if(!isset($_GET['ajax']))
 				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));

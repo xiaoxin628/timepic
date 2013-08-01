@@ -4,7 +4,7 @@ class IeltseyeHelper{
     static public function formatTags($tags, $href=""){
         $tagsStr = '';
         if ($tags) {
-            $tagarray_all = explode('\t', $tags);
+            $tagarray_all = explode(';', $tags);
             if($tagarray_all) {
                 foreach($tagarray_all as $var) {
                     if($var) {
