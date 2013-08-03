@@ -15,6 +15,10 @@
 	<b><?php echo CHtml::encode($data->getAttributeLabel('type')); ?>:</b>
 	<?php echo CHtml::encode($data->type); ?>
 	<br />
+    
+	<b><?php echo CHtml::encode($data->getAttributeLabel('tags')); ?>:</b>
+	<?php echo CHtml::encode($data->tags); ?>
+	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('dateline')); ?>:</b>
 	<?php echo CHtml::encode($data->dateline); ?>

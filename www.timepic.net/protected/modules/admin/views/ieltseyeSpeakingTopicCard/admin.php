@@ -50,16 +50,19 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
             'value' => '"<h4>".$data->question."</h4><p class=\"muted\">".TimePicCode::TpCode($data->description)."<br />Tags: ".IeltseyeHelper::formatTags($data->tags, 1)."</p>"'),
 		array('name' => 'type',  'headerHtmlOptions'=>array('width'=>'13%'), 'value' => '"Part ".$data->type', 'filter'=>array('1'=>'Part 1', '2'=>'Part 2', '3'=>'Part 3')),
         array('name' => 'dateline', 'value' => 'date("Y-m-d H:i:s", $data->dateline)'),
+        array('name'=>'IeltseyeSpeakingTopicCardCount',
+            'header'=>'Samples',
+            'type'=>'html',
+            'value'=> 'CHtml::link($data->IeltseyeSpeakingTopicCardCount,Yii::app()->createUrl(\'admin/ieltseyeSpeakingTopicSample/admin\', array(\'id\'=>$data->cardid)))',         
+        ),
 		array(
             'header'=>'操作',
             'headerHtmlOptions'=>array('width'=>'10%'),
 			'class'=>'bootstrap.widgets.TbButtonColumn',
-            'template'=>'{samples}{createSample}{view}{update}{delete}',
+            'template'=>'{createSample}{view}{update}{delete}',
             'buttons'=>array(
-                'samples' => array(
-                    'label'=>'<i class="icon-th-list"></i>',
-                    'options'=>array('title'=>'例文'),
-                    'url' => 'Yii::app()->createUrl("admin/ieltseyeSpeakingTopicSample/admin",array("id"=>"$data->cardid"))',
+                'delete'=>array(
+                    'visible'=>'$data->IeltseyeSpeakingTopicCardCount == 0',
                 ),
                 'createSample' => array(
                     'label'=>'<i class="icon-plus"></i>',

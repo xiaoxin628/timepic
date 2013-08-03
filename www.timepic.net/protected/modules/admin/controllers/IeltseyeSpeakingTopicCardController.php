@@ -115,6 +115,8 @@ class IeltseyeSpeakingTopicCardController extends adminController
 	{
 		if(Yii::app()->request->isPostRequest)
 		{
+            //delete tagItem
+            IeltseyeTagitem::model()->deleteAll('idtype=:idtype AND itemid=:itemid', array(':idtype'=>'cardid', ':itemid'=>$id));
 			// we only allow deletion via POST request
 			$this->loadModel($id)->delete();
 
@@ -140,19 +142,23 @@ class IeltseyeSpeakingTopicCardController extends adminController
 	public function actionTag($id)
 	{
         $tag = IeltseyeTag::model()->findByPk($id);
+		$model=new IeltseyeSpeakingTopicCard('search');
+        $criteria = $model->getDbCriteria();
+
+        $criteria->with = array(
+            'tagItem'=>array(
+                'condition'=>'tagItem.tagid='.$id,
+            ) 
+        );
+        $criteria->order = "type ASC, cardid DESC";
+        $model->setDbCriteria($criteria);
         
-		$dataProvider=new CActiveDataProvider('IeltseyeSpeakingTopicCard', array(
-                        'criteria'=>array(
-                            'with'=>array(
-                                'tagItem'=>array(
-                                    'condition'=>'tagItem.tagid='.$id,
-                                )
-                            ),
-                            'order'=>"type ASC, cardid DESC",
-                        ),
-        ));
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['IeltseyeSpeakingTopicCard']))
+			$model->attributes=$_GET['IeltseyeSpeakingTopicCard'];
+        
 		$this->render('tag',array(
-			'dataProvider'=>$dataProvider,
+			'model'=>$model,
             'tag'=>$tag,
 		));
 	}

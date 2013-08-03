@@ -64,6 +64,7 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
 		return array(
             'topicSamples'=>array(self::HAS_MANY, 'IeltseyeSpeakingTopicCard', 'cardid'),
             'tagItem'=>array(self::HAS_MANY, 'IeltseyeTagitem', array('itemid'=>'cardid'), 'together'=>true),
+            'IeltseyeSpeakingTopicCardCount'=>array(self::STAT, 'IeltseyeSpeakingTopicSample', 'cardid'),
 		);
 	}
 
@@ -80,6 +81,7 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
 			'type' => 'Part',
             'tags' => 'Tags',
 			'dateline' => 'Dateline',
+            'IeltseyeSpeakingTopicCardCount' => 'Samples',
 		);
 	}
 

@@ -50,8 +50,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
         array('name'=>'IeltseyeTagitemCount',
             'header'=>'Cards',
             'type'=>'html',
-            'value'=> 'CHtml::link($data->IeltseyeTagitemCount,Yii::app()->createUrl(\'admin/ieltseyeSpeakingTopicCard/tag\', array(\'id\'=>$data->tagid)))',
-//            
+            'value'=> 'CHtml::link($data->IeltseyeTagitemCount,Yii::app()->createUrl(\'admin/ieltseyeSpeakingTopicCard/tag\', array(\'id\'=>$data->tagid)))',         
         ),
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',

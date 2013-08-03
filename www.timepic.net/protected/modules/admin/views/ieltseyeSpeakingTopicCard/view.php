@@ -22,6 +22,7 @@ $this->menu=array(
 		'question',
 		'description',
 		'type',
+        'tags',
 		'dateline',
 	),
 )); ?>
