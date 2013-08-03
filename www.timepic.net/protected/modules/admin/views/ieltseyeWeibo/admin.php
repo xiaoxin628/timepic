@@ -54,11 +54,24 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                 <p class=\"muted\">".$data->screen_name."--".date("Y/m/d H:i:s", $data->created_at)."</p>"',
             ),
 		'keywords',
-		array('name'=>'dateline','value'=>'date("Y-m-d H:i:s", $data->dateline)'),
-		'status',
-		'source',
+		array('name'=>'dateline', 'headerHtmlOptions'=>array('width'=>'10%'),'value'=>'date("Y-m-d H:i:s", $data->dateline)'),
+        array('name' => 'status', 'value' => 'IeltseyeWeibo::model()->statusCode[$data->status]', 'filter'=>IeltseyeWeibo::model()->statusCode),
+		array('name' => 'source', 'value' => 'IeltseyeWeibo::model()->sourceCode[$data->source]', 'filter'=>IeltseyeWeibo::model()->sourceCode),
 		array(
+            'headerHtmlOptions'=>array('width'=>'10%'),
+            'template'=>'{switch}{view}{update}{delete}',
 			'class'=>'bootstrap.widgets.TbButtonColumn',
+            'buttons'=>array(
+                'switch'=>array(
+                    'label'=>'<i class="icon-lock"></i>',
+                    'options'=>array('title'=>'隐藏'),
+                    'url' => 'Yii::app()->createUrl("/admin/ieltseyeWeibo/statusSwitch",array("id"=>$data->eid, "status"=>"-1"))',
+                    'click' => 'function(){return confirm("将不在主页及客户端显示。不发送微博。确认隐藏？");}',
+                ),
+                'delete'=>array(
+                    'click'=>'function(){return confirm("来源为搜索的微博建议1小时后删除，@我的则需要隐藏。否则会从微博自动同步回来。确认删除？");}',
+                ),
+            ),
 		),
 	),
 )); ?>

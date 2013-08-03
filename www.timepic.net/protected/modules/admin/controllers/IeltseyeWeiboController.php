@@ -59,6 +59,20 @@ class IeltseyeWeiboController extends adminController
 			'model'=>$model,
 		));
 	}
+    
+    //切换微博状态
+    public function actionStatusSwitch($id, $status){
+        
+        if (in_array($status, array(-1,0,1,2))) {
+                $model = $this->loadModel($id);
+
+                $model->updateByPk($id, array('status'=>$status));
+                if(!isset($_GET['ajax']))
+                    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin')); 
+
+        }
+        throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+    }
 
 	/**
 	 * Deletes a particular model.

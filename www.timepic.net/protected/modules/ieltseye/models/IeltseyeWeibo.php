@@ -19,6 +19,8 @@
  */
 class IeltseyeWeibo extends CActiveRecord
 {
+    public $statusCode = array('-1'=>'隐藏', '0'=>'未发送微博', '1'=>'已发送微博', '2'=>'微博发送失败');
+    public $sourceCode = array('0'=>'搜索', '1'=>'@我', '2'=>'名人微博', '2'=>'weibo发送失败');
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -79,11 +81,11 @@ class IeltseyeWeibo extends CActiveRecord
 			'wbid' => 'Wbid',
 			'wbmid' => 'Wbmid',
 			'text' => 'Text',
-			'created_at' => 'Created At',
-			'keywords' => 'Keywords',
-			'dateline' => 'Dateline',
-			'status' => 'Status',
-			'source' => 'Source',
+			'created_at' => '微博发送时间',
+			'keywords' => '搜索关键字',
+			'dateline' => '采集时间',
+			'status' => '状态',
+			'source' => '来源',
 		);
 	}
 
