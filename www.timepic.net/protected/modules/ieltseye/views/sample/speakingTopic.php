@@ -1,5 +1,5 @@
 <?php
-$this->pageTitle .= "-".CHtml::encode($topicCard->question);
+$this->pageTitle = Yii::app()->params['ieltseye']['seoTitle']."-".CHtml::encode($topicCard->question)."-雅思口语答案-anwsers";
 $this->breadcrumbs=array(
 	'IELTS Speaking Topic'=>$this->createUrl("/topic"),
     CHtml::encode($topicCard->question)
@@ -17,7 +17,7 @@ $this->breadcrumbs=array(
                         <?php echo TimePicCode::TpCode(CHtml::encode($topicCard->description)); ?>
                     </div>
                 <?php endif; ?>
-                <p><a class="btn btn-primary btn-small" href="#sampleFormModal" data-toggle="modal">答题</a></p>
+                <p><a class="btn btn-primary btn-small" href="#sampleFormModal" data-toggle="modal">Share Your Answers</a></p>
                 <div id="sampleFormModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
             </div>
         </div>
@@ -28,7 +28,7 @@ $this->breadcrumbs=array(
             'columns'=>array(
                 array('name'=>'content',
                     'type'=>'html',
-                    'header'=>'Samples',
+                    'header'=>'Answers',
                     'headerHtmlOptions'=>array('width'=>'100%'),
                     'value'=>'"<a href=\"".Yii::app()->createUrl("sample/speakingView/", array("id"=>$data->sampleid))."\">
                                <p class=\"muted\">

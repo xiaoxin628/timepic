@@ -1,5 +1,5 @@
 <?php
-$this->pageTitle .= "-".CHtml::encode($sample->topicCard->question);
+$this->pageTitle = Yii::app()->params['ieltseye']['seoTitle']."-".CHtml::encode($sample->topicCard->question)."-雅思口语答案-anwsers";
 $this->breadcrumbs=array(
 	'IELTS Speaking Topic Sample'=>$this->createUrl("sample/speakingTopic/", array("id"=>$sample->topicCard->cardid)),
     CHtml::encode(CommonHelper::cutstr($sample->content, 50))

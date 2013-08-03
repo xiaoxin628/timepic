@@ -4,7 +4,7 @@ return array(
     // this is used in contact page
     'adminWeibo' => 'http://weibo.com/ieltseye',
     'weiboUrl' => 'http://weibo.com/',
-    'seoTitle' => 'IELTSEYE-雅思口语网蹲哥',
+    'seoTitle' => 'IELTSEYE-雅思口语网蹲哥官网',
     'homeUrl' => 'http://test.ieltseye.com',
     'name' => 'IELTS EYE',
     'appdownload'=>array(
