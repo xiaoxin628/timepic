@@ -67,7 +67,7 @@ class IeltseyeSpeakingTopicCardController extends adminController
                            $model->question = $question;
                            $model->tags = $_POST['IeltseyeSpeakingTopicCard']['tags'];
                            $model->cardid = NULL;
-                           unset($model->questions[$key]);
+//                           unset($model->questions[$key]);
                            $model->setIsNewRecord(true);
                            $model->save();
                        }

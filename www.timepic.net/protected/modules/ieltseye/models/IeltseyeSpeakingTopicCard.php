@@ -135,7 +135,9 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
         //all tags must be lowercase due to search factor.
         $this->tags = strtolower($this->tags);
         //set tagstr for card
-        $this->setTags();
+        if ($this->tags) {
+            $this->setTags();
+        }
 		if ($this->isNewRecord) {
             $this->dateline = time();
         }
