@@ -148,6 +148,7 @@ class IeltseyeSpeakingTopicCardController extends adminController
                                     'condition'=>'tagItem.tagid='.$id,
                                 )
                             ),
+                            'order'=>"type ASC, cardid DESC",
                         ),
         ));
 		$this->render('tag',array(

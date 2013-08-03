@@ -25,6 +25,7 @@ $('.search-form form').submit(function(){
 
 <h1>Manage Ieltseye Speaking Topic</h1>
 <p><span class="label label-important"><?php echo $tag->tagname;?></span></p>
+
 <?php $this->widget('bootstrap.widgets.TbGridView',array(
 	'id'=>'ieltseye-speaking-topic-card-grid',
 	'dataProvider'=>$dataProvider,
@@ -50,9 +51,20 @@ $('.search-form form').submit(function(){
                 'createSample' => array(
                     'label'=>'<i class="icon-plus"></i>',
                     'options'=>array('title'=>'创建例文'),
-                    'url' => 'Yii::app()->createUrl("admin/ieltseyeSpeakingTopicSample/create",array("id"=>"$data->cardid"))',
+                    'url' => '"javascript:createSample(".$data->cardid.")"',
                 ),
             ),
 		),
 	),
 )); ?>
+
+<div id="adminModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div>
+<script type="text/javascript">
+    function createSample(id){
+        $.get("/admin/ieltseyeSpeakingTopicSample/create/id/"+id+"?window=true", function(data) {
+            $("#adminModal").html(data);
+        });
+        $('#adminModal').modal('show');
+    }
+</script>
