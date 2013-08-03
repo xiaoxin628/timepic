@@ -11,15 +11,20 @@ class IeltsApiController extends Controller
         }
 		$jsondata = $data = array();
 		$page = $page ? intval($page) : 0;
-		$pageSize = 6;
+		$pageSize = 7;
         //cache
-        $dependency = new CDbCacheDependency('SELECT COUNT(*) FROM {{ieltseye_weibo}}');
+        $dependency = new CDbCacheDependency('SELECT COUNT(*) FROM {{ieltseye_weibo}} WHERE status >= 0');
         $command = Yii::app()->db->cache(3600, $dependency)->createCommand();
         
         $command->select('uid, screen_name, text, created_at');
         $command->from('{{ieltseye_weibo}}');
+        
+        //status -1 删除（隐藏） 0 抓取微博还没发 1 已经发送微博  2发送微博失败 大于0的 都可以显示
+        $command->where('status >= 0');
+        
         $command->order('created_at DESC');
         $command->limit($pageSize, $page*$pageSize);
+        
         if (!empty($keyword)) {
             $command->where(array('like', 'text', '%'.$keyword.'%'));
         }

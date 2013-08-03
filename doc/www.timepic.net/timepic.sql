@@ -316,3 +316,5 @@ CREATE TABLE IF NOT EXISTS `tp_ieltseye_tagitem` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 ALTER TABLE  `tp_ieltseye_tag` ADD  `aliasWords` VARCHAR( 255 ) NOT NULL COMMENT  '同义词逗号分割' AFTER  `tagname`;
 ALTER TABLE  `tp_ieltseye_tagitem` ADD  `tid` MEDIUMINT( 8 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+ALTER TABLE  `tp_ieltseye_weibo` ADD INDEX (    `status`, `created_at` ) ;
+ALTER TABLE  `tp_ieltseye_weibo` CHANGE  `status`  `status` TINYINT( 1 ) NOT NULL COMMENT  '-1 删除（隐藏） 0 抓取微博还没发 1 已经发送微博  2发送微博失败 大于0的 都可以显示';
