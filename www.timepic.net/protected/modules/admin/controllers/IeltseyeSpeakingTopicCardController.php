@@ -32,6 +32,9 @@ class IeltseyeSpeakingTopicCardController extends adminController
 		{
 			$model->attributes=$_POST['IeltseyeSpeakingTopicCard'];
             $model->type = 2;
+            $model->question = ucfirst(trim($model->question));
+            $model->description = trim($model->description);
+            
             if($model->save()){
                $this->redirect(array('admin'));                
             }
@@ -64,10 +67,9 @@ class IeltseyeSpeakingTopicCardController extends adminController
                    foreach($model->questions as $key=>$question){
                        if (!empty($question)) {
                            $model->type = $_POST['IeltseyeSpeakingTopicCard']['type'];
-                           $model->question = $question;
+                           $model->question = ucfirst(trim($question));
                            $model->tags = $_POST['IeltseyeSpeakingTopicCard']['tags'];
                            $model->cardid = NULL;
-//                           unset($model->questions[$key]);
                            $model->setIsNewRecord(true);
                            $model->save();
                        }
@@ -97,6 +99,8 @@ class IeltseyeSpeakingTopicCardController extends adminController
 		if(isset($_POST['IeltseyeSpeakingTopicCard']))
 		{
 			$model->attributes=$_POST['IeltseyeSpeakingTopicCard'];
+            $model->question = ucfirst(trim($model->question));
+            $model->description = trim($model->description);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->cardid));
 		}

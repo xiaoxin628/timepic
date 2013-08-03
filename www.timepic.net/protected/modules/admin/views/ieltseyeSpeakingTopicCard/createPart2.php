@@ -29,7 +29,7 @@ $this->menu=array(
 	<?php echo $form->dropDownList($model, 'type', array('2'=>'Part 2') , array('class'=>'span5', 'disabled'=>true, 'options'=>array('2'=>array('selected'=>'selected')))); ?>
     <?php echo $form->textFieldRow($model,'tags',array("autocomplete"=>"off", 'class'=>'span6','id'=>'typeahead','maxlength'=>255)); ?>
     
-	<?php echo $form->textFieldRow($model,'question',array('class'=>'span5','maxlength'=>255)); ?>
+	<?php echo $form->textAreaRow($model,'question',array('rows'=>3, 'cols'=>50, 'class'=>'span8','maxlength'=>255)); ?>
 
 	<?php echo $form->textAreaRow($model,'description',array('rows'=>6, 'cols'=>50, 'class'=>'span8')); ?>
 
