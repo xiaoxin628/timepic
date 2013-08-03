@@ -20,6 +20,7 @@
             'items'=>array(
                 array('label'=>'Home', 'url'=>Yii::app()->params['ieltseye']['homeUrl']),
                 array('label'=>'Topic', 'url'=>array('/topic/part2')),
+                array('label'=>'Tag', 'url'=>array('/tag')),
             ),
         ),
     ),
