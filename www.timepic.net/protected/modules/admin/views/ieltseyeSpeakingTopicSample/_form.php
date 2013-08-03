@@ -1,19 +1,13 @@
-<?php 
-        if($model->isNewRecord){
-            $model->cardid = Yii::app()->request->getParam('id');
-        }
-        $card = IeltseyeSpeakingTopicCard::model()->findByPk($model->cardid);
-?>
-
 <div class="row-fluid">
     <div class="topicCard">
-        <legend><?php echo $card->question?></legend>
-        <?php if($card->type == 2):?>
+        <div class="part"><?php echo "Part ".$card->type;?></div>
+        <legend><?php echo CHtml::encode($card->question);?></legend>
+        <?php if ($card->type == 2): ?>
             <p>You should say:</p>
             <div class="description">
-                <?php echo TimePicCode::TpCode($card->description);?>
+                <?php echo TimePicCode::TpCode(CHtml::encode($card->description)); ?>
             </div>
-        <?php endif;?>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -26,13 +20,13 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<?php echo $form->textAreaRow($model,'content',array('rows'=>6, 'cols'=>50, 'class'=>'span8')); ?>
+	<?php echo $form->textAreaRow($model,'content',array('rows'=>20, 'cols'=>50, 'class'=>'span8')); ?>
 
 	<?php echo $form->textFieldRow($model,'author',array('class'=>'span5','maxlength'=>30)); ?>
     
     <?php echo $form->textFieldRow($model,'email',array('class'=>'span5','maxlength'=>30)); ?>
 
-	<?php echo $form->textAreaRow($model,'source',array('rows'=>6, 'cols'=>50, 'class'=>'span8')); ?>
+	<?php echo $form->textAreaRow($model,'source',array('rows'=>2, 'cols'=>50, 'class'=>'span8')); ?>
 
 	<?php echo $form->textFieldRow($model,'displayorder',array('class'=>'span5')); ?>
 

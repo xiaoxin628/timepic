@@ -20,6 +20,12 @@ class IeltseyeSpeakingTopicSampleController extends adminController
 	public function actionCreate()
 	{
 		$model=new IeltseyeSpeakingTopicSample;
+        if($model->isNewRecord){
+            $model->cardid = Yii::app()->request->getParam('id');
+        }
+        $window = Yii::app()->request->getParam('window');
+        $card = IeltseyeSpeakingTopicCard::model()->findByPk($model->cardid);
+
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -27,13 +33,29 @@ class IeltseyeSpeakingTopicSampleController extends adminController
 		if(isset($_POST['IeltseyeSpeakingTopicSample']))
 		{
 			$model->attributes=$_POST['IeltseyeSpeakingTopicSample'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->sampleid));
-		}
+            if($model->save()){
+                if ($window == 'true') {
+                    echo "ok";
+                    Yii::app()->end();
+                }else{
+                    $this->redirect(array('view','id'=>$model->sampleid));                    
+                }
+            }
 
-		$this->render('create',array(
-			'model'=>$model,
-		));
+		}
+        if ($window == 'true') {
+            $this->renderPartial('createAjax',array(
+                    'model'=>$model,
+                    'card' => $card,
+                ),FALSE,TRUE
+            );
+        }else{
+            $this->render('create',array(
+                'model'=>$model,
+                'card' => $card,
+            ));            
+        }
+
 	}
 
 	/**
@@ -44,7 +66,7 @@ class IeltseyeSpeakingTopicSampleController extends adminController
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
+        $card = IeltseyeSpeakingTopicCard::model()->findByPk($model->cardid);
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -57,6 +79,7 @@ class IeltseyeSpeakingTopicSampleController extends adminController
 
 		$this->render('update',array(
 			'model'=>$model,
+            'card' => $card,
 		));
 	}
 
