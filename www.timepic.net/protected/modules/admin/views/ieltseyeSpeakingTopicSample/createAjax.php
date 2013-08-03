@@ -1,4 +1,8 @@
 <?php
+if (Yii::app()->request->isAjaxRequest) {
+    Yii::app()->clientScript->scriptMap['jquery.js'] = false;
+    Yii::app()->clientScript->scriptMap['jquery.min.js'] = false;
+}
 $this->breadcrumbs=array(
 	'Ieltseye Speaking Topic Samples'=>array('index'),
 	'Create',
