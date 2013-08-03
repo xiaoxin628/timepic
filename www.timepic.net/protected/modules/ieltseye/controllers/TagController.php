@@ -8,22 +8,22 @@ class TagController extends IeltseyeController
 
             foreach ($tagsCache as $tag) {
                 $tagsData[ucwords($tag['tagname'])] = $tag['tagid'];
-                $typeAheadData[] = $tag['tagname'];
+                $tagsWithoutAlias[ucwords($tag['tagname'])] = $tag['tagid'];
                 if ($tag['aliasWords']) {
                     $aliasWords = explode(',', $tag['aliasWords']);
                     if ($aliasWords) {
                         foreach ($aliasWords as $aliasWord) {
                             $tagsData[ucwords($aliasWord)] = $tag['tagid'];
-                            $typeAheadData[] = $aliasWord;
                         }
                     }
                 }
             }
         }
-        ksort($tagsData);
+        ksort($tagsWithoutAlias);
         $this->render('index', array(
-            'typeAheadData' => $typeAheadData,
+            'tagsWithoutAlias' => $tagsWithoutAlias,
             'tagsData' => $tagsData,
+            'tagsCache' => $tagsCache,
             )
         );
     }

@@ -22,8 +22,8 @@ $this->breadcrumbs=array(
             $this->widget('bootstrap.widgets.TbTypeahead', array(
                 'name'=>'typeahead',
                 'options'=>array(
-                    'source'=>$typeAheadData,
-                    'items'=>4,
+                    'source'=>  array_keys($tagsData),
+                    'items'=>10,
                     'matcher'=>"js:function(item) {
                         return ~item.toLowerCase().indexOf(this.query.toLowerCase());
                     }",
@@ -36,10 +36,10 @@ $this->breadcrumbs=array(
 </div>
 <div class="row-fluid">
     <div class="row-fluid">
-        <?php if(isset($tagsData)): ?>
-          <?php  foreach ($tagsData as $tagname=>$tagid):?>
+        <?php if(isset($tagsWithoutAlias)): ?>
+          <?php  foreach ($tagsWithoutAlias as $tagname=>$tagid):?>
                 <div class="span2" style="margin-left: 0px;">
-                    <a  target="_blank" href="<?php echo Yii::app()->createUrl('/topic/tag/',array('id'=>$tagid));?>"  title="IELTS Tag:<?php echo $tagname;?>">
+                    <a  rel="tooltip" target="_blank" href="<?php echo Yii::app()->createUrl('/topic/tag/',array('id'=>$tagid));?>"  title="IELTS Tag:<?php echo !empty($tagsCache[$tagid]['aliasWords']) ? $tagname."(".ucwords($tagsCache[$tagid]['aliasWords']).")" : $tagname;?>">
                         <?php echo $tagname;?>
                     </a>
                 </div>
