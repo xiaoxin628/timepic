@@ -1,10 +1,16 @@
+<?php
+if (Yii::app()->request->isAjaxRequest) {
+    Yii::app()->clientScript->scriptMap['jquery.js'] = false;
+    Yii::app()->clientScript->scriptMap['jquery.min.js'] = false;
+}
+?>
 <div class="row-fluid">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       <h3 id="myModalLabel">Sample</h3>
     </div>
 
-    <div class="modal-body">
+    <div class="modal-body" id="topicCardBody">
       <div class="topicCard">
             <div class="part"><?php echo "Part ".$topicCard->type;?></div>
             <legend><?php echo CHtml::encode($topicCard->question);?></legend>
@@ -35,7 +41,7 @@
                     ),
             ));
         ?>
-
+            
             <p class="help-block">Fields with <span class="required">*</span> are required.</p>
             <div class="control-group">
                 <?php echo $form->labelEx($model,'content', array('class'=>'control-label')); ?>
@@ -94,8 +100,8 @@ function postSample(form,data,hasError){
        dataType:'html',
        success:function(data){
                     if (data == 'ok') {
-                          alert('Good job! Thumb up for you!');
-                          $('#closeSampleFormModal').click();
+                          $("#topicCardBody").html("Good job! Thumb up for you!");
+                          setTimeout("$('#closeSampleFormModal').click()",3000);
                     }
                   },
        error: function(data) { // if error occured

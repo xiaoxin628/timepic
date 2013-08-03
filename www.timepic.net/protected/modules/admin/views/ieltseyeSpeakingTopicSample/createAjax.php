@@ -90,8 +90,8 @@ function postSample(form,data,hasError){
        dataType:'html',
        success:function(data){
                     if (data == 'ok') {
-                          alert('创建成功！');
-                          $('#closeSampleFormModal').click();
+                          $("#adminModalBody").html("创建成功！");
+                          setTimeout("$('#closeSampleFormModal').click()",1000);
                     }
                   },
        error: function(data) { // if error occured
