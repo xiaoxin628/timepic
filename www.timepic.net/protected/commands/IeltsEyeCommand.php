@@ -264,11 +264,11 @@ class IeltsEyeCommand extends CConsoleCommand{
             @touch($lockFile);
         }
         
-        $count = Yii::app()->db->createCommand()->select('count(eid)')->from('{{ieltseye_weibo}}')->where('status!=:status', array(':status'=>'1'))->queryScalar();
+        $count = Yii::app()->db->createCommand()->select('count(eid)')->from('{{ieltseye_weibo}}')->where(array('in', 'status', array(0,2)))->queryScalar();
         if ($count) {
             //每次只发5条最新的 大约10分钟处理完成。
-            $query = Yii::app()->db->createCommand()->select('wbid, text, created_at')->from('{{ieltseye_weibo}}')->where('status!=:status', array(':status'=>'1'))->limit(5)->order("eid DESC")->query();
-            while ($row = $query->read()) {
+            $query = Yii::app()->db->createCommand()->select('wbid, text, created_at')->from('{{ieltseye_weibo}}')->where(array('in', 'status', array(0,2)))->limit(5)->order("eid DESC")->queryAll();
+            foreach($query as $row) {
                 //加上时间
                 $message = $row['text'];
                 $topic = '#IELTSEYE'.date("ymd", $row['created_at']).'# ';
@@ -303,7 +303,7 @@ class IeltsEyeCommand extends CConsoleCommand{
                                 $resUpdate = $this->openClient->update($row['text']);
                                 if (isset($resUpdate['error'])) {
                                     Yii::log("IeltsEyeCommand.updateWeibo:app:".$this->classicApp.",id:".$row['wbid'].',errorCode:'.$resUpdate['error_code'].',error:'.$resUpdate['error'], 'info', 'ieltseye.log.weibo');
-                                    Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>-1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
+                                    Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>2), "wbid=:wbid", array(':wbid'=>$row['wbid']));
                                 }else{
                                     Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
                                 }
@@ -315,7 +315,7 @@ class IeltsEyeCommand extends CConsoleCommand{
                             Yii::app()->end();
                         }else{
                             Yii::log("IeltsEyeCommand.reposeWeibo:app:".$this->classicApp.",id:".$row['wbid'].',errorCode:'.$res['error_code'].',error:'.$res['error'], 'info', 'ieltseye.log.weibo');
-                            Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>-1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
+                            Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>2), "wbid=:wbid", array(':wbid'=>$row['wbid']));
                         }
                     }elseif(!empty($res)){
                         Yii::app()->db->createCommand()->update('{{ieltseye_weibo}}', array('status'=>1), "wbid=:wbid", array(':wbid'=>$row['wbid']));
