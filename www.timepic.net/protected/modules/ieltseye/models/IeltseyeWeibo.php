@@ -113,6 +113,9 @@ class IeltseyeWeibo extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+            'sort' => array(
+                'defaultOrder' => array('created_at'=>'CSort::SORT_DESC'),
+            )
 		));
 	}
     /*
