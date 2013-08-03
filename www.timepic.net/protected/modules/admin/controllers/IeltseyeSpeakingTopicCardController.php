@@ -19,13 +19,38 @@ class IeltseyeSpeakingTopicCardController extends adminController
 	 */
 	public function actionCreate()
 	{
-		$model=new IeltseyeSpeakingTopicCard;
+		$model=new IeltseyeSpeakingTopicCard('part2');
+        
+		// Uncomment the following line if AJAX validation is needed
+//		if(isset($_POST['ajax']) && $_POST['ajax']== 'ieltseye-speaking-topic-card-form-part2'){
+//            //ieltseye-speaking-topic-card-form-part13
+//			echo CActiveForm::validate($model);
+//			Yii::app()->end();
+//		}
+
+		if(isset($_POST['IeltseyeSpeakingTopicCard']))
+		{
+			$model->attributes=$_POST['IeltseyeSpeakingTopicCard'];
+            $model->type = 2;
+            if($model->save()){
+               $this->redirect(array('admin'));                
+            }
+
+		}
+        $model->tags = IeltseyeHelper::formatTags($model->tags);
+		$this->render('createPart2',array(
+			'model'=>$model,
+		));
+	}
+    
+    public function actionCreatePart13(){
+		$model=new IeltseyeSpeakingTopicCard('Part13');
         //默认填充9个question
         $model->questions = array_pad(array(), 14, '');
         
 		// Uncomment the following line if AJAX validation is needed
-		if(isset($_POST['ajax']) && in_array($_POST['ajax'], array('ieltseye-speaking-topic-card-form-part2', 'ieltseye-speaking-topic-card-form-part13')))
-		{
+		if(isset($_POST['ajax']) && $_POST['ajax']== 'ieltseye-speaking-topic-card-form-part13'){
+            //ieltseye-speaking-topic-card-form-part13
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
@@ -33,9 +58,8 @@ class IeltseyeSpeakingTopicCardController extends adminController
 		if(isset($_POST['IeltseyeSpeakingTopicCard']))
 		{
 			$model->attributes=$_POST['IeltseyeSpeakingTopicCard'];
-
+            $model->questions = $_POST['IeltseyeSpeakingTopicCard']['questions'];
             if (isset($_POST['IeltseyeSpeakingTopicCard']['questions'])) {
-                $model->questions = $_POST['IeltseyeSpeakingTopicCard']['questions'];
                 if ($model->validate('questions')) {
                    foreach($model->questions as $key=>$question){
                        if (!empty($question)) {
@@ -50,17 +74,13 @@ class IeltseyeSpeakingTopicCardController extends adminController
                    }
                    $this->redirect(array('admin'));
                 }
-            }else{
-                if($model->save())
-                    $this->redirect(array('admin','id'=>$model->cardid));                
             }
-
 		}
         $model->tags = IeltseyeHelper::formatTags($model->tags);
-		$this->render('create',array(
+		$this->render('createPart13',array(
 			'model'=>$model,
 		));
-	}
+    }
 
 	/**
 	 * Updates a particular model.

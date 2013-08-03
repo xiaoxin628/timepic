@@ -41,10 +41,10 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('type', 'required'),
+			array('question, type, description', 'required', 'on'=>'part2'),
 			array('type, dateline', 'numerical', 'integerOnly'=>true),
             array('question', 'unique'),
-            array('questions', 'questionsUnique'),
+            array('questions', 'questionsUnique', 'on'=>'Part13'),
             array('type', 'in', 'range'=>array(1,2,3,)),
 			array('question, tags', 'length', 'max'=>255),
             array('description', 'length', 'max'=>6000),
@@ -110,14 +110,20 @@ class IeltseyeSpeakingTopicCard extends CActiveRecord
 	}
     //多个question一起提交
     public function questionsUnique($attribute,$params){
-          
-        if (!$this->hasErrors() && !empty($this->questions)) {
-            foreach ($this->questions as $key=>$question) {
-                if (!empty($question)) {
-                    $res = $this->exists('question=:question', array(":question" => $question));
-                    if ($res) {
-                        $this->addError('questions', 'question'.($key+1).":".$question . '已经存在');
+        $isEmpty = true;
+        if (!$this->hasErrors()) {
+            if (!empty($this->questions)) {
+                foreach ($this->questions as $key=>$question) {
+                    if (!empty($question)) {
+                        $res = $this->exists('question=:question', array(":question" => $question));
+                        if ($res) {
+                            $this->addError('questions', 'question'.($key+1).":".$question . ' 已经存在');
+                        }
+                        $isEmpty = false;
                     }
+                }
+                if ($isEmpty) {
+                    $this->addError('questions', 'question:至少填写一个问题');
                 }
             }
         }
