@@ -6,6 +6,56 @@ $this->breadcrumbs=array(
 );
 ?>
 <div class="row-fluid">
+    <?php 
+        $tagsCache = IeltseyeCache::loadCache('Tags');
+        if (!empty($tagsCache)) {
+
+            foreach ($tagsCache as $tag) {
+                $tagsarray[$tag['tagname']] = $tag['tagid'];
+                $typeAheadData[] = $tag['tagname'];
+                if ($tag['aliasWords']) {
+                    $aliasWords = explode(',', $tag['aliasWords']);
+                    if ($aliasWords) {
+                        foreach ($aliasWords as $aliasWord) {
+                            $tagsarray[$aliasWord] = $tag['tagid'];
+                            $typeAheadData[] = $aliasWord;
+                        }
+                    }
+                }
+            }
+        }
+        $tagsData = json_encode($tagsarray);
+    ?>
+    <script type="text/javascript">
+        var tags = <?php echo $tagsData;?>;
+        function searchTag(){
+            tagid = tags[$('#searchTag').val()];
+            if (!tagid) {
+                alert("Sorry, cannot find this tag.");
+                return false;
+            }else{
+                window.location.href = "/topic/tag/"+tagid;
+            }
+        }
+    </script>
+    <p>
+        <?php
+            $this->widget('bootstrap.widgets.TbTypeahead', array(
+                'name'=>'typeahead',
+                'options'=>array(
+                    'source'=>$typeAheadData,
+                    'items'=>4,
+                    'matcher'=>"js:function(item) {
+                        return ~item.toLowerCase().indexOf(this.query.toLowerCase());
+                    }",
+                ),
+                'htmlOptions'=>array('id'=>"searchTag"),
+            ));
+        ?>
+        <button type="button" class="btn btn-primary" style="margin-bottom: 10px;" onclick="searchTag();">Search</button>
+    </p>
+</div>
+<div class="row-fluid">
         <?php if(!empty($dataProvider->data)): ?>
           <?php  foreach ($dataProvider->data as $item):?>
             <div class="topicCard">

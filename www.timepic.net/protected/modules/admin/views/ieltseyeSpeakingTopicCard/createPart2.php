@@ -27,7 +27,7 @@ $this->menu=array(
 	<?php echo $form->errorSummary($model); ?>
 
 	<?php echo $form->dropDownList($model, 'type', array('2'=>'Part 2') , array('class'=>'span5', 'disabled'=>true, 'options'=>array('2'=>array('selected'=>'selected')))); ?>
-    <?php echo $form->textFieldRow($model,'tags',array('class'=>'span6','maxlength'=>255)); ?>
+    <?php echo $form->textFieldRow($model,'tags',array("autocomplete"=>"off", 'class'=>'span6','id'=>'typeahead','maxlength'=>255)); ?>
     
 	<?php echo $form->textFieldRow($model,'question',array('class'=>'span5','maxlength'=>255)); ?>
 
@@ -42,3 +42,19 @@ $this->menu=array(
 	</div>
 
 <?php $this->endWidget(); ?>
+<?php 
+    $tagsCache = IeltseyeCache::loadCache("Tags");
+    foreach($tagsCache as $tagid=>$tagItem){
+        $Item = $tagItem['tagname'];
+//        if ($tagItem['aliasWords']) {
+//            $Item .= "(".$tagItem['aliasWords'].")";
+//        }
+        $tagaArray[] = $Item;
+    }
+    $tagsData = json_encode($tagaArray);
+?>
+<script type="text/javascript">
+$('#typeahead').typeahead({
+    'source':<?php echo $tagsData;?>
+});
+</script>
