@@ -52,7 +52,7 @@ class IeltseyeHelper{
                 if (!CommonHelper::checkmobile()) {
                     $tooltip = 'rel="tooltip" ';
                 }
-                $replacearray[] = '<a href="/topic/tag/'.$tagid.'" '.$tooltip.' title="Topic About '.ucfirst($tagname).'">\\1</a>';
+                $replacearray[] = '<a href="/topic/tag/'.$tagid.'" '.$tooltip.' title="Related Topics">\\1</a>';
             }
             $text = preg_replace($searcharray, $replacearray ,$text);
         }
