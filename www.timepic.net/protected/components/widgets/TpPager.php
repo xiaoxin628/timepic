@@ -123,7 +123,7 @@ class TpPager extends CLinkPager
 		if ($hidden || $selected)
 			$class .= ' '.($hidden ? 'disabled' : 'active');
         //add title to the page link
-        $title = Yii::app()->controller->pageTitle.'-'.Yii::t('Base','pagenumber',array('{number}'=>$page));
+        $title = Yii::app()->controller->pageTitle.'-'.Yii::t('Base','pagenumber',array('{number}'=>$page+1));
         
 		return CHtml::tag('li', array('class'=>$class), CHtml::link($label, $this->createPageUrl($page), array('title'=>$title)));
 	}
