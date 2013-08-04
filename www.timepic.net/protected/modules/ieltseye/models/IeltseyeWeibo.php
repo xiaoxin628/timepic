@@ -132,17 +132,17 @@ class IeltseyeWeibo extends CActiveRecord
         }
         $data['keyword'] = $keyword;
 
-        $command = Yii::app()->db->createCommand();
-        $command->select('count(eid)');
-        $command->from('{{ieltseye_weibo}}');
-        //status -1 删除（隐藏） 0 抓取微博还没发 1 已经发送微博  2发送微博失败 大于0的 都可以显示
-        $command->where('status >=0');
-        
-        if (!empty($keyword)) {
-            $command->andwhere(array('like', 'text', '%'.$keyword.'%'));
-        }
-        
-        $countSql = $command->text;
+//        $command = Yii::app()->db->createCommand();
+//        $command->select('count(eid)');
+//        $command->from('{{ieltseye_weibo}}');
+//        //status -1 删除（隐藏） 0 抓取微博还没发 1 已经发送微博  2发送微博失败 大于0的 都可以显示
+//        $command->where('status >=0');
+//        
+//        if (!empty($keyword)) {
+//            $command->andwhere(array('like', 'text', '%'.$keyword.'%'));
+//        }
+//        
+//        $countSql = $command->text;
         //Pagination
         $criteria = new CDbCriteria();
         //最大100页
@@ -152,6 +152,7 @@ class IeltseyeWeibo extends CActiveRecord
         $data['pages'] = $pages;
         
         //cache
+        $countSql = "SELECT COUNT(*) FROM {{ieltseye_weibo}}";
         $dependency = new CDbCacheDependency($countSql);
  
         $command = Yii::app()->db->cache(3600, $dependency)->createCommand();
