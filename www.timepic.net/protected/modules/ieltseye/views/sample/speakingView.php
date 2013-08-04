@@ -15,6 +15,18 @@ $this->breadcrumbs=array(
                 <?php echo TimePicCode::TpCode(CHtml::encode($sample->topicCard->description)); ?>
             </div>
         <?php endif; ?>
+        <?php if(isset($sample->topicCard->tags) && !empty($sample->topicCard->tags)):?>
+            <p>Tags: <?php echo IeltseyeHelper::formatTags($sample->topicCard->tags, 1);?></p>
+        <?php endif;?>
+        <p><a class="btn btn-primary btn-small" href="#sampleFormModal" data-toggle="modal">Share Your Answers</a></p>
+        <div id="sampleFormModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+        <script type="text/javascript">
+        $('#sampleFormModal').on('show', function () {
+            $.get('/sample/create/'+"<?php echo $sample->topicCard->cardid;?>", function(data) {
+                $("#sampleFormModal").html(data);
+            });
+        })
+        </script>
     </div>
 </div>
 <div class="row-fluid">

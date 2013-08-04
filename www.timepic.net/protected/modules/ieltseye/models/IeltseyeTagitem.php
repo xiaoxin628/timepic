@@ -56,6 +56,7 @@ class IeltseyeTagitem extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
             'tag' => array(self::BELONGS_TO, 'IeltseyeTag', 'tagid'),
+            'card' => array(self::HAS_ONE, 'IeltseyeSpeakingTopicCard', array('cardid'=>'itemid'), 'together'=>true),
 		);
 	}
 
